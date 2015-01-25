@@ -28,6 +28,8 @@ class KeyboardViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = UIColor.whiteColor()
+        
         //The values for al the keys
         let buttonTitles1 = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
         let buttonTitles2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l"]
@@ -52,7 +54,7 @@ class KeyboardViewController: UIInputViewController {
         row2.setTranslatesAutoresizingMaskIntoConstraints(false)
         row3.setTranslatesAutoresizingMaskIntoConstraints(false)
         row4.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
+
         //Adding the constraints to the rows of keys. I took these constraints from the tutorial I followed
         addConstraintsToInputView(self.view, rowViews: [row1, row2, row3, row4])
     }
@@ -101,7 +103,6 @@ class KeyboardViewController: UIInputViewController {
         
         let button = UIButton.buttonWithType(.System) as UIButton
         button.frame = CGRectMake(0, 0, 20, 20)
-        button.layer.cornerRadius = 10
         button.clipsToBounds = true
         button.setTitle(title, forState: .Normal)
         button.sizeToFit()
@@ -141,20 +142,25 @@ class KeyboardViewController: UIInputViewController {
         
         for (index, button) in enumerate(buttons) {
             var topConstraint = NSLayoutConstraint(item: button, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 1)
-            var bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: -1)
+            var bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: 0)
             var rightConstraint : NSLayoutConstraint!
             if index == buttons.count - 1 {
-                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: -1)
-            }else{
+                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: 0)
+            } else {
                 let nextButton = buttons[index+1]
-                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: nextButton, attribute: .Left, multiplier: 1.0, constant: -1)
+                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: nextButton, attribute: .Left, multiplier: 1.0, constant: 0)
             }
             var leftConstraint : NSLayoutConstraint!
             if index == 0 {
-                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 1)
-            }else{
+                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 0)
+            } else {
                 let prevtButton = buttons[index-1]
-                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: 1)
+                if button.titleForState(.Normal) == "z"  || button.titleForState(.Normal) == "bp" {
+                    println("adding space")
+                    leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: 15)
+                } else {
+                    leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: 0)
+                }
                 let firstButton = buttons[0]
                 var widthConstraint = NSLayoutConstraint(item: firstButton, attribute: .Width, relatedBy: .Equal, toItem: button, attribute: .Width, multiplier: 1.0, constant: 0)
                 widthConstraint.priority = 800
@@ -167,11 +173,15 @@ class KeyboardViewController: UIInputViewController {
     func addConstraintsToInputView(inputView: UIView, rowViews: [UIView]){
         
         for (index, rowView) in enumerate(rowViews) {
-            var rightSideConstraint = NSLayoutConstraint(item: rowView, attribute: .Right, relatedBy: .Equal, toItem: inputView, attribute: .Right, multiplier: 1.0, constant: -1)
-            
-            var leftConstraint = NSLayoutConstraint(item: rowView, attribute: .Left, relatedBy: .Equal, toItem: inputView, attribute: .Left, multiplier: 1.0, constant: 1)
-            
-            inputView.addConstraints([leftConstraint, rightSideConstraint])
+            if index == 1 {
+                var rightSideConstraint = NSLayoutConstraint(item: rowView, attribute: .Right, relatedBy: .Equal, toItem: inputView, attribute: .Right, multiplier: 1.0, constant: -15)
+                var leftConstraint = NSLayoutConstraint(item: rowView, attribute: .Left, relatedBy: .Equal, toItem: inputView, attribute: .Left, multiplier: 1.0, constant: 15)
+                inputView.addConstraints([leftConstraint, rightSideConstraint])
+            } else {
+                var rightSideConstraint = NSLayoutConstraint(item: rowView, attribute: .Right, relatedBy: .Equal, toItem: inputView, attribute: .Right, multiplier: 1.0, constant: 0)
+                var leftConstraint = NSLayoutConstraint(item: rowView, attribute: .Left, relatedBy: .Equal, toItem: inputView, attribute: .Left, multiplier: 1.0, constant: 0)
+                inputView.addConstraints([leftConstraint, rightSideConstraint])
+            }
             
             var topConstraint: NSLayoutConstraint
             
@@ -204,7 +214,6 @@ class KeyboardViewController: UIInputViewController {
             
             inputView.addConstraint(bottomConstraint)
         }
-        
     }
 
 }
