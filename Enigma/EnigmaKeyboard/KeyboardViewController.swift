@@ -6,16 +6,22 @@
 //  Copyright (c) 2015 Flipped Bit. All rights reserved.
 //
 
-
 /* I followed a tutorial to get all of this stuff ready to go. 
  * We dont have to use this set up if you guys don't want to I am just trying to learn.
  * Here is the URL if you would like to take a look:
  * http://www.appdesignvault.com/ios-8-custom-keyboard-extension/
  * The reason I was looking at this one was becasue it showed you how to set it up without a nib.
 */
+
 import UIKit
 
 class KeyboardViewController: UIInputViewController {
+    
+    var upperCase: Bool = false
+    var caseLock: Bool = false
+    var firstLetter: Bool = true
+    var lastTypedWord: String = ""
+    var proxy: UITextDocumentProxy!
 
     @IBOutlet var nextKeyboardButton: UIButton!
 
@@ -31,10 +37,10 @@ class KeyboardViewController: UIInputViewController {
         self.view.backgroundColor = UIColor.whiteColor()
         
         //The values for al the keys
-        let buttonTitles1 = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
-        let buttonTitles2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l"]
-        let buttonTitles3 = ["uc", "z", "x", "c", "v", "b", "n", "m", "bp"]
-        let buttonTitles4 = ["chg", "space", "return"]
+        let buttonTitles1 = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
+        let buttonTitles2 = ["A", "S", "D", "F", "G", "H", "J", "K", "L"]
+        let buttonTitles3 = ["UC", "Z", "X", "C", "V", "B", "N", "M", "BP"]
+        let buttonTitles4 = ["CHG", "SPACE", "RETURN"]
         
         //Row of buttons as a view. Example "qwertyuiop"
         var row1 = rowOfButtons(buttonTitles1)
@@ -48,6 +54,13 @@ class KeyboardViewController: UIInputViewController {
         self.view.addSubview(row3)
         self.view.addSubview(row4)
         
+        let cSelector: Selector = "swipe:"
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: cSelector)
+        rightSwipe.direction = UISwipeGestureRecognizerDirection.Right
+        rightSwipe.numberOfTouchesRequired = 1
+        row2.addGestureRecognizer(rightSwipe)
+        row2.userInteractionEnabled = true
+        
         //Disable all of the autolayout stuff that gets automatically set by adding a subview that way
         //we can add our own autolayout attributes
         row1.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -57,24 +70,67 @@ class KeyboardViewController: UIInputViewController {
 
         //Adding the constraints to the rows of keys. I took these constraints from the tutorial I followed
         addConstraintsToInputView(self.view, rowViews: [row1, row2, row3, row4])
+        self.proxy = textDocumentProxy as UITextDocumentProxy
+        
     }
     
-    //Create the rows of buttons
-    func rowOfButtons(buttonTitles: [NSString]) -> UIView {
-        //Array of buttons that will go in the row
-        var buttons = [UIButton]()
-        //Setting up the size of the array of keys
-        var keyboardRowView = UIView(frame: CGRectMake(0, 0, 320, 50))
-        //Create each button in the row
-        for buttonTitle in buttonTitles{
-            let button = createButtonWithTitle(buttonTitle)
-            buttons.append(button)
-            keyboardRowView.addSubview(button)
-        }
-        //Adding the constraints for each button in the row.
-        addIndividualButtonConstraints(buttons, mainView: keyboardRowView)
+    /* Keyboard functions */
+    
+    func swipe(sender: UISwipeGestureRecognizer){
+        //This is where I can change the keyboard layout
+    }
+    
+    func lockCase(sender: AnyObject?) {
+        self.caseLock = !self.caseLock
+    }
+    
+    func longPressBackSpace(sender: AnyObject) {
+        self.proxy.deleteBackward()
+    }
+    
+    func buttonTapped(sender: AnyObject?) {
+        let button = sender as UIButton
         
-        return keyboardRowView
+        if let title = button.titleForState(.Normal) {
+            switch title {
+            case "BP" :
+                self.proxy.deleteBackward()
+                //Getting rid of the last typed word with input field
+                if !self.lastTypedWord.isEmpty {
+                    self.lastTypedWord = self.lastTypedWord.substringToIndex(self.lastTypedWord.endIndex.predecessor())
+                }
+            case "RETURN" :
+                self.proxy.insertText("\n")
+            case "SPACE" :
+				let context = proxy.documentContextBeforeInput
+				if context.hasSuffix(" ") {
+					proxy.deleteBackward()
+					proxy.insertText(". ")
+				} else {
+					proxy.insertText(" ")
+				}
+            case "CHG" :
+                self.advanceToNextInputMode()
+            case "UC" :
+                self.upperCase = !self.upperCase
+            default :
+                if self.upperCase || self.caseLock || self.firstLetter {
+                    self.proxy.insertText(title)
+                    self.lastTypedWord += title
+                    if self.upperCase {
+                        //Undo upercase so the next word wont be capitalized.
+                        self.upperCase = !self.upperCase
+                    } else if self.firstLetter {
+                        //Uncheck first letter so the next one wont be capitalized.
+                        self.firstLetter = !self.firstLetter
+                    }
+                } else {
+                    //Adding a letter to the input and saving each letter so we know what the user just typed in
+                    self.proxy.insertText(title.lowercaseString)
+                    self.lastTypedWord += title.lowercaseString
+                }
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,6 +154,26 @@ class KeyboardViewController: UIInputViewController {
         }
     }
     
+    /* Keyboard setup */
+    
+    //Create the rows of buttons
+    func rowOfButtons(buttonTitles: [NSString]) -> UIView {
+        //Array of buttons that will go in the row
+        var buttons = [UIButton]()
+        //Setting up the size of the array of keys
+        var keyboardRowView = UIView(frame: CGRectMake(0, 0, 320, 50))
+        //Create each button in the row
+        for buttonTitle in buttonTitles{
+            let button = createButtonWithTitle(buttonTitle)
+            buttons.append(button)
+            keyboardRowView.addSubview(button)
+        }
+        //Adding the constraints for each button in the row.
+        addIndividualButtonConstraints(buttons, mainView: keyboardRowView)
+        
+        return keyboardRowView
+    }
+    
     //Creating a button with the title from the button* arrays
     func createButtonWithTitle(title: String) -> UIButton {
         
@@ -111,31 +187,24 @@ class KeyboardViewController: UIInputViewController {
         button.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
         button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
         
+        let singleTap = UITapGestureRecognizer(target: self, action: "buttonTapped:")
+        singleTap.numberOfTapsRequired = 1
         button.addTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
         
-        return button
-    }
-    
-    func buttonTapped(sender: AnyObject?) {
-        
-        let button = sender as UIButton
-        //This is where I set where the button title goes when the user hits a button.
-        var proxy = textDocumentProxy as UITextDocumentProxy
-        
-        if let title = button.titleForState(.Normal) {
-            switch title {
-            case "bp" :
-                proxy.deleteBackward()
-            case "return" :
-                proxy.insertText("\n")
-            case "space" :
-                proxy.insertText(" ")
-            case "chg" :
-                self.advanceToNextInputMode()
-            default :
-                proxy.insertText(title)
-            }
+        if title == "UC" {
+            let doubleTap = UITapGestureRecognizer(target: self, action: "lockCase:")
+            doubleTap.numberOfTapsRequired = 2
+            button.addGestureRecognizer(doubleTap)
+            singleTap.requireGestureRecognizerToFail(doubleTap)
+        } else if title == "BP" {
+            let longPress = UILongPressGestureRecognizer(target: self, action: "longPressBackSpace:")
+            button.addGestureRecognizer(longPress)
+            singleTap.requireGestureRecognizerToFail(longPress)
+            button.userInteractionEnabled = true
+            
         }
+        
+        return button
     }
     
     func addIndividualButtonConstraints(buttons: [UIButton], mainView: UIView){
