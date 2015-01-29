@@ -102,16 +102,13 @@ class KeyboardViewController: UIInputViewController {
             case "RETURN" :
                 self.proxy.insertText("\n")
             case "SPACE" :
-                //This is where we would access self.lastTypedWord to encrypt their text.
-                //Just use self.proxy.deleteBackward() to delete each char the user typed until it is gone then replace with the encrypted string.
-                if self.lastTypedWord == " " {
-                    self.proxy.deleteBackward()
-                    self.proxy.insertText(". ")
-                    self.lastTypedWord = " "
-                } else {
-                    self.proxy.insertText(" ")
-                    self.lastTypedWord = " "
-                }
+				let context = proxy.documentContextBeforeInput
+				if context.hasSuffix(" ") {
+					proxy.deleteBackward()
+					proxy.insertText(". ")
+				} else {
+					proxy.insertText(" ")
+				}
             case "CHG" :
                 self.advanceToNextInputMode()
             case "UC" :
