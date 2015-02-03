@@ -12,49 +12,64 @@
 
 +(void) test {
 	NSString *testString = @"Hello";
-	const char *CString = [testString cStringUsingEncoding:NSASCIIStringEncoding];
 	
-	NSLog(@"Testing Caesar encrytion");
-	NSLog(@"Using %@", testString);
-	char *newMesg = Caesar_encrypt(5, (char *)CString);
+	NSString *newString = [self encrypt:testString Using:@"SimpleSub" withKey:@"pineapple" andKey:0];
+	NSLog(@"Encrypted %@ to %@", testString, newString);
 	
-	NSString *encryptedObj = [NSString stringWithCString:newMesg encoding:NSASCIIStringEncoding];
-	NSLog(@"Encrypted Message is: %@", encryptedObj);
+	newString = [self decrypt:newString Using:@"SimpleSub" withKey:@"pineapple" andKey:0];
+	NSLog(@"Decryted to %@", newString);
 	
-	char *decryptedMesg = Caesar_decrypt(5, newMesg);
-	NSString *decrypObj = [NSString stringWithCString:decryptedMesg encoding:NSASCIIStringEncoding];
-	NSLog(@"Decrypted message is: %@", decrypObj);
+	newString = [self encrypt:testString Using:@"Caesar" withKey:@"2" andKey:0];
+	NSLog(@"Encrypted %@ to %@", testString, newString);
 	
-	free(newMesg);
-	free(decryptedMesg);
+	newString = [self decrypt:newString Using:@"Caesar" withKey:@"2" andKey:0];
+	NSLog(@"Decryted to %@", newString);
 	
-	NSLog(@"Testing Affine encrytion");
-	NSLog(@"Using %@", testString);
+	newString = [self encrypt:testString Using:@"Affine" withKey:@"3" andKey:4];
+	NSLog(@"Encrypted %@ to %@", testString, newString);
 	
-	newMesg = Affine_encrypt(17, 3, (char *)CString);
-	encryptedObj = [NSString stringWithCString:newMesg encoding:NSASCIIStringEncoding];
-	NSLog(@"Encrypted Message is: %@", encryptedObj);
+	newString = [self decrypt:newString Using:@"Affine" withKey:@"3" andKey:4];
+	NSLog(@"Decryted to %@", newString);
+}
+
++(NSString *) encrypt:(NSString *)message Using:(NSString *)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
+	const char *CString = [message cStringUsingEncoding:NSASCIIStringEncoding];
+	char *newCString;
 	
-	decryptedMesg = Affine_decrypt(17, 3, (char *)newMesg);
-	decrypObj = [NSString stringWithCString:decryptedMesg encoding:NSASCIIStringEncoding];
-	NSLog(@"Decrypted message is: %@", decrypObj);
+	if ([encrytionType isEqualToString:@"SimpleSub"]) {
+		newCString = SimpleSub_encrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)CString);
+	} else if  ([encrytionType isEqualToString:@"Caesar"]) {
+		int caesKey = [key1 intValue];
+		newCString = Caesar_encrypt(caesKey, (char *)CString);
+	} else {
+		int affKeyA = [key1 intValue];
+		newCString = Affine_encrypt(affKeyA, key2, (char *)CString);
+	}
 	
-	free(newMesg);
-	free(decryptedMesg);
+	NSString *newMessage = [NSString stringWithCString:newCString encoding:NSASCIIStringEncoding];
+	free(newCString);
 	
-	NSLog(@"Testing Simple Substitution encrytion");
-	NSLog(@"Using %@", testString);
+	return newMessage;
+}
+
++(NSString *) decrypt:(NSString *)message Using:(NSString *)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
+	const char *CString = [message cStringUsingEncoding:NSASCIIStringEncoding];
+	char *newCString;
 	
-	newMesg = SimpleSub_encrypt("zyxwvutsrqponmlkjihgfedcba", (char *)CString);
-	encryptedObj = [NSString stringWithCString:newMesg encoding:NSASCIIStringEncoding];
-	NSLog(@"Encrypted Message is: %@", encryptedObj);
+	if ([encrytionType isEqualToString:@"SimpleSub"]) {
+		newCString = SimpleSub_decrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)CString);
+	} else if  ([encrytionType isEqualToString:@"Caesar"]) {
+		int caesKey = [key1 intValue];
+		newCString = Caesar_decrypt(caesKey, (char *)CString);
+	} else {
+		int affKeyA = [key1 intValue];
+		newCString = Affine_decrypt(affKeyA, key2, (char *)CString);
+	}
 	
-	decryptedMesg = SimpleSub_decrypt("zyxwvutsrqponmlkjihgfedcba", (char *)newMesg);
-	decrypObj = [NSString stringWithCString:decryptedMesg encoding:NSASCIIStringEncoding];
-	NSLog(@"Decrypted message is: %@", decrypObj);
+	NSString *newMessage = [NSString stringWithCString:newCString encoding:NSASCIIStringEncoding];
+	free(newCString);
 	
-	free(newMesg);
-	free(decryptedMesg);
+	return newMessage;
 }
 
 @end
