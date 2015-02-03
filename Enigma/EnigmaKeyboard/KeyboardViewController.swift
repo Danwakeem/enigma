@@ -119,6 +119,7 @@ class KeyboardViewController: UIInputViewController {
             case "RTN" :
                 self.proxy.insertText("\n")
             case "SPACE" :
+<<<<<<< HEAD
                 //This is where we would access self.lastTypedWord to encrypt their text.
                 //Just use self.proxy.deleteBackward() to delete each char the user typed until it is gone then replace with the encrypted string.
                 if self.lastTypedWord == " " {
@@ -130,6 +131,16 @@ class KeyboardViewController: UIInputViewController {
                     self.lastTypedWord = " "
                 }
             case "\u{1f310}" :
+=======
+				let context = proxy.documentContextBeforeInput
+				if context.hasSuffix(" ") {
+					proxy.deleteBackward()
+					proxy.insertText(". ")
+				} else {
+					proxy.insertText(" ")
+				}
+            case "CHG" :
+>>>>>>> 7ebd6f2ecfe8ae0ee8ee68d9bb851fb986ae227b
                 self.advanceToNextInputMode()
             case "\u{21ea}" :
                 self.upperCase = !self.upperCase

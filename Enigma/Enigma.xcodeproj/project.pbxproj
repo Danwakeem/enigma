@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
+		021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
+		021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
+		021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
 		0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029227091A71D9D900A7DD81 /* AppDelegate.swift */; };
 		0292270C1A71D9D900A7DD81 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0292270B1A71D9D900A7DD81 /* ViewController.swift */; };
 		0292270F1A71D9D900A7DD81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0292270D1A71D9D900A7DD81 /* Main.storyboard */; };
@@ -49,6 +53,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Enigma-Bridging-Header.h"; sourceTree = "<group>"; };
+		021AE2E61A7D6F9700DF13F0 /* EncrytionFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncrytionFramework.h; sourceTree = "<group>"; };
+		021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncrytionFramework.m; sourceTree = "<group>"; };
+		021AE2EA1A7D708E00DF13F0 /* Ceasar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Ceasar.c; sourceTree = "<group>"; };
+		021AE2EB1A7D708E00DF13F0 /* Ceasar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ceasar.h; sourceTree = "<group>"; };
+		021AE2ED1A7D76FD00DF13F0 /* Affine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Affine.c; sourceTree = "<group>"; };
+		021AE2EE1A7D76FD00DF13F0 /* Affine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Affine.h; sourceTree = "<group>"; };
+		021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SimpleSub.c; sourceTree = "<group>"; };
+		021AE2F11A7D7B9F00DF13F0 /* SimpleSub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleSub.h; sourceTree = "<group>"; };
 		029227041A71D9D900A7DD81 /* Enigma.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Enigma.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		029227081A71D9D900A7DD81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		029227091A71D9D900A7DD81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,6 +102,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		021AE2E91A7D706400DF13F0 /* EncryptionFramework */ = {
+			isa = PBXGroup;
+			children = (
+				021AE2E61A7D6F9700DF13F0 /* EncrytionFramework.h */,
+				021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */,
+				021AE2EA1A7D708E00DF13F0 /* Ceasar.c */,
+				021AE2EB1A7D708E00DF13F0 /* Ceasar.h */,
+				021AE2ED1A7D76FD00DF13F0 /* Affine.c */,
+				021AE2EE1A7D76FD00DF13F0 /* Affine.h */,
+				021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */,
+				021AE2F11A7D7B9F00DF13F0 /* SimpleSub.h */,
+			);
+			name = EncryptionFramework;
+			sourceTree = "<group>";
+		};
 		029226FB1A71D9D900A7DD81 = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +142,8 @@
 			children = (
 				029227091A71D9D900A7DD81 /* AppDelegate.swift */,
 				0292270B1A71D9D900A7DD81 /* ViewController.swift */,
+				021AE2E91A7D706400DF13F0 /* EncryptionFramework */,
+				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
 				0292270D1A71D9D900A7DD81 /* Main.storyboard */,
 				029227101A71D9D900A7DD81 /* Images.xcassets */,
 				029227121A71D9D900A7DD81 /* LaunchScreen.xib */,
@@ -239,7 +269,7 @@
 					};
 					05211C4A1A72D16E00660739 = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 62TN7799Y7;
+						DevelopmentTeam = Z67LVNYQSE;
 					};
 				};
 			};
@@ -295,8 +325,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */,
+				021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */,
 				0292270C1A71D9D900A7DD81 /* ViewController.swift in Sources */,
 				0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */,
+				021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */,
+				021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,10 +468,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Enigma/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Enigma/Enigma-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -445,10 +482,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Enigma/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Enigma/Enigma-Bridging-Header.h";
 			};
 			name = Release;
 		};
