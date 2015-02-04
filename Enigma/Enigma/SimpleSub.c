@@ -61,14 +61,14 @@ char *SimpleSub_encrypt(char *key, char *message) {
 	
 	int i;
 	for (i = 0; i < strlen(message); i++) {
-		if (message[i] != ' ') {
+		if (tolower(message[i]) >= 'a' && tolower(message[i]) <= 'z') {
 			int keyIdx = tolower(message[i]) - 'a';
 			newMesg[i] = newKey[keyIdx];
 			
 			if (isupper(message[i]))
 				newMesg[i] = toupper(newMesg[i]);
 		} else {
-			newMesg[i] = ' ';
+			newMesg[i] = message[i];
 		}
 	}
 	newMesg[i] = '\0';
@@ -95,14 +95,14 @@ char *SimpleSub_decrypt(char *key, char *message) {
 	
 	int i;
 	for (i = 0; i < strlen(message); i++) {
-		if (message[i] != ' ') {
+		if (tolower(message[i]) >= 'a' && tolower(message[i]) <= 'z') {
 			int keyIdx = indexForKey(tolower(message[i]), newKey);
 			newMesg[i] = 'a' + keyIdx;
 			
 			if (isupper(message[i]))
 				newMesg[i] = toupper(newMesg[i]);
 		} else {
-			newMesg[i] = ' ';
+			newMesg[i] = message[i];
 		}
 	}
 	newMesg[i] = '\0';

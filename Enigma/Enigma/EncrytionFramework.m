@@ -11,7 +11,7 @@
 @implementation EncrytionFramework
 
 +(void) test {
-	NSString *testString = @"Hello";
+	NSString *testString = @"\"Hello!\"";
 	
 	NSString *newString = [self encrypt:testString Using:@"SimpleSub" withKey:@"pineapple" andKey:0];
 	NSLog(@"Encrypted %@ to %@", testString, newString);
