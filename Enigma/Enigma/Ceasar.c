@@ -16,7 +16,7 @@ char *Caesar_encrypt(int key, char *message) {
 	
 	int i;
 	for (i = 0; i < strlen(message); i++) {
-		if (message[i] != ' ') {
+		if (tolower(message[i]) >= 'a' && tolower(message[i]) <= 'z') {
 			newMesg[i] = 'a' + (((tolower(message[i]) - 'a') + key) % 26);
 			if ((((tolower(message[i]) - 'a') + key) % 26) < 0)
 				newMesg[i] = '{' + (((tolower(message[i]) - 'a') + key) % 26);
@@ -24,7 +24,7 @@ char *Caesar_encrypt(int key, char *message) {
 			if (isupper(message[i]))
 				newMesg[i] = toupper(newMesg[i]);
 		} else {
-			newMesg[i] = ' ';
+			newMesg[i] = message[i];
 		}
 	}
 	newMesg[i] = '\0';
@@ -37,7 +37,7 @@ char *Caesar_decrypt(int key, char *message) {
 	
 	int i;
 	for (i = 0; i < strlen(message); i++) {
-		if (message[i] != ' ') {
+		if (tolower(message[i]) >= 'a' && tolower(message[i]) <= 'z') {
 			newMesg[i] = 'a' + (((tolower(message[i]) - 'a') - key) % 26);
 			if ((((tolower(message[i]) - 'a') - key) % 26) < 0)
 				newMesg[i] = '{' + (((tolower(message[i]) - 'a') - key) % 26);
@@ -45,7 +45,7 @@ char *Caesar_decrypt(int key, char *message) {
 			if (isupper(message[i]))
 				newMesg[i] = toupper(newMesg[i]);
 		} else {
-			newMesg[i] = ' ';
+			newMesg[i] = message[i];
 		}
 	}
 	newMesg[i] = '\0';

@@ -25,13 +25,13 @@ char *Affine_encrypt(int keyA, int keyB, char *message) {
 	
 	int i;
 	for (i = 0; i < strlen(message); i++) {
-		if (message[i] != ' ') {
+		if (tolower(message[i]) >= 'a' && tolower(message[i]) <= 'z') {
 			newMesg[i] = 'a' + ((keyA * (tolower(message[i]) - 'a') + keyB) % 26);
 			
 			if (isupper(message[i]))
 				newMesg[i] = toupper(newMesg[i]);
 		} else {
-			newMesg[i] = ' ';
+			newMesg[i] = message[i];
 		}
 	}
 	newMesg[i] = '\0';
@@ -46,7 +46,7 @@ char *Affine_decrypt(int keyA, int keyB, char *message) {
 	
 	int i;
 	for (i = 0; i < strlen(message); i++) {
-		if (message[i] != ' ') {
+		if (tolower(message[i]) >= 'a' && tolower(message[i]) <= 'z') {
 			newMesg[i] = 'a' + ((inverse * ((tolower(message[i]) - 'a') - keyB)) % 26);
 			if (((inverse * ((tolower(message[i]) - 'a') - keyB)) % 26) < 0)
 				newMesg[i] = '{' + ((inverse * ((tolower(message[i]) - 'a') - keyB)) % 26);
@@ -54,7 +54,7 @@ char *Affine_decrypt(int keyA, int keyB, char *message) {
 			if (isupper(message[i]))
 				newMesg[i] = toupper(newMesg[i]);
 		} else {
-			newMesg[i] = ' ';
+			newMesg[i] = message[i];
 		}
 	}
 	newMesg[i] = '\0';
