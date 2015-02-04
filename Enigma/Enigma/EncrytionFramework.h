@@ -11,8 +11,16 @@
 #import "Affine.h"
 #import "SimpleSub.h"
 
+typedef enum {
+	SimpleSub,
+	Caesar,
+	Affine
+} EncryptionType;
+
 @interface EncrytionFramework : NSObject
 
 +(void) test;
++(NSString *) encrypt:(NSString *)message Using:(EncryptionType)encrytionType withKey:(NSString *)key1 andKey:(int)key2;
++(NSString *) decrypt:(NSString *)message Using:(EncryptionType)encrytionType withKey:(NSString *)key1 andKey:(int)key2;
 
 @end

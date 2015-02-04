@@ -13,32 +13,32 @@
 +(void) test {
 	NSString *testString = @"\"Hello!\"";
 	
-	NSString *newString = [self encrypt:testString Using:@"SimpleSub" withKey:@"pineapple" andKey:0];
+	NSString *newString = [self encrypt:testString Using:SimpleSub withKey:@"pineapple" andKey:0];
 	NSLog(@"Encrypted %@ to %@", testString, newString);
 	
-	newString = [self decrypt:newString Using:@"SimpleSub" withKey:@"pineapple" andKey:0];
+	newString = [self decrypt:newString Using:SimpleSub withKey:@"pineapple" andKey:0];
 	NSLog(@"Decryted to %@", newString);
 	
-	newString = [self encrypt:testString Using:@"Caesar" withKey:@"2" andKey:0];
+	newString = [self encrypt:testString Using:Caesar withKey:@"2" andKey:0];
 	NSLog(@"Encrypted %@ to %@", testString, newString);
 	
-	newString = [self decrypt:newString Using:@"Caesar" withKey:@"2" andKey:0];
+	newString = [self decrypt:newString Using:Caesar withKey:@"2" andKey:0];
 	NSLog(@"Decryted to %@", newString);
 	
-	newString = [self encrypt:testString Using:@"Affine" withKey:@"3" andKey:4];
+	newString = [self encrypt:testString Using:Affine withKey:@"3" andKey:4];
 	NSLog(@"Encrypted %@ to %@", testString, newString);
 	
-	newString = [self decrypt:newString Using:@"Affine" withKey:@"3" andKey:4];
+	newString = [self decrypt:newString Using:Affine withKey:@"3" andKey:4];
 	NSLog(@"Decryted to %@", newString);
 }
 
-+(NSString *) encrypt:(NSString *)message Using:(NSString *)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
++(NSString *) encrypt:(NSString *)message Using:(EncryptionType)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
 	const char *CString = [message cStringUsingEncoding:NSASCIIStringEncoding];
 	char *newCString;
 	
-	if ([encrytionType isEqualToString:@"SimpleSub"]) {
+	if (encrytionType == SimpleSub) {
 		newCString = SimpleSub_encrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)CString);
-	} else if  ([encrytionType isEqualToString:@"Caesar"]) {
+	} else if  (encrytionType == Caesar) {
 		int caesKey = [key1 intValue];
 		newCString = Caesar_encrypt(caesKey, (char *)CString);
 	} else {
@@ -52,13 +52,13 @@
 	return newMessage;
 }
 
-+(NSString *) decrypt:(NSString *)message Using:(NSString *)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
++(NSString *) decrypt:(NSString *)message Using:(EncryptionType)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
 	const char *CString = [message cStringUsingEncoding:NSASCIIStringEncoding];
 	char *newCString;
 	
-	if ([encrytionType isEqualToString:@"SimpleSub"]) {
+	if (encrytionType == SimpleSub) {
 		newCString = SimpleSub_decrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)CString);
-	} else if  ([encrytionType isEqualToString:@"Caesar"]) {
+	} else if  (encrytionType == Caesar) {
 		int caesKey = [key1 intValue];
 		newCString = Caesar_decrypt(caesKey, (char *)CString);
 	} else {
