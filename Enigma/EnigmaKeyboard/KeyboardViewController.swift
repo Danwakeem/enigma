@@ -126,7 +126,13 @@ class KeyboardViewController: UIInputViewController {
                     self.proxy.insertText(". ")
                     self.lastTypedWord = " "
                 } else {
-                    self.proxy.insertText(" ")
+                    //Encryption test :)
+                    var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
+                    for ch in self.lastTypedWord{
+                        self.proxy.deleteBackward()
+                    }
+                    
+                    self.proxy.insertText(encryptedString + " ")
                     self.lastTypedWord = " "
                 }
             case "\u{1f310}" :

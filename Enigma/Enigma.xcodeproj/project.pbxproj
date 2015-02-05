@@ -19,6 +19,10 @@
 		029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */; };
 		05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05211C4F1A72D16E00660739 /* KeyboardViewController.swift */; };
 		05211C531A72D16E00660739 /* EnigmaKeyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
+		05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
+		05AA7D611A840BE000C1B763 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
+		05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +349,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */,
+				05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */,
+				05AA7D611A840BE000C1B763 /* Affine.c in Sources */,
+				05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */,
 				05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -538,6 +546,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Enigma/Enigma-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -551,6 +560,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Enigma/Enigma-Bridging-Header.h";
 			};
 			name = Release;
 		};
