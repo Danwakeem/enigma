@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Flipped Bit. All rights reserved.
 //
 
-/* I followed a tutorial to get all of this stuff ready to go. 
- * We dont have to use this set up if you guys don't want to I am just trying to learn.
- * Here is the URL if you would like to take a look:
- * http://www.appdesignvault.com/ios-8-custom-keyboard-extension/
- * The reason I was looking at this one was becasue it showed you how to set it up without a nib.
+/* I followed a tutorial to get all of this stuff ready to go.
+* We dont have to use this set up if you guys don't want to I am just trying to learn.
+* Here is the URL if you would like to take a look:
+* http://www.appdesignvault.com/ios-8-custom-keyboard-extension/
+* The reason I was looking at this one was becasue it showed you how to set it up without a nib.
 */
 
 import UIKit
@@ -36,6 +36,8 @@ class KeyboardViewController: UIInputViewController {
     let numberButtonTitles3 = ["+#=", ".", ",", "?", "!", "'", "BP"]
     let numberButtonTitles4 = ["ABC", "\u{1f310}", "SPACE", "RTN"]
     
+    let rawTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 320, 50))
+    
     var encryptionRow: UIView!
     var row1: UIView!
     var row2: UIView!
@@ -43,13 +45,13 @@ class KeyboardViewController: UIInputViewController {
     var row4: UIView!
     
     @IBOutlet var nextKeyboardButton: UIButton!
-
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
-    
+        
         // Add custom view sizing constraints here
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -119,6 +121,7 @@ class KeyboardViewController: UIInputViewController {
             case "RTN" :
                 self.proxy.insertText("\n")
             case "SPACE" :
+                self.rawTextLabel.text! = ""
                 //This is where we would access self.lastTypedWord to encrypt their text.
                 //Just use self.proxy.deleteBackward() to delete each char the user typed until it is gone then replace with the encrypted string.
                 if self.lastTypedWord == " " {
@@ -136,13 +139,13 @@ class KeyboardViewController: UIInputViewController {
                     self.lastTypedWord = " "
                 }
             case "\u{1f310}" :
-				let context = proxy.documentContextBeforeInput
-				if context.hasSuffix(" ") {
-					proxy.deleteBackward()
-					proxy.insertText(". ")
-				} else {
-					proxy.insertText(" ")
-				}
+                let context = proxy.documentContextBeforeInput
+                if context.hasSuffix(" ") {
+                    proxy.deleteBackward()
+                    proxy.insertText(". ")
+                } else {
+                    proxy.insertText(" ")
+                }
             case "CHG" :
                 self.advanceToNextInputMode()
             case "\u{21ea}" :
@@ -155,6 +158,7 @@ class KeyboardViewController: UIInputViewController {
                 self.createKeyboard()
             default :
                 if self.upperCase || self.caseLock || self.firstLetter {
+                    self.rawTextLabel.text! += title
                     self.proxy.insertText(title)
                     self.lastTypedWord += title
                     if self.upperCase {
@@ -166,6 +170,7 @@ class KeyboardViewController: UIInputViewController {
                     }
                 } else {
                     //Adding a letter to the input and saving each letter so we know what the user just typed in
+                    self.rawTextLabel.text! += title.lowercaseString
                     self.proxy.insertText(title.lowercaseString)
                     self.lastTypedWord += title.lowercaseString
                 }
@@ -178,19 +183,19 @@ class KeyboardViewController: UIInputViewController {
             theView.removeFromSuperview()
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated
     }
-
+    
     override func textWillChange(textInput: UITextInput) {
         // The app is about to change the document's contents. Perform any preparation here.
     }
-
+    
     override func textDidChange(textInput: UITextInput) {
         // The app has just changed the document's contents, the document context has been updated.
-    
+        
         var textColor: UIColor
         var proxy = self.textDocumentProxy as UITextDocumentProxy
         if proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
@@ -211,12 +216,19 @@ class KeyboardViewController: UIInputViewController {
         self.row3 = rowOfButtons(self.buttonTitles3)
         self.row4 = rowOfButtons(self.buttonTitles4)
         
+        //Center the text in the label
+        self.rawTextLabel.textAlignment = .Center
+        
         //add the views of button arrays to the screen
+        self.encryptionRow.addSubview(self.rawTextLabel)
         self.view.addSubview(encryptionRow)
         self.view.addSubview(row1)
         self.view.addSubview(row2)
         self.view.addSubview(row3)
         self.view.addSubview(row4)
+        
+        //Add the constraints rawTextView to the encryptionRow
+        constraintsForRawTextLabel()
         
         //Disable all of the autolayout stuff that gets automatically set by adding a subview that way
         //we can add our own autolayout attributes
@@ -229,6 +241,13 @@ class KeyboardViewController: UIInputViewController {
         //Adding the constraints to the rows of keys. I took these constraints from the tutorial I followed
         addConstraintsToInputView(self.view, rowViews: [self.encryptionRow, self.row1, self.row2, self.row3, self.row4])
         
+    }
+    
+    func constraintsForRawTextLabel(){
+        var topConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Top, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Top, multiplier: 1.0, constant: 0)
+        var bottomConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var leftConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Left, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Left, multiplier: 1.0, constant: 0)
+        var rightConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Right, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Right, multiplier: 1.0, constant: 0)
     }
     
     func changeToNumberBoard() {
@@ -429,5 +448,5 @@ class KeyboardViewController: UIInputViewController {
             inputView.addConstraint(bottomConstraint)
         }
     }
-
+    
 }
