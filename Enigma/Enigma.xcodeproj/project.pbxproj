@@ -17,6 +17,8 @@
 		029227111A71D9D900A7DD81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 029227101A71D9D900A7DD81 /* Images.xcassets */; };
 		029227141A71D9D900A7DD81 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 029227121A71D9D900A7DD81 /* LaunchScreen.xib */; };
 		029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */; };
+		02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AD1A854136009C76E6 /* PasscodeView.swift */; };
+		02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AF1A854176009C76E6 /* PasscodeButton.swift */; };
 		05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05211C4F1A72D16E00660739 /* KeyboardViewController.swift */; };
 		05211C531A72D16E00660739 /* EnigmaKeyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
@@ -76,6 +78,8 @@
 		029227191A71D9D900A7DD81 /* EnigmaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnigmaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0292271E1A71D9D900A7DD81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnigmaTests.swift; sourceTree = "<group>"; };
+		02FF51AD1A854136009C76E6 /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
+		02FF51AF1A854176009C76E6 /* PasscodeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeButton.swift; sourceTree = "<group>"; };
 		05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EnigmaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		05211C4E1A72D16E00660739 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05211C4F1A72D16E00660739 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
@@ -146,6 +150,8 @@
 			children = (
 				029227091A71D9D900A7DD81 /* AppDelegate.swift */,
 				0292270B1A71D9D900A7DD81 /* ViewController.swift */,
+				02FF51AD1A854136009C76E6 /* PasscodeView.swift */,
+				02FF51AF1A854176009C76E6 /* PasscodeButton.swift */,
 				021AE2E91A7D706400DF13F0 /* EncryptionFramework */,
 				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
 				0292270D1A71D9D900A7DD81 /* Main.storyboard */,
@@ -330,8 +336,10 @@
 			files = (
 				021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */,
 				021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */,
+				02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */,
 				0292270C1A71D9D900A7DD81 /* ViewController.swift in Sources */,
 				0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */,
+				02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */,
 				021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */,
 				021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */,
 			);
