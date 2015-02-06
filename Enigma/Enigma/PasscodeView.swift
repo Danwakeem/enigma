@@ -35,6 +35,7 @@ class PasscodeView: UIViewController {
 			btn.center = CGPointMake(startX + CGFloat((i%3) * 90), startY + CGFloat(row * 90))
 			btn.setTitle(String(i+1), forState: .Normal)
 			btn.setTitleColor(UIColor.blackColor(), forState: .Normal)
+			btn.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 26.0)
 			btn.layer.borderColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0).CGColor
 			btn.layer.borderWidth = 2.0
 			btn.layer.cornerRadius = 35
