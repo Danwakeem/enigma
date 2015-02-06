@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Flipped Bit. All rights reserved.
 //
 
-/* I followed a tutorial to get all of this stuff ready to go. 
- * We dont have to use this set up if you guys don't want to I am just trying to learn.
- * Here is the URL if you would like to take a look:
- * http://www.appdesignvault.com/ios-8-custom-keyboard-extension/
- * The reason I was looking at this one was becasue it showed you how to set it up without a nib.
+/* I followed a tutorial to get all of this stuff ready to go.
+* We dont have to use this set up if you guys don't want to I am just trying to learn.
+* Here is the URL if you would like to take a look:
+* http://www.appdesignvault.com/ios-8-custom-keyboard-extension/
+* The reason I was looking at this one was becasue it showed you how to set it up without a nib.
 */
 
 import UIKit
@@ -36,6 +36,9 @@ class KeyboardViewController: UIInputViewController {
     let numberButtonTitles3 = ["+#=", ".", ",", "?", "!", "'", "BP"]
     let numberButtonTitles4 = ["ABC", "\u{1f310}", "SPACE", "RTN"]
     
+    let rawTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
+    let toggleEncryptDecrypt: UIButton = UIButton.buttonWithType(.System) as UIButton
+    
     var encryptionRow: UIView!
     var row1: UIView!
     var row2: UIView!
@@ -43,19 +46,19 @@ class KeyboardViewController: UIInputViewController {
     var row4: UIView!
     
     @IBOutlet var nextKeyboardButton: UIButton!
-
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
-    
+        
         // Add custom view sizing constraints here
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.view.backgroundColor = UIColor.whiteColor()
-        self.view = UIVisualEffectView()
-        self.view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
+        self.view.backgroundColor = UIColor.whiteColor()
+        //self.view = UIVisualEffectView()
+        //self.view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
         self.createKeyboard()
         self.proxy = textDocumentProxy as UITextDocumentProxy
         
@@ -116,9 +119,12 @@ class KeyboardViewController: UIInputViewController {
                 if !self.lastTypedWord.isEmpty {
                     self.lastTypedWord = self.lastTypedWord.substringToIndex(self.lastTypedWord.endIndex.predecessor())
                 }
+                self.rawTextLabel.text = self.lastTypedWord
             case "RTN" :
+                //Probably need to make lastTypedWord blank and the rawTextLabel blank
                 self.proxy.insertText("\n")
             case "SPACE" :
+                self.rawTextLabel.text = ""
                 //This is where we would access self.lastTypedWord to encrypt their text.
                 //Just use self.proxy.deleteBackward() to delete each char the user typed until it is gone then replace with the encrypted string.
                 if self.lastTypedWord == " " {
@@ -131,18 +137,17 @@ class KeyboardViewController: UIInputViewController {
                     for ch in self.lastTypedWord{
                         self.proxy.deleteBackward()
                     }
-                    
                     self.proxy.insertText(encryptedString + " ")
                     self.lastTypedWord = " "
                 }
             case "\u{1f310}" :
-				let context = proxy.documentContextBeforeInput
-				if context.hasSuffix(" ") {
-					proxy.deleteBackward()
-					proxy.insertText(". ")
-				} else {
-					proxy.insertText(" ")
-				}
+                let context = proxy.documentContextBeforeInput
+                if context.hasSuffix(" ") {
+                    proxy.deleteBackward()
+                    proxy.insertText(". ")
+                } else {
+                    proxy.insertText(" ")
+                }
             case "CHG" :
                 self.advanceToNextInputMode()
             case "\u{21ea}" :
@@ -155,6 +160,7 @@ class KeyboardViewController: UIInputViewController {
                 self.createKeyboard()
             default :
                 if self.upperCase || self.caseLock || self.firstLetter {
+                    self.setRawTextlabelText(title)
                     self.proxy.insertText(title)
                     self.lastTypedWord += title
                     if self.upperCase {
@@ -166,10 +172,19 @@ class KeyboardViewController: UIInputViewController {
                     }
                 } else {
                     //Adding a letter to the input and saving each letter so we know what the user just typed in
+                    self.setRawTextlabelText(title.lowercaseString)
                     self.proxy.insertText(title.lowercaseString)
                     self.lastTypedWord += title.lowercaseString
                 }
             }
+        }
+    }
+    
+    func setRawTextlabelText(title: String){
+        if let notEmpty = self.rawTextLabel.text {
+            self.rawTextLabel.text! += title
+        } else {
+            self.rawTextLabel.text = title
         }
     }
     
@@ -178,19 +193,19 @@ class KeyboardViewController: UIInputViewController {
             theView.removeFromSuperview()
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated
     }
-
+    
     override func textWillChange(textInput: UITextInput) {
         // The app is about to change the document's contents. Perform any preparation here.
     }
-
+    
     override func textDidChange(textInput: UITextInput) {
         // The app has just changed the document's contents, the document context has been updated.
-    
+        
         var textColor: UIColor
         var proxy = self.textDocumentProxy as UITextDocumentProxy
         if proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
@@ -211,7 +226,18 @@ class KeyboardViewController: UIInputViewController {
         self.row3 = rowOfButtons(self.buttonTitles3)
         self.row4 = rowOfButtons(self.buttonTitles4)
         
+        //Change to a D when you are in decrypt mode
+        self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
+        self.toggleEncryptDecrypt.frame = CGRectMake(0, 0, 50, 50)
+        self.toggleEncryptDecrypt.sizeToFit()
+        self.toggleEncryptDecrypt.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.toggleEncryptDecrypt.backgroundColor = UIColor.whiteColor()
+        self.toggleEncryptDecrypt.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        self.toggleEncryptDecrypt.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
         //add the views of button arrays to the screen
+        self.encryptionRow.addSubview(self.rawTextLabel)
+        self.rawTextLabel.addSubview(self.toggleEncryptDecrypt)
         self.view.addSubview(encryptionRow)
         self.view.addSubview(row1)
         self.view.addSubview(row2)
@@ -225,10 +251,28 @@ class KeyboardViewController: UIInputViewController {
         self.row2.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.row3.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.row4.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.rawTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         //Adding the constraints to the rows of keys. I took these constraints from the tutorial I followed
         addConstraintsToInputView(self.view, rowViews: [self.encryptionRow, self.row1, self.row2, self.row3, self.row4])
         
+        //Add the constraints rawTextView to the encryptionRow
+        constraintsForRawTextLabel()
+        //Center the text in the label
+        self.rawTextLabel.textAlignment = .Center
+    }
+    
+    func constraintsForRawTextLabel(){
+        var buttonTop = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Top, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Top, multiplier: 1.0, constant: 0)
+        var buttonBottom = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Bottom, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var buttonLeft = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Left, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Left, multiplier: 1.0, constant: 0)
+        self.rawTextLabel.addConstraints([buttonTop,buttonBottom,buttonLeft])
+        
+        var topConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Top, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Top, multiplier: 1.0, constant: 0)
+        var bottomConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var leftConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Left, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Left, multiplier: 1.0, constant: 0)
+        var rightConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Right, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Right, multiplier: 1.0, constant: 0)
+        self.encryptionRow.addConstraints([topConstraint,bottomConstraint,leftConstraint,rightConstraint])
     }
     
     func changeToNumberBoard() {
@@ -291,7 +335,8 @@ class KeyboardViewController: UIInputViewController {
         button.sizeToFit()
         button.titleLabel?.font = UIFont.systemFontOfSize(15)
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
-        button.backgroundColor = UIColor(red: 232/255, green: 234/255, blue: 237/255, alpha: 0.2)
+        button.backgroundColor = UIColor.whiteColor()
+        //button.backgroundColor = UIColor(red: 232/255, green: 234/255, blue: 237/255, alpha: 0.2)
         button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
         
         let singleTap = UITapGestureRecognizer(target: self, action: "buttonTapped:")
@@ -429,5 +474,5 @@ class KeyboardViewController: UIInputViewController {
             inputView.addConstraint(bottomConstraint)
         }
     }
-
+    
 }
