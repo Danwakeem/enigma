@@ -22,7 +22,6 @@ class KeyboardViewController: UIInputViewController {
     var firstLetter: Bool = true
     var lastTypedWord: String = ""
     var proxy: UITextDocumentProxy!
-    var encryptDecryptToggle: Bool = false
     
     //21ea == uppercase
     //1f310 == Globe
@@ -36,14 +35,14 @@ class KeyboardViewController: UIInputViewController {
     let numberButtonTitles3 = ["+#=", ".", ",", "?", "!", "'", "BP"]
     let numberButtonTitles4 = ["ABC", "\u{1f310}", "SPACE", "RTN"]
     
-    let rawTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
-    let toggleEncryptDecrypt: UIButton = UIButton.buttonWithType(.System) as UIButton
-    
     var encryptionRow: UIView!
     var row1: UIView!
     var row2: UIView!
     var row3: UIView!
     var row4: UIView!
+    
+    let rawTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
+    let toggleEncryptDecrypt: UIButton = UIButton.buttonWithType(.System) as UIButton
     
     @IBOutlet var nextKeyboardButton: UIButton!
     
@@ -59,7 +58,7 @@ class KeyboardViewController: UIInputViewController {
         self.view.backgroundColor = UIColor.whiteColor()
         //self.view = UIVisualEffectView()
         //self.view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
-        self.createKeyboard()
+        self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         self.proxy = textDocumentProxy as UITextDocumentProxy
         
         let alphaSelector: Selector = "toggleAlphaKeyboard:"
@@ -86,18 +85,14 @@ class KeyboardViewController: UIInputViewController {
     
     /* Keyboard functions */
     
-    func swipe(sender: UISwipeGestureRecognizer){
-        //This is where I can change the keyboard layout
-    }
-    
     func toggleAlphaKeyboard(sender: UISwipeGestureRecognizer) {
         self.removeViews()
-        self.createKeyboard()
+        self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
     }
     
     func toggleNumberKeyboard(sender: UISwipeGestureRecognizer) {
         self.removeViews()
-        self.changeToNumberBoard()
+        self.createKeyboard([numberButtonTitles1,numberButtonTitles2,numberButtonTitles3,numberButtonTitles4])
     }
     
     func lockCase(sender: AnyObject?) {
@@ -106,6 +101,7 @@ class KeyboardViewController: UIInputViewController {
     
     func longPressBackSpace(sender: AnyObject) {
         self.proxy.deleteBackward()
+        self.rawTextLabel.text = ""
     }
     
     func buttonTapped(sender: AnyObject?) {
@@ -114,69 +110,74 @@ class KeyboardViewController: UIInputViewController {
         if let title = button.titleForState(.Normal) {
             switch title {
             case "BP" :
-                self.proxy.deleteBackward()
-                //Getting rid of the last typed word with input field
-                if !self.lastTypedWord.isEmpty {
-                    self.lastTypedWord = self.lastTypedWord.substringToIndex(self.lastTypedWord.endIndex.predecessor())
-                }
-                self.rawTextLabel.text = self.lastTypedWord
+                self.pressedBackSpace(title)
             case "RTN" :
-                //Probably need to make lastTypedWord blank and the rawTextLabel blank
+                self.lastTypedWord = ""
+                self.rawTextLabel.text = ""
                 self.proxy.insertText("\n")
             case "SPACE" :
-                self.rawTextLabel.text = ""
-                //This is where we would access self.lastTypedWord to encrypt their text.
-                //Just use self.proxy.deleteBackward() to delete each char the user typed until it is gone then replace with the encrypted string.
-                if self.lastTypedWord == " " {
-                    self.proxy.deleteBackward()
-                    self.proxy.insertText(". ")
-                    self.lastTypedWord = " "
-                } else {
-                    //Encryption test :)
-                    var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
-                    for ch in self.lastTypedWord{
-                        self.proxy.deleteBackward()
-                    }
-                    self.proxy.insertText(encryptedString + " ")
-                    self.lastTypedWord = " "
-                }
+                self.pressedSpace(title)
             case "\u{1f310}" :
-                let context = proxy.documentContextBeforeInput
-                if context.hasSuffix(" ") {
-                    proxy.deleteBackward()
-                    proxy.insertText(". ")
-                } else {
-                    proxy.insertText(" ")
-                }
-            case "CHG" :
                 self.advanceToNextInputMode()
             case "\u{21ea}" :
                 self.upperCase = !self.upperCase
             case "123" :
                 self.removeViews()
-                self.changeToNumberBoard()
+                self.createKeyboard([numberButtonTitles1,numberButtonTitles2,numberButtonTitles3,numberButtonTitles4])
             case "ABC" :
                 self.removeViews()
-                self.createKeyboard()
+                self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
             default :
-                if self.upperCase || self.caseLock || self.firstLetter {
-                    self.setRawTextlabelText(title)
-                    self.proxy.insertText(title)
-                    self.lastTypedWord += title
-                    if self.upperCase {
-                        //Undo upercase so the next word wont be capitalized.
-                        self.upperCase = !self.upperCase
-                    } else if self.firstLetter {
-                        //Uncheck first letter so the next one wont be capitalized.
-                        self.firstLetter = !self.firstLetter
-                    }
-                } else {
-                    //Adding a letter to the input and saving each letter so we know what the user just typed in
-                    self.setRawTextlabelText(title.lowercaseString)
-                    self.proxy.insertText(title.lowercaseString)
-                    self.lastTypedWord += title.lowercaseString
-                }
+                self.insertText(title)
             }
+        }
+    }
+    
+    func pressedBackSpace(title: String){
+        self.proxy.deleteBackward()
+        //Getting rid of the last typed word with input field
+        if !self.lastTypedWord.isEmpty {
+            self.lastTypedWord = self.lastTypedWord.substringToIndex(self.lastTypedWord.endIndex.predecessor())
+        }
+        self.rawTextLabel.text = self.lastTypedWord
+    }
+    
+    func pressedSpace(title: String){
+        self.rawTextLabel.text = ""
+        //This is where we would access self.lastTypedWord to encrypt their text.
+        //Just use self.proxy.deleteBackward() to delete each char the user typed until it is gone then replace with the encrypted string.
+        if self.lastTypedWord == " " {
+            self.proxy.deleteBackward()
+            self.proxy.insertText(". ")
+            self.lastTypedWord = " "
+        } else {
+            //Encryption test :)
+            var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
+            for ch in self.lastTypedWord{
+                self.proxy.deleteBackward()
+            }
+            self.proxy.insertText(encryptedString + " ")
+            self.lastTypedWord = " "
+        }
+    }
+    
+    func insertText(title: String){
+        if self.upperCase || self.caseLock || self.firstLetter {
+            self.setRawTextlabelText(title)
+            self.proxy.insertText(title)
+            self.lastTypedWord += title
+            if self.upperCase {
+                //Undo upercase so the next word wont be capitalized.
+                self.upperCase = !self.upperCase
+            } else if self.firstLetter {
+                //Uncheck first letter so the next one wont be capitalized.
+                self.firstLetter = !self.firstLetter
+            }
+        } else {
+            //Adding a letter to the input and saving each letter so we know what the user just typed in
+            self.setRawTextlabelText(title.lowercaseString)
+            self.proxy.insertText(title.lowercaseString)
+            self.lastTypedWord += title.lowercaseString
         }
     }
     
@@ -217,23 +218,16 @@ class KeyboardViewController: UIInputViewController {
     
     /* Keyboard setup */
     
-    func createKeyboard(){
+    func createKeyboard(buttonTitles: [AnyObject]){
         //Row of buttons as a view. Example "qwertyuiop"
         self.encryptionRow = UIView(frame: CGRectMake(0, 0, 320, 50))
-        self.encryptionRow.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 0.2)
-        self.row1 = rowOfButtons(self.buttonTitles1)
-        self.row2 = rowOfButtons(self.buttonTitles2)
-        self.row3 = rowOfButtons(self.buttonTitles3)
-        self.row4 = rowOfButtons(self.buttonTitles4)
-        
-        //Change to a D when you are in decrypt mode
-        self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
-        self.toggleEncryptDecrypt.frame = CGRectMake(0, 0, 50, 50)
-        self.toggleEncryptDecrypt.sizeToFit()
-        self.toggleEncryptDecrypt.titleLabel?.font = UIFont.systemFontOfSize(15)
-        self.toggleEncryptDecrypt.backgroundColor = UIColor.whiteColor()
-        self.toggleEncryptDecrypt.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
-        self.toggleEncryptDecrypt.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.encryptionRow.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+        self.row1 = rowOfButtons(buttonTitles[0] as [String])
+        self.row2 = rowOfButtons(buttonTitles[1] as [String])
+        self.row3 = rowOfButtons(buttonTitles[2] as [String])
+        self.row4 = rowOfButtons(buttonTitles[3] as [String])
+
+        self.createEncryptDecryptToggleButton()
         
         //add the views of button arrays to the screen
         self.encryptionRow.addSubview(self.rawTextLabel)
@@ -262,45 +256,15 @@ class KeyboardViewController: UIInputViewController {
         self.rawTextLabel.textAlignment = .Center
     }
     
-    func constraintsForRawTextLabel(){
-        var buttonTop = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Top, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Top, multiplier: 1.0, constant: 0)
-        var buttonBottom = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Bottom, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        var buttonLeft = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Left, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Left, multiplier: 1.0, constant: 0)
-        self.rawTextLabel.addConstraints([buttonTop,buttonBottom,buttonLeft])
-        
-        var topConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Top, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Top, multiplier: 1.0, constant: 0)
-        var bottomConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        var leftConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Left, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Left, multiplier: 1.0, constant: 0)
-        var rightConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Right, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Right, multiplier: 1.0, constant: 0)
-        self.encryptionRow.addConstraints([topConstraint,bottomConstraint,leftConstraint,rightConstraint])
-    }
-    
-    func changeToNumberBoard() {
-        self.encryptionRow = UIView(frame: CGRectMake(0, 0, 320, 50))
-        self.encryptionRow.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 0.2)
-        self.row1 = rowOfButtons(self.numberButtonTitles1)
-        self.row2 = rowOfButtons(self.numberButtonTitles2)
-        self.row3 = rowOfButtons(self.numberButtonTitles3)
-        self.row4 = rowOfButtons(self.numberButtonTitles4)
-        
-        //add the views of button arrays to the screen
-        self.view.addSubview(encryptionRow)
-        self.view.addSubview(row1)
-        self.view.addSubview(row2)
-        self.view.addSubview(row3)
-        self.view.addSubview(row4)
-        
-        //Disable all of the autolayout stuff that gets automatically set by adding a subview that way
-        //we can add our own autolayout attributes
-        self.encryptionRow.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.row1.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.row2.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.row3.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.row4.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        //Adding the constraints to the rows of keys. I took these constraints from the tutorial I followed
-        addConstraintsToInputView(self.view, rowViews: [self.encryptionRow, self.row1, self.row2, self.row3, self.row4])
-        
+    func createEncryptDecryptToggleButton(){
+        //Change to a D when you are in decrypt mode
+        self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
+        self.toggleEncryptDecrypt.frame = CGRectMake(0, 0, 50, 50)
+        self.toggleEncryptDecrypt.sizeToFit()
+        self.toggleEncryptDecrypt.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.toggleEncryptDecrypt.backgroundColor = UIColor(red: 0.91, green: 0.902, blue: 0.902, alpha: 1.0)
+        self.toggleEncryptDecrypt.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        self.toggleEncryptDecrypt.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
     
     //Create the rows of buttons
@@ -357,6 +321,22 @@ class KeyboardViewController: UIInputViewController {
         }
         
         return button
+    }
+    
+    
+    //Constraints for the raw text encryption row
+    func constraintsForRawTextLabel(){
+        var buttonTop = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Top, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Top, multiplier: 1.0, constant: 0)
+        var buttonBottom = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Bottom, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var buttonLeft = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Left, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Left, multiplier: 1.0, constant: 0)
+        var widthConstraint = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50)
+        self.rawTextLabel.addConstraints([buttonTop,buttonBottom,buttonLeft,widthConstraint])
+        
+        var topConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Top, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Top, multiplier: 1.0, constant: 0)
+        var bottomConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var leftConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Left, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Left, multiplier: 1.0, constant: 0)
+        var rightConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Right, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Right, multiplier: 1.0, constant: 0)
+        self.encryptionRow.addConstraints([topConstraint,bottomConstraint,leftConstraint,rightConstraint])
     }
     
     func addBottomRowConstraints(buttons: [UIButton], mainView: UIView){
