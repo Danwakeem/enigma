@@ -42,7 +42,7 @@ class KeyboardViewController: UIInputViewController {
     var row4: UIView!
     
     let rawTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
-    let toggleEncryptDecrypt: UIButton = UIButton.buttonWithType(.System) as UIButton
+    let toggleEncryptDecrypt: UIButton = UIButton()
     
     @IBOutlet var nextKeyboardButton: UIButton!
     
@@ -137,6 +137,11 @@ class KeyboardViewController: UIInputViewController {
         self.proxy.deleteBackward()
         //Getting rid of the last typed word with input field
         if !self.lastTypedWord.isEmpty {
+            //If last letter was uppercase then turn uppercase on for that ch
+            var lastCh: String = self.lastTypedWord.lastPathComponent as String
+            if lastCh.uppercaseString == lastCh {
+                self.upperCase = true
+            }
             self.lastTypedWord = self.lastTypedWord.substringToIndex(self.lastTypedWord.endIndex.predecessor())
         }
         self.rawTextLabel.text = self.lastTypedWord
@@ -186,6 +191,14 @@ class KeyboardViewController: UIInputViewController {
             self.rawTextLabel.text! += title
         } else {
             self.rawTextLabel.text = title
+        }
+    }
+    
+    func toggleCryption(){
+        if self.toggleEncryptDecrypt.titleForState(.Normal) == "E" {
+            self.toggleEncryptDecrypt.setTitle("D", forState: .Normal)
+        } else {
+            self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
         }
     }
     
@@ -257,13 +270,19 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func createEncryptDecryptToggleButton(){
+        //So the button is clickable
+        self.encryptionRow.userInteractionEnabled = true
+        self.rawTextLabel.userInteractionEnabled = true
+        
         //Change to a D when you are in decrypt mode
         self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
         self.toggleEncryptDecrypt.frame = CGRectMake(0, 0, 50, 50)
+        self.toggleEncryptDecrypt.clipsToBounds = true
         self.toggleEncryptDecrypt.sizeToFit()
         self.toggleEncryptDecrypt.titleLabel?.font = UIFont.systemFontOfSize(15)
         self.toggleEncryptDecrypt.backgroundColor = UIColor(red: 0.91, green: 0.902, blue: 0.902, alpha: 1.0)
         self.toggleEncryptDecrypt.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        self.toggleEncryptDecrypt.addTarget(self, action: "toggleCryption", forControlEvents: .TouchUpInside)
         self.toggleEncryptDecrypt.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
     
@@ -300,7 +319,6 @@ class KeyboardViewController: UIInputViewController {
         button.titleLabel?.font = UIFont.systemFontOfSize(15)
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         button.backgroundColor = UIColor.whiteColor()
-        //button.backgroundColor = UIColor(red: 232/255, green: 234/255, blue: 237/255, alpha: 0.2)
         button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
         
         let singleTap = UITapGestureRecognizer(target: self, action: "buttonTapped:")
