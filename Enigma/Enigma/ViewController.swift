@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+	var authenticated = false
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
@@ -21,7 +23,10 @@ class ViewController: UIViewController {
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		
-		self.presentViewController(PasscodeView(), animated: true, completion: nil)
+		if !authenticated {
+			authenticated = true
+			self.presentViewController(PasscodeView(), animated: true, completion: nil)
+		}
 	}
 
 	override func didReceiveMemoryWarning() {

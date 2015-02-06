@@ -10,26 +10,18 @@ import UIKit
 
 class PasscodeView: UIViewController {
 
+	let dots = [] as NSMutableArray
+	var dotCnt = 0
+	
+	var passcode = ""
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
 		self.view.backgroundColor = UIColor.whiteColor()
 		
-        /*let btn5 = UIButton()
-		btn5.frame = CGRectMake(0, 0, 50, 50)
-		btn5.center = self.view.center
-		btn5.setTitle("5", forState: .Normal)
-		btn5.setTitleColor(UIColor.blackColor(), forState: .Normal)
-		btn5.layer.borderColor = UIColor.redColor().CGColor
-		btn5.layer.borderWidth = 2.0
-		btn5.layer.cornerRadius = 25
-		btn5.addTarget(self, action: "btnClicked:", forControlEvents: .TouchDown)
-		btn5.addTarget(self, action: "btnReleased:", forControlEvents: .TouchUpInside)
-		
-		self.view.addSubview(btn5)*/
-		
 		createBtns()
-		
+		createDots()
     }
 	
 	func createBtns() {
@@ -43,7 +35,7 @@ class PasscodeView: UIViewController {
 			btn.center = CGPointMake(startX + CGFloat((i%3) * 90), startY + CGFloat(row * 90))
 			btn.setTitle(String(i+1), forState: .Normal)
 			btn.setTitleColor(UIColor.blackColor(), forState: .Normal)
-			btn.layer.borderColor = UIColor.redColor().CGColor
+			btn.layer.borderColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0).CGColor
 			btn.layer.borderWidth = 2.0
 			btn.layer.cornerRadius = 35
 			btn.addTarget(self, action: "btnClicked:", forControlEvents: .TouchDown)
@@ -59,6 +51,38 @@ class PasscodeView: UIViewController {
 				row++
 			}
 		}
+		
+		let deleteBtn = UIButton()
+		deleteBtn.frame = CGRectMake(0, 0, 150, 70)
+		deleteBtn.center = CGPointMake(self.view.center.x, self.view.center.y + 270)
+		deleteBtn.setTitle("delete", forState: .Normal)
+		deleteBtn.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+		deleteBtn.addTarget(self, action: "deleteTapped:", forControlEvents: .TouchUpInside)
+		self.view.addSubview(deleteBtn)
+	}
+	
+	func createDots() {
+		let startX = self.view.center.x - 45
+		let startY = self.view.center.y - 180
+		
+		for var i = 0; i < 4; i++ {
+			let dot = UIView()
+			dot.frame = CGRectMake(0, 0, 15, 15)
+			dot.center = CGPointMake(startX + CGFloat(i * 30), startY)
+			dot.layer.borderWidth = 1.25
+			dot.layer.borderColor = UIColor.darkGrayColor().CGColor
+			dot.layer.cornerRadius = 7.5
+			
+			dots.addObject(dot)
+			self.view.addSubview(dot)
+		}
+		
+		let passcodeLbl = UILabel()
+		passcodeLbl.frame = CGRectMake(0, 0, 150, 70)
+		passcodeLbl.center = CGPointMake(self.view.center.x, self.view.center.y - 210)
+		passcodeLbl.text = "Passcode Required"
+		passcodeLbl.textColor = UIColor.blackColor()
+		self.view.addSubview(passcodeLbl)
 	}
 	
 	func btnClicked(sender: AnyObject) {
@@ -71,6 +95,28 @@ class PasscodeView: UIViewController {
 		let btn = sender as UIButton
 		btn.backgroundColor = UIColor.clearColor()
 		btn.setTitleColor(UIColor.blackColor(), forState: .Normal)
+		
+		if (dotCnt < 4) {
+			let dot = dots[dotCnt] as UIView
+			dot.backgroundColor = UIColor.init(CGColor: dot.layer.borderColor)
+			dotCnt++
+			
+			passcode += btn.titleLabel!.text!
+			
+			if dotCnt == 4 {
+				self.dismissViewControllerAnimated(true, completion: nil)
+			}
+		}
+	}
+	
+	func deleteTapped(sender: AnyObject) {
+		if dotCnt > 0 {
+			dotCnt--
+			let dot = dots[dotCnt] as UIView
+			dot.backgroundColor = UIColor.clearColor()
+			
+			passcode = passcode.substringToIndex(passcode.endIndex.predecessor())
+		}
 	}
 
     override func didReceiveMemoryWarning() {
