@@ -37,6 +37,7 @@ class KeyboardViewController: UIInputViewController {
     let numberButtonTitles4 = ["ABC", "\u{1f310}", "SPACE", "RTN"]
     
     let rawTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
+    let toggleEncryptDecrypt: UIButton = UIButton.buttonWithType(.System) as UIButton
     
     var encryptionRow: UIView!
     var row1: UIView!
@@ -225,8 +226,18 @@ class KeyboardViewController: UIInputViewController {
         self.row3 = rowOfButtons(self.buttonTitles3)
         self.row4 = rowOfButtons(self.buttonTitles4)
         
+        //Change to a D when you are in decrypt mode
+        self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
+        self.toggleEncryptDecrypt.frame = CGRectMake(0, 0, 50, 50)
+        self.toggleEncryptDecrypt.sizeToFit()
+        self.toggleEncryptDecrypt.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.toggleEncryptDecrypt.backgroundColor = UIColor.whiteColor()
+        self.toggleEncryptDecrypt.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        self.toggleEncryptDecrypt.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
         //add the views of button arrays to the screen
         self.encryptionRow.addSubview(self.rawTextLabel)
+        self.rawTextLabel.addSubview(self.toggleEncryptDecrypt)
         self.view.addSubview(encryptionRow)
         self.view.addSubview(row1)
         self.view.addSubview(row2)
@@ -252,6 +263,11 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func constraintsForRawTextLabel(){
+        var buttonTop = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Top, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Top, multiplier: 1.0, constant: 0)
+        var buttonBottom = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Bottom, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var buttonLeft = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Left, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Left, multiplier: 1.0, constant: 0)
+        self.rawTextLabel.addConstraints([buttonTop,buttonBottom,buttonLeft])
+        
         var topConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Top, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Top, multiplier: 1.0, constant: 0)
         var bottomConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
         var leftConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Left, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Left, multiplier: 1.0, constant: 0)
