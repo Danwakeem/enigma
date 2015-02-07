@@ -47,6 +47,8 @@ class KeyboardViewController: UIInputViewController {
     
     let rawTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
     let toggleEncryptDecrypt: UIButton = UIButton()
+    let decryptButton: UIButton = UIButton()
+    let decryptedTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
     
     @IBOutlet var nextKeyboardButton: UIButton!
     
@@ -216,6 +218,17 @@ class KeyboardViewController: UIInputViewController {
                     sub.removeFromSuperview()
                 }
                 view.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+                if view == self.row1 {
+                    self.createDecryptButton()
+                    self.row1.addSubview(self.decryptButton)
+                    self.addDecryptButtonConstraints()
+                } else if view == self.row2 {
+                    self.decryptedTextLabel.text = ""
+                    self.row2.addSubview(self.decryptedTextLabel)
+                    self.decryptedTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+                    self.addDecryptedTextLabelConstraints()
+                    self.decryptedTextLabel.textAlignment = .Center
+                }
             }
             self.removeGestures()
             self.view.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
@@ -225,9 +238,22 @@ class KeyboardViewController: UIInputViewController {
             for view in views {
                 view.backgroundColor = UIColor.whiteColor()
             }
+            self.decryptedTextLabel.removeFromSuperview()
+            self.decryptButton.removeFromSuperview()
             self.view.backgroundColor = UIColor.whiteColor()
             createKeyboard([self.buttonTitles1,self.buttonTitles2,self.buttonTitles3,self.buttonTitles4])
         }
+    }
+    
+    func decryptPasteboard(){
+        let pasteBoard = UIPasteboard.generalPasteboard()
+        if let text = pasteBoard.string {
+            self.decryptedTextLabel.text = self.decryptText(text)
+        }
+    }
+    
+    func decryptText(text: String) -> String{
+         return EncrytionFramework.decrypt(text, using: Caesar, withKey: "13", andKey: 0)
     }
     
     func removeViews(){
@@ -295,6 +321,18 @@ class KeyboardViewController: UIInputViewController {
         constraintsForRawTextLabel()
         //Center the text in the label
         self.rawTextLabel.textAlignment = .Center
+    }
+    
+    func createDecryptButton(){
+        self.decryptButton.setTitle("Decrypt pasteboard", forState: .Normal)
+        self.decryptButton.frame = CGRectMake(0, 0, 320, 50)
+        self.decryptButton.clipsToBounds = true
+        self.decryptButton.sizeToFit()
+        self.decryptButton.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.decryptButton.backgroundColor = UIColor.clearColor()
+        self.decryptButton.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        self.decryptButton.addTarget(self, action: "decryptPasteboard", forControlEvents: .TouchUpInside)
+        self.decryptButton.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
     
     func createEncryptDecryptToggleButton(){
@@ -369,6 +407,22 @@ class KeyboardViewController: UIInputViewController {
         return button
     }
     
+    func addDecryptedTextLabelConstraints(){
+        var bottomConstraint = NSLayoutConstraint(item: self.decryptedTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.row2, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var topConstraint = NSLayoutConstraint(item: self.decryptedTextLabel, attribute: .Top, relatedBy: .Equal, toItem: self.row2, attribute: .Top, multiplier: 1.0, constant: 0)
+        var rightConstraint = NSLayoutConstraint(item: self.decryptedTextLabel, attribute: .Right, relatedBy: .Equal, toItem: self.row2, attribute: .Right, multiplier: 1.0, constant: 0)
+        var leftConstraint = NSLayoutConstraint(item: self.decryptedTextLabel, attribute: .Left, relatedBy: .Equal, toItem: self.row2, attribute: .Left, multiplier: 1.0, constant: 0)
+        self.row2.addConstraints([bottomConstraint,topConstraint,rightConstraint,leftConstraint])
+        
+    }
+    
+    func addDecryptButtonConstraints(){
+        var bottomConstraint = NSLayoutConstraint(item: self.decryptButton, attribute: .Bottom, relatedBy: .Equal, toItem: self.row1, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var topConstraint = NSLayoutConstraint(item: self.decryptButton, attribute: .Top, relatedBy: .Equal, toItem: self.row1, attribute: .Top, multiplier: 1.0, constant: 0)
+        var leftConstraint = NSLayoutConstraint(item: self.decryptButton, attribute: .Left, relatedBy: .Equal, toItem: self.row1, attribute: .Left, multiplier: 1.0, constant: 0)
+        var rightConstraint = NSLayoutConstraint(item: self.decryptButton, attribute: .Right, relatedBy: .Equal, toItem: self.row1, attribute: .Right, multiplier: 1.0, constant: 0)
+        self.row1.addConstraints([bottomConstraint,topConstraint,leftConstraint,rightConstraint])
+    }
     
     //Constraints for the raw text encryption row
     func constraintsForRawTextLabel(){
