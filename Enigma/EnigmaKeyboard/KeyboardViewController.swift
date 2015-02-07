@@ -35,6 +35,10 @@ class KeyboardViewController: UIInputViewController {
     let numberButtonTitles3 = ["+#=", ".", ",", "?", "!", "'", "BP"]
     let numberButtonTitles4 = ["ABC", "\u{1f310}", "SPACE", "RTN"]
     
+    let alternateKeyboardButtonTitles1 = ["[", "]", "{", "}", "#", "%", "^", "*", "+", "="]
+    let alternateKeyboardButtonTitles2 = ["_", "\\", "|", "~", "<", ">", "¢", "£", "¥", "•"]
+    let alternateKeyboardButtonTitles3 = ["123", ".", ",", "?", "!", "'", "BP"]
+    
     var encryptionRow: UIView!
     var row1: UIView!
     var row2: UIView!
@@ -124,6 +128,9 @@ class KeyboardViewController: UIInputViewController {
             case "123" :
                 self.removeViews()
                 self.createKeyboard([numberButtonTitles1,numberButtonTitles2,numberButtonTitles3,numberButtonTitles4])
+            case "+#=":
+                self.removeViews()
+                self.createKeyboard([alternateKeyboardButtonTitles1,alternateKeyboardButtonTitles2,alternateKeyboardButtonTitles3,numberButtonTitles4])
             case "ABC" :
                 self.removeViews()
                 self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
