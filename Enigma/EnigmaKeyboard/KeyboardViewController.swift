@@ -194,11 +194,32 @@ class KeyboardViewController: UIInputViewController {
         }
     }
     
+    func removeGestures(){
+        for gesture in self.view.gestureRecognizers as [UIGestureRecognizer] {
+            self.view.removeGestureRecognizer(gesture)
+        }
+    }
+    
     func toggleCryption(){
         if self.toggleEncryptDecrypt.titleForState(.Normal) == "E" {
             self.toggleEncryptDecrypt.setTitle("D", forState: .Normal)
+            let views = [self.row1,self.row2,self.row3,self.row4]
+            for view in views {
+                for sub in view.subviews {
+                    sub.removeFromSuperview()
+                }
+                view.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+            }
+            self.removeGestures()
+            self.view.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
         } else {
             self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
+            let views = [self.row1,self.row2,self.row3,self.row4]
+            for view in views {
+                view.backgroundColor = UIColor.whiteColor()
+            }
+            self.view.backgroundColor = UIColor.whiteColor()
+            createKeyboard([self.buttonTitles1,self.buttonTitles2,self.buttonTitles3,self.buttonTitles4])
         }
     }
     
