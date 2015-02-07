@@ -224,21 +224,15 @@ class KeyboardViewController: UIInputViewController {
             let frame = self.encryptionRow.frame
             self.rowHeight = frame.height
             self.setUpDecryptionView()
-            self.animateDecryptionView()
+            self.animateDecryptionViewIn()
             self.removeGestures()
         } else {
-            self.decryptionView.removeFromSuperview()
-            self.decryptionDirectionsView.removeFromSuperview()
-            self.decryptionTextView.removeFromSuperview()
+            self.animateDecryptionViewOut()
             self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
-            self.decryptedTextLabel.removeFromSuperview()
-            self.decryptButton.removeFromSuperview()
-            self.view.backgroundColor = UIColor.whiteColor()
-            createKeyboard([self.buttonTitles1,self.buttonTitles2,self.buttonTitles3,self.buttonTitles4])
         }
     }
     
-    func animateDecryptionView(){
+    func animateDecryptionViewIn(){
         var newBottomConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
         
         UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseOut , animations: {
@@ -246,6 +240,24 @@ class KeyboardViewController: UIInputViewController {
             self.view.addConstraint(newBottomConstraint)
             self.view.layoutIfNeeded()
             }, completion: nil)
+        
+        self.decryptionBottomConstraint = newBottomConstraint
+    }
+    
+    func animateDecryptionViewOut(){
+        var newBottomConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: -200)
+        
+        UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseIn , animations: {
+            self.view.removeConstraint(self.decryptionBottomConstraint)
+            self.view.addConstraint(newBottomConstraint)
+            self.view.layoutIfNeeded()
+            }, completion: {(complete: Bool) -> Void in
+                self.decryptionView.removeFromSuperview()
+                self.decryptionDirectionsView.removeFromSuperview()
+                self.decryptionTextView.removeFromSuperview()
+                self.decryptedTextLabel.removeFromSuperview()
+                self.decryptButton.removeFromSuperview()
+            })
         
         self.decryptionBottomConstraint = newBottomConstraint
     }
