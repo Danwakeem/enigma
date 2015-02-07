@@ -46,8 +46,13 @@ class KeyboardViewController: UIInputViewController {
     var row4: UIView!
     var decryptionDirectionsView: UIView!
     var decryptionTextView: UIView!
+    var decryptionView: UIView!
     var rowHeight: CGFloat!
     
+    var decryptionTopConstraint: NSLayoutConstraint!
+    var decryptionBottomConstraint: NSLayoutConstraint!
+    var decryptionLeftConstraint: NSLayoutConstraint!
+    var decryptionRightConstraint: NSLayoutConstraint!
     
     let rawTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
     let toggleEncryptDecrypt: UIButton = UIButton()
@@ -218,28 +223,31 @@ class KeyboardViewController: UIInputViewController {
             self.toggleEncryptDecrypt.setTitle("D", forState: .Normal)
             let frame = self.encryptionRow.frame
             self.rowHeight = frame.height
-            let views = [self.row1,self.row2,self.row3,self.row4]
-            for view in views {
-                if view != self.encryptionRow {
-                    view.removeFromSuperview()
-                }
-            }
             self.setUpDecryptionView()
+            self.animateDecryptionView()
             self.removeGestures()
-            self.view.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
         } else {
+            self.decryptionView.removeFromSuperview()
             self.decryptionDirectionsView.removeFromSuperview()
             self.decryptionTextView.removeFromSuperview()
             self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
-            let views = [self.row1,self.row2,self.row3,self.row4]
-            for view in views {
-                view.backgroundColor = UIColor.whiteColor()
-            }
             self.decryptedTextLabel.removeFromSuperview()
             self.decryptButton.removeFromSuperview()
             self.view.backgroundColor = UIColor.whiteColor()
             createKeyboard([self.buttonTitles1,self.buttonTitles2,self.buttonTitles3,self.buttonTitles4])
         }
+    }
+    
+    func animateDecryptionView(){
+        var newBottomConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        
+        UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseOut , animations: {
+            self.view.removeConstraint(self.decryptionBottomConstraint)
+            self.view.addConstraint(newBottomConstraint)
+            self.view.layoutIfNeeded()
+            }, completion: nil)
+        
+        self.decryptionBottomConstraint = newBottomConstraint
     }
     
     func decryptPasteboard(){
@@ -405,44 +413,62 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func setUpDecryptionView(){
+        self.decryptionView = UIView(frame: CGRectMake(0, 0, 320, 50))
+        self.decryptionView.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+        self.view.addSubview(self.decryptionView)
+        self.decryptionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
         self.decryptionDirectionsView = UIView(frame: CGRectMake(0, 0, 320, 50))
         self.decryptionTextView = UIView(frame: CGRectMake(0, 0, 320, 50))
-        self.view.addSubview(self.decryptionTextView)
-        self.view.addSubview(self.decryptionDirectionsView)
+        self.decryptionView.addSubview(self.decryptionTextView)
+        self.decryptionView.addSubview(self.decryptionDirectionsView)
         self.decryptionTextView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.decryptionDirectionsView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.addDecryptionViewConstraints()
+        
+        self.addDecryptionSubViewConstraints()
+        self.decryptionViewConstraints()
+        
         self.createDecryptButton()
         self.decryptionDirectionsView.addSubview(self.decryptButton)
         self.decryptButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.addDecryptButtonConstraints()
+        
         self.decryptedTextLabel.text = ""
         self.decryptionTextView.addSubview(self.decryptedTextLabel)
         self.decryptedTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.addDecryptedTextLabelConstraints()
         self.decryptedTextLabel.numberOfLines = 0
         self.decryptedTextLabel.textAlignment = .Center
+        self.view.layoutIfNeeded()
     }
     
     /* Constraint Crazy */
     
-    func addDecryptionViewConstraints(){
+    func decryptionViewConstraints(){
         var encryptionRowHeight = NSLayoutConstraint(item: self.encryptionRow, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: self.rowHeight!)
         self.view.addConstraint(encryptionRowHeight)
         
-        var directionTopConstraint = NSLayoutConstraint(item: self.decryptionDirectionsView, attribute: .Top, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        var directionRightConstraint = NSLayoutConstraint(item: self.decryptionDirectionsView, attribute: .Right, relatedBy: .Equal, toItem: self.view, attribute: .Right, multiplier: 1.0, constant: 0)
-        var directionLeftConstraint = NSLayoutConstraint(item: self.decryptionDirectionsView, attribute: .Left, relatedBy: .Equal, toItem: self.view, attribute: .Left, multiplier: 1.0, constant: 0)
+        self.decryptionTopConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Top, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        self.decryptionBottomConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: -200)
+        self.decryptionLeftConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Left, relatedBy: .Equal, toItem: self.view, attribute: .Left, multiplier: 1.0, constant: 0)
+        self.decryptionRightConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Right, relatedBy: .Equal, toItem: self.view, attribute: .Right, multiplier: 1.0, constant: 0)
+        self.view.addConstraints([self.decryptionTopConstraint,self.decryptionBottomConstraint,self.decryptionLeftConstraint,self.decryptionRightConstraint])
+    }
+    
+    func addDecryptionSubViewConstraints(){
+        var directionTopConstraint = NSLayoutConstraint(item: self.decryptionDirectionsView, attribute: .Top, relatedBy: .Equal, toItem: self.decryptionView, attribute: .Top, multiplier: 1.0, constant: 0)
+        var directionRightConstraint = NSLayoutConstraint(item: self.decryptionDirectionsView, attribute: .Right, relatedBy: .Equal, toItem: self.decryptionView, attribute: .Right, multiplier: 1.0, constant: 0)
+        var directionLeftConstraint = NSLayoutConstraint(item: self.decryptionDirectionsView, attribute: .Left, relatedBy: .Equal, toItem: self.decryptionView, attribute: .Left, multiplier: 1.0, constant: 0)
         var directionBottomConstraint = NSLayoutConstraint(item: self.decryptionDirectionsView, attribute: .Bottom, relatedBy: .Equal, toItem: self.decryptionTextView, attribute: .Top, multiplier: 1.0, constant: 0)
-        var directionHeightConstraint = NSLayoutConstraint(item: self.encryptionRow, attribute: .Height, relatedBy: .Equal, toItem: self.decryptionDirectionsView, attribute: .Height, multiplier: 1.0, constant: 0)
+        var directionHeightConstraint = NSLayoutConstraint(item: self.decryptionDirectionsView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: self.rowHeight!)
         directionHeightConstraint.priority = 800
-        self.view.addConstraints([directionTopConstraint,directionLeftConstraint,directionRightConstraint,directionBottomConstraint,directionHeightConstraint])
+        self.decryptionView.addConstraints([directionTopConstraint,directionLeftConstraint,directionRightConstraint,directionBottomConstraint,directionHeightConstraint])
         
         var textTopConstraint = NSLayoutConstraint(item: self.decryptionTextView, attribute: .Top, relatedBy: .Equal, toItem: self.decryptionDirectionsView, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        var textBottomConstraint = NSLayoutConstraint(item: self.decryptionTextView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        var textLeftConstraint = NSLayoutConstraint(item: self.decryptionTextView, attribute: .Left, relatedBy: .Equal, toItem: self.view, attribute: .Left, multiplier: 1.0, constant: 0)
-        var textRightConstraint = NSLayoutConstraint(item: self.decryptionTextView, attribute: .Right, relatedBy: .Equal, toItem: self.view, attribute: .Right, multiplier: 1.0, constant: 0)
-        self.view.addConstraints([textTopConstraint,textLeftConstraint,textRightConstraint,textBottomConstraint])
+        var textBottomConstraint = NSLayoutConstraint(item: self.decryptionTextView, attribute: .Bottom, relatedBy: .Equal, toItem: self.decryptionView, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        var textLeftConstraint = NSLayoutConstraint(item: self.decryptionTextView, attribute: .Left, relatedBy: .Equal, toItem: self.decryptionView, attribute: .Left, multiplier: 1.0, constant: 0)
+        var textRightConstraint = NSLayoutConstraint(item: self.decryptionTextView, attribute: .Right, relatedBy: .Equal, toItem: self.decryptionView, attribute: .Right, multiplier: 1.0, constant: 0)
+        self.decryptionView.addConstraints([textTopConstraint,textLeftConstraint,textRightConstraint,textBottomConstraint])
     }
     
     func addDecryptedTextLabelConstraints(){
