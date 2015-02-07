@@ -227,6 +227,7 @@ class KeyboardViewController: UIInputViewController {
                     self.row2.addSubview(self.decryptedTextLabel)
                     self.decryptedTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
                     self.addDecryptedTextLabelConstraints()
+                    self.decryptedTextLabel.numberOfLines = 0
                     self.decryptedTextLabel.textAlignment = .Center
                 }
             }
