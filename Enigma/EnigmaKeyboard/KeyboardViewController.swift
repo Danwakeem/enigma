@@ -322,6 +322,12 @@ class KeyboardViewController: UIInputViewController {
         self.view.addSubview(row3)
         self.view.addSubview(row4)
         
+        let alphaSelector: Selector = "toggleCryption"
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: alphaSelector)
+        downSwipe.direction = UISwipeGestureRecognizerDirection.Down
+        downSwipe.numberOfTouchesRequired = 1
+        self.encryptionRow.addGestureRecognizer(downSwipe)
+        
         //Disable all of the autolayout stuff that gets automatically set by adding a subview that way
         //we can add our own autolayout attributes
         self.encryptionRow.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -429,6 +435,12 @@ class KeyboardViewController: UIInputViewController {
         self.decryptionView.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
         self.view.addSubview(self.decryptionView)
         self.decryptionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        let alphaSelector: Selector = "toggleCryption"
+        let upSwipe = UISwipeGestureRecognizer(target: self, action: alphaSelector)
+        upSwipe.direction = UISwipeGestureRecognizerDirection.Up
+        upSwipe.numberOfTouchesRequired = 1
+        self.decryptionView.addGestureRecognizer(upSwipe)
         
         self.decryptionDirectionsView = UIView(frame: CGRectMake(0, 0, 320, 50))
         self.decryptionTextView = UIView(frame: CGRectMake(0, 0, 320, 50))
