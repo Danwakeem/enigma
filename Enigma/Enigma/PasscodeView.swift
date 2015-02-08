@@ -96,9 +96,20 @@ class PasscodeView: UIViewController {
 			}
 		}
 		
+		var yOffset = 0 // This is for smaller screens
+		var xOffset = 0
+		if UIScreen.mainScreen().bounds.size.height == 568 {
+			// iPhone 5(s)
+			yOffset = 30
+		} else if UIScreen.mainScreen().bounds.size.height == 480 {
+			// iPhone 4s
+			yOffset = 90
+			xOffset = 90
+		}
+		
 		let deleteBtn = UIButton()
 		deleteBtn.frame = CGRectMake(0, 0, 150, 70)
-		deleteBtn.center = CGPointMake(self.view.center.x, self.view.center.y + 270)
+		deleteBtn.center = CGPointMake(self.view.center.x + CGFloat(xOffset), self.view.center.y + 270 - CGFloat(yOffset))
 		deleteBtn.setTitle("delete", forState: .Normal)
 		deleteBtn.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
 		deleteBtn.addTarget(self, action: "deleteTapped:", forControlEvents: .TouchUpInside)
