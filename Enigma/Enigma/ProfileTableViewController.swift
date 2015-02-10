@@ -26,8 +26,6 @@ class ProfileTableViewController: UITableViewController {
 		super.didReceiveMemoryWarning()
 	}
 	
-	
-	
 	// MARK: - Segues
 	
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

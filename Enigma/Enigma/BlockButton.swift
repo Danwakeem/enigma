@@ -20,24 +20,4 @@ class BlockButton: UIButton {
 		self.layer.cornerRadius = 6.0
 		self.layer.masksToBounds = true
 	}
-	
-	/*
-	required init(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-	}
-	
-	override func intrinsicContentSize() -> CGSize {
-		return CGSizeMake(100, 70)
-	}
-	
-	override func layoutSubviews() {
-		self.layer.cornerRadius = 6.0
-		self.layer.masksToBounds = true
-	}
-	
-	
-	override func prepareForInterfaceBuilder() {
-		
-	}
-	*/
 }
