@@ -9,13 +9,26 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
 	var window: UIWindow?
 
-
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+		#if DEBUG
 		EncrytionFramework.test()
+		#endif
+		
+		// DELETE THESE TWO LINES FOR DEFAULT BEHAVIOR
+		// These lines force the tutorial to be shown every time the app is launched. For testing purposes only.
+		var userDefaults = NSUserDefaults.standardUserDefaults()
+		userDefaults.setBool(false, forKey: "hasSeenTutorial")
+		
+		// Split view controller
+		let splitViewController = self.window!.rootViewController as UISplitViewController
+		let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as UINavigationController
+		navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
+		splitViewController.delegate = self
+		
 		return true
 	}
 
@@ -41,6 +54,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
 
-
+	// MARK: - Split View
+	
+	func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController:UIViewController!, ontoPrimaryViewController primaryViewController:UIViewController!) -> Bool {
+		if let secondaryAsNavController = secondaryViewController as? UINavigationController {
+			if let topAsDetailController = secondaryAsNavController.topViewController as? ProfileDetailViewController {
+				if topAsDetailController.name == "" {
+					// Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
+					return true
+				}
+			}
+		}
+		return false
+	}
+	
+	func splitViewController(svc: UISplitViewController, shouldHideViewController vc: UIViewController, inOrientation orientation: UIInterfaceOrientation) -> Bool {
+		return false
+	}
 }
 
