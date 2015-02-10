@@ -23,27 +23,21 @@ class TutorialViewController: UIViewController, UIPageViewControllerDelegate, Tu
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		pageViewController = UIPageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
-		pageViewController!.delegate = self
-		
 		let startingViewController: TutorialPageViewController = modelController.viewControllerAtIndex(0, storyboard: self.storyboard!)!
 		startingViewController.delegate = self
 		let viewControllers: NSArray = [startingViewController]
 		pageViewController!.setViewControllers(viewControllers, direction: .Forward, animated: false, completion: {done in })
-		
 		pageViewController!.dataSource = self.modelController
-		addChildViewController(self.pageViewController!)
-		view.addSubview(self.pageViewController!.view)
-		
-		var pageViewRect = self.view.bounds
-		pageViewRect.size.height -= 20
-		pageViewController!.view.frame = pageViewRect
-		
-		pageViewController!.didMoveToParentViewController(self)
-		
 		pageControl.numberOfPages = modelController.pageData.count
 		
 		view.gestureRecognizers = self.pageViewController!.gestureRecognizers
+	}
+	
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		if segue.identifier == "pageViewController" {
+			pageViewController = segue.destinationViewController as? UIPageViewController
+			pageViewController!.delegate = self
+		}
 	}
 	
 	// MARK: - UIPageViewControllerDelegate
