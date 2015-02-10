@@ -9,6 +9,10 @@
 import UIKit
 import LocalAuthentication
 
+protocol PasscodeViewDelegate {
+	func authenticationCompleted(success: Bool)
+}
+
 class PasscodeView: UIViewController {
 
 	let dots = [] as NSMutableArray
@@ -18,15 +22,16 @@ class PasscodeView: UIViewController {
 	
 	var context = LAContext()
 	var error : NSError?
+	var delegate: PasscodeViewDelegate! = nil
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 
 		self.view.backgroundColor = UIColor.whiteColor()
 		
 		createBtns()
 		createDots()
-    }
+	}
 	
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
@@ -41,6 +46,7 @@ class PasscodeView: UIViewController {
 				
 				if success {
 					self.dismissViewControllerAnimated(true, completion: nil)
+					self.delegate.authenticationCompleted(true)
 				} else {
 					var failureReason = "unable to authenticate user"
 					switch authenticationError!.code {
@@ -160,6 +166,7 @@ class PasscodeView: UIViewController {
 			
 			if dotCnt == 4 {
 				self.dismissViewControllerAnimated(true, completion: nil)
+				delegate.authenticationCompleted(true)
 			}
 		}
 	}
@@ -174,10 +181,10 @@ class PasscodeView: UIViewController {
 		}
 	}
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+	override func didReceiveMemoryWarning() {
+		super.didReceiveMemoryWarning()
+		// Dispose of any resources that can be recreated.
+	}
     
 
     /*

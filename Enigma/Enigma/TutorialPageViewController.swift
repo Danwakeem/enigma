@@ -12,7 +12,7 @@ protocol TutorialPageViewControllerDelegate {
 	func pageRequestedForController(controller: TutorialPageViewController, direction: UIPageViewControllerNavigationDirection)
 }
 
-class TutorialPageViewController: UIViewController {
+class TutorialPageViewController: UIViewController, PasscodeViewDelegate {
 	
 	@IBOutlet weak var dataLabel: UILabel!
 	
@@ -45,6 +45,19 @@ class TutorialPageViewController: UIViewController {
 	}
 	
 	@IBAction func enableSecurity(sender: AnyObject) {
-		// TODO: show passcode creation screen then touch id screen
+		performSegueWithIdentifier("showPasscodeView", sender: self)
+	}
+	
+	func authenticationCompleted(success: Bool) {
+		if success {
+			next(self)
+		}
+	}
+	
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		if segue.identifier == "showPasscodeView" {
+			var passcodeView = segue.destinationViewController as PasscodeView
+			passcodeView.delegate = self
+		}
 	}
 }
