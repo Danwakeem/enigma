@@ -39,10 +39,20 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cQJ-g2-mmn">
+                                <rect key="frame" x="0.0" y="20" width="600" height="560"/>
+                                <connections>
+                                    <segue destination="XOf-iT-f9s" kind="embed" identifier="pageViewController" id="i1g-2C-P8G"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="QcD-l1-gM8" secondAttribute="trailing" id="843-Xv-Fgw"/>
+                            <constraint firstItem="cQJ-g2-mmn" firstAttribute="top" secondItem="qGR-y4-IaZ" secondAttribute="bottom" id="Lno-uD-pxW"/>
+                            <constraint firstAttribute="trailing" secondItem="cQJ-g2-mmn" secondAttribute="trailing" id="Vu9-Ok-1s1"/>
+                            <constraint firstItem="cQJ-g2-mmn" firstAttribute="leading" secondItem="5Ru-Ir-4fU" secondAttribute="leading" id="jF1-KQ-FP7"/>
+                            <constraint firstItem="QcD-l1-gM8" firstAttribute="top" secondItem="cQJ-g2-mmn" secondAttribute="bottom" id="kFt-YQ-jlU"/>
                             <constraint firstItem="QcD-l1-gM8" firstAttribute="leading" secondItem="5Ru-Ir-4fU" secondAttribute="leading" id="mAA-zd-cmP"/>
                             <constraint firstItem="vY1-17-GaN" firstAttribute="top" secondItem="QcD-l1-gM8" secondAttribute="bottom" id="yDZ-mu-eXr"/>
                         </constraints>
@@ -75,14 +85,8 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enigma" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c1I-E1-osZ">
-                                <rect key="frame" x="235" y="174" width="131" height="53"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="44"/>
-                                <color key="textColor" red="1" green="0.28627450980000002" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e54-1S-90n" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="261" y="355" width="80" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e54-1S-90n" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="261" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="Z7e-kI-aus"/>
@@ -95,13 +99,19 @@
                                     <action selector="next:" destination="fYh-7I-ajn" eventType="touchUpInside" id="9cB-IE-B2p"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enigma" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c1I-E1-osZ">
+                                <rect key="frame" x="247" y="179" width="107" height="43"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="36"/>
+                                <color key="textColor" red="1" green="0.28627450980000002" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="e54-1S-90n" secondAttribute="centerX" constant="-0.5" id="3lI-lm-ULd"/>
                             <constraint firstAttribute="centerX" secondItem="c1I-E1-osZ" secondAttribute="centerX" id="CDN-sP-HZr"/>
-                            <constraint firstAttribute="centerY" secondItem="c1I-E1-osZ" secondAttribute="centerY" multiplier="3/2" id="VMd-ak-4vI"/>
+                            <constraint firstItem="c1I-E1-osZ" firstAttribute="centerY" secondItem="jtb-2q-3vg" secondAttribute="bottom" multiplier="1/3" constant="1" id="VMd-ak-4vI"/>
                             <constraint firstAttribute="centerX" secondItem="qHV-jw-hH9" secondAttribute="centerX" id="knX-Mc-L4f"/>
                             <constraint firstAttribute="centerX" secondItem="e54-1S-90n" secondAttribute="centerX" constant="-42.5" id="laQ-hX-iPg"/>
                             <constraint firstAttribute="centerY" secondItem="qHV-jw-hH9" secondAttribute="centerY" constant="0.5" id="o1Z-pZ-lWZ"/>
@@ -120,7 +130,15 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AcQ-P8-mRt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="66" y="1632"/>
+            <point key="canvasLocation" x="110" y="2274"/>
+        </scene>
+        <!--Page View Controller-->
+        <scene sceneID="2Vi-Cj-NOX">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="XOf-iT-f9s" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H2h-s3-sTX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="110" y="1632"/>
         </scene>
         <!--Detail Navigation Controller-->
         <scene sceneID="HIC-ys-AHv">
@@ -303,7 +321,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3sb-JF-GQZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="704" y="1632"/>
+            <point key="canvasLocation" x="748" y="2274"/>
         </scene>
         <!--Tutorial: Final-->
         <scene sceneID="Kqg-rP-XzJ">
@@ -367,7 +385,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JSV-Z5-Knd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1331" y="1632"/>
+            <point key="canvasLocation" x="1375" y="2274"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
