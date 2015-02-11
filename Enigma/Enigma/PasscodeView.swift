@@ -41,40 +41,42 @@ class PasscodeView: UIViewController {
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		
-		if context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
-			let reason = "Authenticate to Unlock Enigma"
-			
-			context.evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply: {
-				(success: Bool, authenticationError: NSError?) -> Void in
+		if !setup {
+			if context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
+				let reason = "Authenticate to Unlock Enigma"
 				
-				println("Result \(success)")
-				
-				if success {
-					self.dismissViewControllerAnimated(true, completion: nil)
-					self.delegate.authenticationCompleted(true)
-				} else {
-					var failureReason = "unable to authenticate user"
-					switch authenticationError!.code {
-						case LAError.AuthenticationFailed.rawValue:
-							failureReason = "authentication failed"
-						case LAError.UserCancel.rawValue:
-							failureReason = "user canceled authentication"
-						case LAError.SystemCancel.rawValue:
-							failureReason = "system canceled authentication"
-						case LAError.PasscodeNotSet.rawValue:
-							failureReason = "passcode not set"
-						case LAError.UserFallback.rawValue:
-							failureReason = "user chose password"
-						default:
-							failureReason = "unable to authenticate user"
+				context.evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply: {
+					(success: Bool, authenticationError: NSError?) -> Void in
+					
+					println("Result \(success)")
+					
+					if success {
+						self.dismissViewControllerAnimated(true, completion: nil)
+						self.delegate.authenticationCompleted(true)
+					} else {
+						var failureReason = "unable to authenticate user"
+						switch authenticationError!.code {
+							case LAError.AuthenticationFailed.rawValue:
+								failureReason = "authentication failed"
+							case LAError.UserCancel.rawValue:
+								failureReason = "user canceled authentication"
+							case LAError.SystemCancel.rawValue:
+								failureReason = "system canceled authentication"
+							case LAError.PasscodeNotSet.rawValue:
+								failureReason = "passcode not set"
+							case LAError.UserFallback.rawValue:
+								failureReason = "user chose password"
+							default:
+								failureReason = "unable to authenticate user"
+						}
+						
+						println("Fingerprint validation failed: \(failureReason).");
 					}
 					
-					println("Fingerprint validation failed: \(failureReason).");
-				}
-				
-			})
-		} else {
-			println("Touch ID not avalible")
+				})
+			} else {
+				println("Touch ID not avalible")
+			}
 		}
 	}
 	
