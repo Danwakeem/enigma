@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsViewController: UITableViewController {
+class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 	
 	override func viewDidLoad() {
 		
@@ -58,11 +58,58 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	func checkSwitchStatus(index: Int) -> Bool {
+		let defaults = NSUserDefaults.standardUserDefaults()
+		
+		switch index {
+		case 0:
+			if defaults.boolForKey("PasscodeSet") {
+				return true
+			}
+		case 1:
+			if defaults.boolForKey("QuickPeriod") {
+				return true
+			}
+		case 2:
+			if defaults.boolForKey("ProfileSwipe") {
+				return true
+			}
+		default:
+			return false
+		}
+		
 		return false
 	}
 	
+	func setPasscode() {
+		let vc = PasscodeView()
+		vc.setup = true
+		vc.delegate = self
+		self.presentViewController(vc, animated: true, completion: nil)
+	}
+	
+	func authenticationCompleted(success: Bool) {
+		println("We did it!")
+	}
+	
 	func switchTapped(sender: AnyObject) {
+		let selectedSwitch = sender as UISwitch
+		let defaults = NSUserDefaults.standardUserDefaults()
 		
+		switch selectedSwitch.tag {
+		case 0:
+			if !selectedSwitch.on {
+				defaults.setBool(false, forKey: "PasscodeSet")
+				defaults.setObject("", forKey: "passcode")
+			} else {
+				setPasscode()
+			}
+		case 1:
+			defaults.setBool(selectedSwitch.on, forKey: "QuickPeriod")
+		case 2:
+			defaults.setBool(selectedSwitch.on, forKey: "ProfileSwipe")
+		default:
+			break
+		}
 	}
 	
 	func createSwitch(index: Int) -> UISwitch {
