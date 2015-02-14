@@ -20,8 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// DELETE THESE TWO LINES FOR DEFAULT BEHAVIOR
 		// These lines force the tutorial to be shown every time the app is launched. For testing purposes only.
-		var userDefaults = NSUserDefaults.standardUserDefaults()
-		userDefaults.setBool(false, forKey: "hasSeenTutorial")
+		//var userDefaults = NSUserDefaults.standardUserDefaults()
+		//userDefaults.setBool(false, forKey: "hasSeenTutorial")
 		
 		// Split view controller
 		let splitViewController = self.window!.rootViewController as SplitViewController

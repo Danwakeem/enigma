@@ -19,6 +19,7 @@
 		029227111A71D9D900A7DD81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 029227101A71D9D900A7DD81 /* Images.xcassets */; };
 		029227141A71D9D900A7DD81 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 029227121A71D9D900A7DD81 /* LaunchScreen.xib */; };
 		029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */; };
+		029E4A131A8E806900DB6732 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029E4A121A8E806900DB6732 /* SettingsViewController.swift */; };
 		02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AD1A854136009C76E6 /* PasscodeView.swift */; };
 		02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AF1A854176009C76E6 /* PasscodeButton.swift */; };
 		05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05211C4F1A72D16E00660739 /* KeyboardViewController.swift */; };
@@ -89,6 +90,7 @@
 		029227191A71D9D900A7DD81 /* EnigmaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnigmaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0292271E1A71D9D900A7DD81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnigmaTests.swift; sourceTree = "<group>"; };
+		029E4A121A8E806900DB6732 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		02FF51AD1A854136009C76E6 /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
 		02FF51AF1A854176009C76E6 /* PasscodeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeButton.swift; sourceTree = "<group>"; };
 		05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EnigmaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -179,6 +181,7 @@
 				2373995D1A89549100A21FE0 /* BlockButton.swift */,
 				02FF51AD1A854136009C76E6 /* PasscodeView.swift */,
 				02FF51AF1A854176009C76E6 /* PasscodeButton.swift */,
+				029E4A121A8E806900DB6732 /* SettingsViewController.swift */,
 				021AE2E91A7D706400DF13F0 /* EncryptionFramework */,
 				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
 				0292270D1A71D9D900A7DD81 /* Main.storyboard */,
@@ -369,6 +372,7 @@
 				0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */,
 				02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */,
 				021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */,
+				029E4A131A8E806900DB6732 /* SettingsViewController.swift in Sources */,
 				237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */,
 				2373995C1A86D31700A21FE0 /* TutorialModelController.swift in Sources */,
 				2373995A1A86D28100A21FE0 /* TutorialPageViewController.swift in Sources */,

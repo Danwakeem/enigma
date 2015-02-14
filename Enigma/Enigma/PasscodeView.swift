@@ -226,6 +226,7 @@ class PasscodeView: UIViewController {
 	func storePasscode() {
 		let defaults = NSUserDefaults.standardUserDefaults()
 		defaults.setObject(passcode, forKey: "passcode")
+		defaults.setBool(true, forKey: "PasscodeSet")
 	}
 	
 	func deleteTapped(sender: AnyObject) {
