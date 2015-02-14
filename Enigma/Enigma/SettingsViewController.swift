@@ -14,6 +14,12 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 		
 	}
 	
+	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		setNeedsStatusBarAppearanceUpdate()
+	}
+	
 	override func preferredStatusBarStyle() -> UIStatusBarStyle {
 		return .LightContent
 	}
