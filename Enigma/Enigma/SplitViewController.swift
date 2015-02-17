@@ -8,7 +8,10 @@
 
 import UIKit
 
-class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
+class SplitViewController: UISplitViewController, UISplitViewControllerDelegate, PasscodeViewDelegate {
+	
+	var authenticated = false
+	
 	@IBAction func unwindTutorial(sender: UIStoryboardSegue) {
 		var userDefaults = NSUserDefaults.standardUserDefaults()
 		userDefaults.setBool(true, forKey: "hasSeenTutorial")
@@ -29,9 +32,23 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
 		var userDefaults = NSUserDefaults.standardUserDefaults()
 		if (userDefaults.boolForKey("hasSeenTutorial") == false) {
 			performSegueWithIdentifier("showTutorial", sender: self)
+		} else {
+			if userDefaults.boolForKey("PasscodeSet") && !authenticated {
+				let vc = PasscodeView()
+				vc.delegate = self
+				vc.setup = false
+				self.presentViewController(vc, animated: true, completion: nil)
+			} else {
+				authenticated = true
+			}
 		}
 		
 		setNeedsStatusBarAppearanceUpdate()
+	}
+	
+	func authenticationCompleted(success: Bool) {
+		println("We did it!")
+		authenticated = true
 	}
 	
 	override func preferredStatusBarStyle() -> UIStatusBarStyle {

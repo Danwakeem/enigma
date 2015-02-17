@@ -192,10 +192,27 @@ class PasscodeView: UIViewController {
 					}
 				}
 				
-				self.dismissViewControllerAnimated(true, completion: nil)
-				delegate.authenticationCompleted(true)
+				let defaults = NSUserDefaults.standardUserDefaults()
+				if defaults.stringForKey("passcode") == passcode {
+					self.dismissViewControllerAnimated(true, completion: nil)
+					delegate.authenticationCompleted(true)
+				} else {
+					passcodeLbl.text = "Try Again"
+					passcodeLbl.textColor = UIColor.redColor()
+					wrongPasscode()
+				}
 			}
 		}
+	}
+	
+	func wrongPasscode() {
+		for var i = 0; i < 4; i++ {
+			// clear the dots
+			dotCnt--
+			let dot = dots[dotCnt] as UIView
+			dot.backgroundColor = UIColor.clearColor()
+		}
+		passcode = ""
 	}
 	
 	func resetUI(doConfirm: Bool) {
