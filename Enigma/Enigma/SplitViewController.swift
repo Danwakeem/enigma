@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import CoreData
 
 class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
+    
+    var managedObjectContext: NSManagedObjectContext? = nil
+    
 	@IBAction func unwindTutorial(sender: UIStoryboardSegue) {
 		var userDefaults = NSUserDefaults.standardUserDefaults()
 		userDefaults.setBool(true, forKey: "hasSeenTutorial")
@@ -41,15 +45,7 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
 	// MARK: - UISplitViewControllerDelegate
 	
 	func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController:UIViewController!, ontoPrimaryViewController primaryViewController:UIViewController!) -> Bool {
-		if let secondaryAsNavController = secondaryViewController as? UINavigationController {
-			if let topAsDetailController = secondaryAsNavController.topViewController as? ProfileDetailViewController {
-				if topAsDetailController.name == "" {
-					// Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-					return true
-				}
-			}
-		}
-		return false
+		return true
 	}
 	
 	func splitViewController(svc: UISplitViewController, shouldHideViewController vc: UIViewController, inOrientation orientation: UIInterfaceOrientation) -> Bool {

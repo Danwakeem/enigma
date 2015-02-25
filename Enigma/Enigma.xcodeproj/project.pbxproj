@@ -19,8 +19,14 @@
 		029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */; };
 		02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AD1A854136009C76E6 /* PasscodeView.swift */; };
 		02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AF1A854176009C76E6 /* PasscodeButton.swift */; };
+		050ADB501A8AA3EC0020A1CD /* Enigma.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 050ADB4E1A8AA3EC0020A1CD /* Enigma.xcdatamodeld */; };
 		05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05211C4F1A72D16E00660739 /* KeyboardViewController.swift */; };
 		05211C531A72D16E00660739 /* EnigmaKeyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		059BD39E1A9BE5A100B53D2E /* NewProfilePopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059BD39D1A9BE5A100B53D2E /* NewProfilePopupViewController.swift */; };
+		05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
+		05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
+		05AA7D611A840BE000C1B763 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
+		05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
 		237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399571A86C5E500A21FE0 /* SplitViewController.swift */; };
 		2373995A1A86D28100A21FE0 /* TutorialPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399591A86D28100A21FE0 /* TutorialPageViewController.swift */; };
 		2373995C1A86D31700A21FE0 /* TutorialModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2373995B1A86D31700A21FE0 /* TutorialModelController.swift */; };
@@ -28,11 +34,6 @@
 		23ECC2D81A840A71000EB3CC /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ECC2D71A840A71000EB3CC /* TutorialViewController.swift */; };
 		23ECC2DC1A841323000EB3CC /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ECC2DB1A841323000EB3CC /* ProfileTableViewController.swift */; };
 		23ECC30E1A842DD0000EB3CC /* ProfileDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ECC30D1A842DD0000EB3CC /* ProfileDetailViewController.swift */; };
-		05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
-		05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
-		05AA7D611A840BE000C1B763 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
-		05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,9 +89,11 @@
 		0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnigmaTests.swift; sourceTree = "<group>"; };
 		02FF51AD1A854136009C76E6 /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
 		02FF51AF1A854176009C76E6 /* PasscodeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeButton.swift; sourceTree = "<group>"; };
+		050ADB4F1A8AA3EC0020A1CD /* Enigma.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Enigma.xcdatamodel; sourceTree = "<group>"; };
 		05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EnigmaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		05211C4E1A72D16E00660739 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05211C4F1A72D16E00660739 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		059BD39D1A9BE5A100B53D2E /* NewProfilePopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProfilePopupViewController.swift; sourceTree = "<group>"; };
 		237399571A86C5E500A21FE0 /* SplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		237399591A86D28100A21FE0 /* TutorialPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialPageViewController.swift; sourceTree = "<group>"; };
 		2373995B1A86D31700A21FE0 /* TutorialModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialModelController.swift; sourceTree = "<group>"; };
@@ -172,15 +175,16 @@
 				237399591A86D28100A21FE0 /* TutorialPageViewController.swift */,
 				2373995B1A86D31700A21FE0 /* TutorialModelController.swift */,
 				2373995D1A89549100A21FE0 /* BlockButton.swift */,
-				0292270B1A71D9D900A7DD81 /* ViewController.swift */,
 				02FF51AD1A854136009C76E6 /* PasscodeView.swift */,
 				02FF51AF1A854176009C76E6 /* PasscodeButton.swift */,
+				059BD39D1A9BE5A100B53D2E /* NewProfilePopupViewController.swift */,
 				021AE2E91A7D706400DF13F0 /* EncryptionFramework */,
 				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
 				0292270D1A71D9D900A7DD81 /* Main.storyboard */,
 				029227101A71D9D900A7DD81 /* Images.xcassets */,
 				029227121A71D9D900A7DD81 /* LaunchScreen.xib */,
 				029227071A71D9D900A7DD81 /* Supporting Files */,
+				050ADB4E1A8AA3EC0020A1CD /* Enigma.xcdatamodeld */,
 			);
 			path = Enigma;
 			sourceTree = "<group>";
@@ -360,9 +364,9 @@
 			files = (
 				021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */,
 				23ECC2D81A840A71000EB3CC /* TutorialViewController.swift in Sources */,
+				050ADB501A8AA3EC0020A1CD /* Enigma.xcdatamodeld in Sources */,
 				021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */,
 				02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */,
-				0292270C1A71D9D900A7DD81 /* ViewController.swift in Sources */,
 				0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */,
 				02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */,
 				021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */,
@@ -370,6 +374,7 @@
 				2373995C1A86D31700A21FE0 /* TutorialModelController.swift in Sources */,
 				2373995A1A86D28100A21FE0 /* TutorialPageViewController.swift in Sources */,
 				23ECC30E1A842DD0000EB3CC /* ProfileDetailViewController.swift in Sources */,
+				059BD39E1A9BE5A100B53D2E /* NewProfilePopupViewController.swift in Sources */,
 				23ECC2DC1A841323000EB3CC /* ProfileTableViewController.swift in Sources */,
 				021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */,
 				2373995E1A89549100A21FE0 /* BlockButton.swift in Sources */,
@@ -644,6 +649,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		050ADB4E1A8AA3EC0020A1CD /* Enigma.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				050ADB4F1A8AA3EC0020A1CD /* Enigma.xcdatamodel */,
+			);
+			currentVersion = 050ADB4F1A8AA3EC0020A1CD /* Enigma.xcdatamodel */;
+			path = Enigma.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 029226FC1A71D9D900A7DD81 /* Project object */;
 }
