@@ -78,8 +78,8 @@ class ProfileTableViewController: UITableViewController, NSFetchedResultsControl
         basicEncryption.setValue(newProfile, forKey: "profiles")
         
         secondEncryption.setValue("Affine", forKey: "encryptionType")
-        secondEncryption.setValue("Hi", forKey: "key1")
-        secondEncryption.setValue("0", forKey: "key2")
+        secondEncryption.setValue("9", forKey: "key1")
+        secondEncryption.setValue("23", forKey: "key2")
         secondEncryption.setValue(newProfile, forKey: "profiles")
         
         // Save the context.
