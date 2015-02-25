@@ -58,6 +58,7 @@ class TutorialPageViewController: UIViewController, PasscodeViewDelegate {
 		if segue.identifier == "showPasscodeView" {
 			var passcodeView = segue.destinationViewController as PasscodeView
 			passcodeView.delegate = self
+			passcodeView.setup = true
 		}
 	}
 }

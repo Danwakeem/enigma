@@ -11,6 +11,8 @@
 		021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
 		021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
 		021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
+		0233F75C1A8D320800E0D6BC /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 0233F75A1A8D320800E0D6BC /* Clear.c */; };
+		0233F75D1A8D335300E0D6BC /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 0233F75A1A8D320800E0D6BC /* Clear.c */; };
 		02605E3A1A86728400D3BF81 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02605E381A86726B00D3BF81 /* LocalAuthentication.framework */; };
 		0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029227091A71D9D900A7DD81 /* AppDelegate.swift */; };
 		0292270F1A71D9D900A7DD81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0292270D1A71D9D900A7DD81 /* Main.storyboard */; };
@@ -77,6 +79,8 @@
 		021AE2EE1A7D76FD00DF13F0 /* Affine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Affine.h; sourceTree = "<group>"; };
 		021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SimpleSub.c; sourceTree = "<group>"; };
 		021AE2F11A7D7B9F00DF13F0 /* SimpleSub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleSub.h; sourceTree = "<group>"; };
+		0233F75A1A8D320800E0D6BC /* Clear.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Clear.c; sourceTree = "<group>"; };
+		0233F75B1A8D320800E0D6BC /* Clear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clear.h; sourceTree = "<group>"; };
 		02605E381A86726B00D3BF81 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
 		029227041A71D9D900A7DD81 /* Enigma.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Enigma.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		029227081A71D9D900A7DD81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 				021AE2EE1A7D76FD00DF13F0 /* Affine.h */,
 				021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */,
 				021AE2F11A7D7B9F00DF13F0 /* SimpleSub.h */,
+				0233F75A1A8D320800E0D6BC /* Clear.c */,
+				0233F75B1A8D320800E0D6BC /* Clear.h */,
 			);
 			name = EncryptionFramework;
 			sourceTree = "<group>";
@@ -376,6 +382,7 @@
 				23ECC30E1A842DD0000EB3CC /* ProfileDetailViewController.swift in Sources */,
 				059BD39E1A9BE5A100B53D2E /* NewProfilePopupViewController.swift in Sources */,
 				23ECC2DC1A841323000EB3CC /* ProfileTableViewController.swift in Sources */,
+				0233F75C1A8D320800E0D6BC /* Clear.c in Sources */,
 				021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */,
 				2373995E1A89549100A21FE0 /* BlockButton.swift in Sources */,
 			);
@@ -393,6 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0233F75D1A8D335300E0D6BC /* Clear.c in Sources */,
 				05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */,
 				05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */,
 				05AA7D611A840BE000C1B763 /* Affine.c in Sources */,

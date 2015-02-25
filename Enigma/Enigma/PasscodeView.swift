@@ -19,10 +19,15 @@ class PasscodeView: UIViewController {
 	var dotCnt = 0
 	
 	var passcode = ""
+	var tempPass = ""
 	
 	var context = LAContext()
 	var error : NSError?
 	var delegate: PasscodeViewDelegate! = nil
+	
+	let passcodeLbl = UILabel()
+	var setup = false
+	var confirm = false
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -36,40 +41,42 @@ class PasscodeView: UIViewController {
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		
-		if context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
-			let reason = "Authenticate to Unlock Enigma"
-			
-			context.evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply: {
-				(success: Bool, authenticationError: NSError?) -> Void in
+		if !setup {
+			if context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
+				let reason = "Authenticate to Unlock Enigma"
 				
-				println("Result \(success)")
-				
-				if success {
-					self.dismissViewControllerAnimated(true, completion: nil)
-					self.delegate.authenticationCompleted(true)
-				} else {
-					var failureReason = "unable to authenticate user"
-					switch authenticationError!.code {
-						case LAError.AuthenticationFailed.rawValue:
-							failureReason = "authentication failed"
-						case LAError.UserCancel.rawValue:
-							failureReason = "user canceled authentication"
-						case LAError.SystemCancel.rawValue:
-							failureReason = "system canceled authentication"
-						case LAError.PasscodeNotSet.rawValue:
-							failureReason = "passcode not set"
-						case LAError.UserFallback.rawValue:
-							failureReason = "user chose password"
-						default:
-							failureReason = "unable to authenticate user"
+				context.evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply: {
+					(success: Bool, authenticationError: NSError?) -> Void in
+					
+					println("Result \(success)")
+					
+					if success {
+						self.dismissViewControllerAnimated(true, completion: nil)
+						self.delegate.authenticationCompleted(true)
+					} else {
+						var failureReason = "unable to authenticate user"
+						switch authenticationError!.code {
+							case LAError.AuthenticationFailed.rawValue:
+								failureReason = "authentication failed"
+							case LAError.UserCancel.rawValue:
+								failureReason = "user canceled authentication"
+							case LAError.SystemCancel.rawValue:
+								failureReason = "system canceled authentication"
+							case LAError.PasscodeNotSet.rawValue:
+								failureReason = "passcode not set"
+							case LAError.UserFallback.rawValue:
+								failureReason = "user chose password"
+							default:
+								failureReason = "unable to authenticate user"
+						}
+						
+						println("Fingerprint validation failed: \(failureReason).");
 					}
 					
-					println("Fingerprint validation failed: \(failureReason).");
-				}
-				
-			})
-		} else {
-			println("Touch ID not avalible")
+				})
+			} else {
+				println("Touch ID not avalible")
+			}
 		}
 	}
 	
@@ -138,10 +145,16 @@ class PasscodeView: UIViewController {
 			self.view.addSubview(dot)
 		}
 		
-		let passcodeLbl = UILabel()
-		passcodeLbl.frame = CGRectMake(0, 0, 150, 70)
+		passcodeLbl.frame = CGRectMake(0, 0, 250, 70)
 		passcodeLbl.center = CGPointMake(self.view.center.x, self.view.center.y - 210)
-		passcodeLbl.text = "Passcode Required"
+		passcodeLbl.textAlignment = .Center
+		
+		if setup {
+			passcodeLbl.text = "Please enter a 4 digit passcode"
+		} else {
+			passcodeLbl.text = "Passcode Required"
+		}
+		
 		passcodeLbl.textColor = UIColor.blackColor()
 		self.view.addSubview(passcodeLbl)
 	}
@@ -165,10 +178,54 @@ class PasscodeView: UIViewController {
 			passcode += btn.titleLabel!.text!
 			
 			if dotCnt == 4 {
+				if setup {
+					if !confirm {
+						resetUI(true)
+						return
+					} else {
+						if passcode == tempPass {
+							storePasscode()
+						} else {
+							resetUI(false)
+							return
+						}
+					}
+				}
+				
 				self.dismissViewControllerAnimated(true, completion: nil)
 				delegate.authenticationCompleted(true)
 			}
 		}
+	}
+	
+	func resetUI(doConfirm: Bool) {
+		confirm = doConfirm
+		tempPass = passcode // store the passcode
+		
+		for var i = 0; i < 4; i++ {
+			// clear the dots
+			dotCnt--
+			let dot = dots[dotCnt] as UIView
+			dot.backgroundColor = UIColor.clearColor()
+		}
+		passcode = ""
+		
+		if confirm {
+			passcodeLbl.text = "Please confirm your passcode"
+		} else {
+			let alert = UIAlertView()
+			alert.title = "Error"
+			alert.message = "Your passcodes did not match. Please try again."
+			alert.addButtonWithTitle("Ok")
+			alert.show()
+			passcodeLbl.text = "Please enter a passcode"
+		}
+		
+	}
+	
+	func storePasscode() {
+		let defaults = NSUserDefaults.standardUserDefaults()
+		defaults.setObject(passcode, forKey: "passcode")
 	}
 	
 	func deleteTapped(sender: AnyObject) {

@@ -8,17 +8,18 @@
 
 #include "SimpleSub.h"
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
 
-int keyContains(char c, char *key) {
+bool keyContains(char c, char *key) {
 	int i;
 	for (i = 0; i < strlen(key); i++) {
 		if (key[i] == c)
-			return 1;
+			return true;
 	}
 	
-	return 0;
+	return false;
 }
 
 void createKey(char *key, char *buffer) {
