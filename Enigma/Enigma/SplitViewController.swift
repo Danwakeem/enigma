@@ -18,6 +18,7 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate,
 	@IBAction func unwindTutorial(sender: UIStoryboardSegue) {
 		var userDefaults = NSUserDefaults.standardUserDefaults()
 		userDefaults.setBool(true, forKey: "hasSeenTutorial")
+		authenticated = true
 	}
 	
 	required init(coder aDecoder: NSCoder) {

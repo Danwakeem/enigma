@@ -19,8 +19,7 @@ class ProfileTableViewController: UITableViewController, NSFetchedResultsControl
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = self.editButtonItem()
-        
+		
         self.managedObjectContext = self.appDelegate.managedObjectContext!
 		if let split = self.splitViewController {
 			let controllers = split.viewControllers
