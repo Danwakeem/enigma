@@ -30,6 +30,12 @@
 	
 	newString = [self decrypt:newString Using:Affine withKey:@"3" andKey:4];
 	NSLog(@"Decryted to %@", newString);
+	
+	newString = [self encrypt:testString Using:Clear withKey:@"" andKey:0];
+	NSLog(@"Encrypted %@ to %@", testString, newString);
+	
+	newString = [self decrypt:newString Using:Clear withKey:@"" andKey:0];
+	NSLog(@"Decryted to %@", newString);
 }
 
 +(NSString *) encrypt:(NSString *)message Using:(EncryptionType)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
@@ -41,9 +47,11 @@
 	} else if  (encrytionType == Caesar) {
 		int caesKey = [key1 intValue];
 		newCString = Caesar_encrypt(caesKey, (char *)CString);
-	} else {
+	} else if (encrytionType == Affine) {
 		int affKeyA = [key1 intValue];
 		newCString = Affine_encrypt(affKeyA, key2, (char *)CString);
+	} else {
+		newCString = Clear_decrypt((char *)CString);
 	}
 	
 	NSString *newMessage = [NSString stringWithCString:newCString encoding:NSASCIIStringEncoding];
@@ -61,9 +69,11 @@
 	} else if  (encrytionType == Caesar) {
 		int caesKey = [key1 intValue];
 		newCString = Caesar_decrypt(caesKey, (char *)CString);
-	} else {
+	} else if (encrytionType == Affine) {
 		int affKeyA = [key1 intValue];
 		newCString = Affine_decrypt(affKeyA, key2, (char *)CString);
+	} else {
+		newCString = Clear_decrypt((char *)CString);
 	}
 	
 	NSString *newMessage = [NSString stringWithCString:newCString encoding:NSASCIIStringEncoding];

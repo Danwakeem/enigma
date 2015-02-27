@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14C109" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Encryptions" syncable="YES">
+        <attribute name="encryptionType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="key1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="key2" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="profiles" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Profiles" inverseName="encryption" inverseEntity="Profiles" syncable="YES"/>
+    </entity>
+    <entity name="Profiles" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="encryption" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Encryptions" inverseName="profiles" inverseEntity="Encryptions" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Encryptions" positionX="187" positionY="5" width="128" height="103"/>
+        <element name="Profiles" positionX="-63" positionY="-18" width="128" height="88"/>
+    </elements>
+</model>
