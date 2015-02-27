@@ -64,9 +64,19 @@
 
 +(NSString *) encrypt:(NSString *)message Using:(EncryptionType)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
 	
-	message = [self removeEmojiFromString:message];
+	unichar buffer[[message length]+1];
+	[message getCharacters:buffer range:NSMakeRange(0, [message length])];
 	
-	const char *CString = [message cStringUsingEncoding:NSASCIIStringEncoding];
+	NSMutableString *asciiNSString = [NSMutableString string];
+	for (int i = 0; i < [message length]; i++) {
+		if (buffer[i] > 127) {
+			[asciiNSString appendString:@"?"];
+		} else {
+			[asciiNSString appendString:[NSString stringWithFormat:@"%C", buffer[i]]];
+		}
+	}
+	
+	const char *CString = [asciiNSString cStringUsingEncoding:NSASCIIStringEncoding];
 	char *newCString;
 	
 	if (encrytionType == SimpleSub) {
@@ -81,17 +91,33 @@
 		newCString = Clear_decrypt((char *)CString);
 	}
 	
-	NSString *newMessage = [NSString stringWithCString:newCString encoding:NSASCIIStringEncoding];
+	asciiNSString = [NSMutableString stringWithCString:newCString encoding:NSASCIIStringEncoding];
 	free(newCString);
 	
-	return newMessage;
+	for (int i = 0; i < [message length]; i++) {
+		if (buffer[i] > 127) {
+			[asciiNSString replaceCharactersInRange:NSMakeRange(i, 1) withString:[NSString stringWithFormat:@"%C", buffer[i]]];
+		}
+	}
+	
+	return asciiNSString;
 }
 
 +(NSString *) decrypt:(NSString *)message Using:(EncryptionType)encrytionType withKey:(NSString *)key1 andKey:(int)key2 {
 	
-	message = [self removeEmojiFromString:message];
+	unichar buffer[[message length]+1];
+	[message getCharacters:buffer range:NSMakeRange(0, [message length])];
 	
-	const char *CString = [message cStringUsingEncoding:NSASCIIStringEncoding];
+	NSMutableString *asciiNSString = [NSMutableString string];
+	for (int i = 0; i < [message length]; i++) {
+		if (buffer[i] > 127) {
+			[asciiNSString appendString:@"?"];
+		} else {
+			[asciiNSString appendString:[NSString stringWithFormat:@"%C", buffer[i]]];
+		}
+	}
+	
+	const char *CString = [asciiNSString cStringUsingEncoding:NSASCIIStringEncoding];
 	char *newCString;
 	
 	if (encrytionType == SimpleSub) {
@@ -106,10 +132,16 @@
 		newCString = Clear_decrypt((char *)CString);
 	}
 	
-	NSString *newMessage = [NSString stringWithCString:newCString encoding:NSASCIIStringEncoding];
+	asciiNSString = [NSMutableString stringWithCString:newCString encoding:NSASCIIStringEncoding];
 	free(newCString);
 	
-	return newMessage;
+	for (int i = 0; i < [message length]; i++) {
+		if (buffer[i] > 127) {
+			[asciiNSString replaceCharactersInRange:NSMakeRange(i, 1) withString:[NSString stringWithFormat:@"%C", buffer[i]]];
+		}
+	}
+	
+	return asciiNSString;
 }
 
 @end
