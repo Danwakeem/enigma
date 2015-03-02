@@ -36,6 +36,12 @@
 	
 	newString = [self decrypt:newString Using:Clear withKey:@"" andKey:0];
 	NSLog(@"Decryted to %@", newString);
+	
+	newString = [self encrypt:newString Using:Vigenere withKey:@"lemon" andKey:0];
+	NSLog(@"Encrypted %@ to %@", testString, newString);
+	
+	newString = [self decrypt:newString Using:Vigenere withKey:@"lemon" andKey:0];
+	NSLog(@"Decrypted to %@", newString);
 }
 
 +(NSString*) removeEmojiFromString:(NSString *)string {
@@ -87,6 +93,8 @@
 	} else if (encrytionType == Affine) {
 		int affKeyA = [key1 intValue];
 		newCString = Affine_encrypt(affKeyA, key2, (char *)CString);
+	} else if (encrytionType == Vigenere) {
+		newCString = Vigenere_encrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)CString);
 	} else {
 		newCString = Clear_decrypt((char *)CString);
 	}
@@ -128,6 +136,8 @@
 	} else if (encrytionType == Affine) {
 		int affKeyA = [key1 intValue];
 		newCString = Affine_decrypt(affKeyA, key2, (char *)CString);
+	} else if (encrytionType == Vigenere) {
+		newCString = Vigenere_decrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)CString);
 	} else {
 		newCString = Clear_decrypt((char *)CString);
 	}
