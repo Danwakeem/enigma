@@ -37,8 +37,8 @@
 	newString = [self decrypt:newString Using:Clear withKey:@"" andKey:0];
 	NSLog(@"Decryted to %@", newString);
 	
-	newString = [self encrypt:newString Using:Vigenere withKey:@"lemon" andKey:0];
-	NSLog(@"Encrypted %@ to %@", testString, newString);
+	newString = [self encrypt:@"\"Hippopotamus!\"" Using:Vigenere withKey:@"lemon" andKey:0];
+	NSLog(@"Encrypted %@ to %@", @"\"Hippopotamus!\"", newString);
 	
 	newString = [self decrypt:newString Using:Vigenere withKey:@"lemon" andKey:0];
 	NSLog(@"Decrypted to %@", newString);
@@ -126,8 +126,9 @@
 	}
 	
 	const char *CString = [asciiNSString cStringUsingEncoding:NSASCIIStringEncoding];
-	char *newCString;
+	char *newCString = NULL;
 	
+	BOOL isVigenre = false;
 	if (encrytionType == SimpleSub) {
 		newCString = SimpleSub_decrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)CString);
 	} else if  (encrytionType == Caesar) {
@@ -137,13 +138,37 @@
 		int affKeyA = [key1 intValue];
 		newCString = Affine_decrypt(affKeyA, key2, (char *)CString);
 	} else if (encrytionType == Vigenere) {
-		newCString = Vigenere_decrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)CString);
+		/*
+			Ok this one is a bit tricky. We need to split the string into words. Then we need to
+			remove any empty strings that may have gotten through. Next we iterate over each word,
+			and decrypt it. That word is then turned back into an NSString and appended to
+			asiiNSString. This will cause us to lose newlines from the original text but based on how
+			we're displaying the decrypted text, I don't see it as much of an issue.
+		 
+			Reason for this is because text is encrypted on a word by word basis and with the way this
+			algorithm works that means we need to do the same thing while decrypting.
+		 */
+		
+		isVigenre = true;
+		NSArray *wordsAndEmpties = [message componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		NSArray *words = [wordsAndEmpties filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
+		
+		asciiNSString = [NSMutableString string];
+		for (NSString *word in words) {
+			char *newWord = Vigenere_decrypt((char *)[key1 cStringUsingEncoding:NSASCIIStringEncoding], (char *)[word cStringUsingEncoding:NSASCIIStringEncoding]);
+			
+			[asciiNSString appendString:[NSString stringWithFormat:@"%@ ", [NSString stringWithCString:newWord encoding:NSASCIIStringEncoding]]];
+			
+			free(newWord);
+		}
 	} else {
 		newCString = Clear_decrypt((char *)CString);
 	}
 	
-	asciiNSString = [NSMutableString stringWithCString:newCString encoding:NSASCIIStringEncoding];
-	free(newCString);
+	if (!isVigenre) {
+		asciiNSString = [NSMutableString stringWithCString:newCString encoding:NSASCIIStringEncoding];
+		free(newCString);
+	}
 	
 	for (int i = 0; i < [message length]; i++) {
 		if (buffer[i] > 127) {
