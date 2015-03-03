@@ -29,17 +29,20 @@ class ProfileTableViewController: UITableViewController {
 	// MARK: - Segues
 	
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-		if segue.identifier == "showDetail" {
+		switch segue.identifier! {
+		case "showDetail":
 			if let indexPath = self.tableView.indexPathForSelectedRow() {
 				let name = testProfileNames[indexPath.row] as String
 				let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
 				
-				//controller.title = name
 				controller.name = name
-				
-				controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-				controller.navigationItem.leftItemsSupplementBackButton = true
 			}
+		case "addProfile":
+			let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
+			
+			controller.setEditing(true, animated: false)
+		default:
+			println("Default segue")
 		}
 	}
 	

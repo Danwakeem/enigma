@@ -18,8 +18,8 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
 		super.init(coder: aDecoder)
 		delegate = self
 		
-		let navigationController = viewControllers[viewControllers.count-1] as UINavigationController
-		navigationController.topViewController.navigationItem.leftBarButtonItem = displayModeButtonItem()
+		//let navigationController = viewControllers[viewControllers.count-1] as UINavigationController
+		//navigationController.topViewController.navigationItem.leftBarButtonItem = displayModeButtonItem()
 	}
 	
 	override func viewDidAppear(animated: Bool) {
