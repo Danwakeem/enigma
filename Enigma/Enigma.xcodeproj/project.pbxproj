@@ -12,11 +12,16 @@
 		021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
 		021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
 		02605E3A1A86728400D3BF81 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02605E381A86726B00D3BF81 /* LocalAuthentication.framework */; };
+		026B4DBB1AA7A4B5002DB3C6 /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DB91AA7A4B5002DB3C6 /* Clear.c */; };
+		026B4DBC1AA7A528002DB3C6 /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DB91AA7A4B5002DB3C6 /* Clear.c */; };
+		026B4DBF1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029227091A71D9D900A7DD81 /* AppDelegate.swift */; };
 		0292270F1A71D9D900A7DD81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0292270D1A71D9D900A7DD81 /* Main.storyboard */; };
 		029227111A71D9D900A7DD81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 029227101A71D9D900A7DD81 /* Images.xcassets */; };
 		029227141A71D9D900A7DD81 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 029227121A71D9D900A7DD81 /* LaunchScreen.xib */; };
 		029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */; };
+		02CA73881AA4B2EB00FBFDF0 /* Vigenere.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */; };
+		02CA73891AA4B82900FBFDF0 /* Vigenere.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */; };
 		02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AD1A854136009C76E6 /* PasscodeView.swift */; };
 		02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AF1A854176009C76E6 /* PasscodeButton.swift */; };
 		05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05211C4F1A72D16E00660739 /* KeyboardViewController.swift */; };
@@ -34,8 +39,6 @@
 		23ECC2D81A840A71000EB3CC /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ECC2D71A840A71000EB3CC /* TutorialViewController.swift */; };
 		23ECC2DC1A841323000EB3CC /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ECC2DB1A841323000EB3CC /* ProfileTableViewController.swift */; };
 		23ECC30E1A842DD0000EB3CC /* ProfileDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ECC30D1A842DD0000EB3CC /* ProfileDetailViewController.swift */; };
-		23F4FC3E1AA7999200284F16 /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 23F4FC3C1AA7999200284F16 /* Clear.c */; };
-		23F4FC3F1AA799A700284F16 /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 23F4FC3C1AA7999200284F16 /* Clear.c */; };
 		23F4FC411AA79AC400284F16 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F4FC401AA79AC400284F16 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +84,9 @@
 		021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SimpleSub.c; sourceTree = "<group>"; };
 		021AE2F11A7D7B9F00DF13F0 /* SimpleSub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleSub.h; sourceTree = "<group>"; };
 		02605E381A86726B00D3BF81 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
+		026B4DB91AA7A4B5002DB3C6 /* Clear.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Clear.c; sourceTree = "<group>"; };
+		026B4DBA1AA7A4B5002DB3C6 /* Clear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clear.h; sourceTree = "<group>"; };
+		026B4DBE1AA7A5E1002DB3C6 /* Enigma.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Enigma.xcdatamodel; sourceTree = "<group>"; };
 		029227041A71D9D900A7DD81 /* Enigma.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Enigma.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		029227081A71D9D900A7DD81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		029227091A71D9D900A7DD81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +96,8 @@
 		029227191A71D9D900A7DD81 /* EnigmaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnigmaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0292271E1A71D9D900A7DD81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnigmaTests.swift; sourceTree = "<group>"; };
+		02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Vigenere.c; sourceTree = "<group>"; };
+		02CA73871AA4B2EB00FBFDF0 /* Vigenere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vigenere.h; sourceTree = "<group>"; };
 		02FF51AD1A854136009C76E6 /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
 		02FF51AF1A854176009C76E6 /* PasscodeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeButton.swift; sourceTree = "<group>"; };
 		05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EnigmaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,8 +113,6 @@
 		23ECC2DB1A841323000EB3CC /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
 		23ECC30D1A842DD0000EB3CC /* ProfileDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewController.swift; sourceTree = "<group>"; };
 		23F4FC3B1AA798A400284F16 /* Enigma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Enigma.entitlements; sourceTree = "<group>"; };
-		23F4FC3C1AA7999200284F16 /* Clear.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Clear.c; sourceTree = "<group>"; };
-		23F4FC3D1AA7999200284F16 /* Clear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clear.h; sourceTree = "<group>"; };
 		23F4FC401AA79AC400284F16 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,14 +147,16 @@
 			children = (
 				021AE2E61A7D6F9700DF13F0 /* EncrytionFramework.h */,
 				021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */,
+				026B4DB91AA7A4B5002DB3C6 /* Clear.c */,
+				026B4DBA1AA7A4B5002DB3C6 /* Clear.h */,
 				021AE2EA1A7D708E00DF13F0 /* Ceasar.c */,
 				021AE2EB1A7D708E00DF13F0 /* Ceasar.h */,
 				021AE2ED1A7D76FD00DF13F0 /* Affine.c */,
 				021AE2EE1A7D76FD00DF13F0 /* Affine.h */,
 				021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */,
 				021AE2F11A7D7B9F00DF13F0 /* SimpleSub.h */,
-				23F4FC3C1AA7999200284F16 /* Clear.c */,
-				23F4FC3D1AA7999200284F16 /* Clear.h */,
+				02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */,
+				02CA73871AA4B2EB00FBFDF0 /* Vigenere.h */,
 			);
 			name = EncryptionFramework;
 			sourceTree = "<group>";
@@ -177,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				23F4FC3B1AA798A400284F16 /* Enigma.entitlements */,
+				026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */,
 				029227091A71D9D900A7DD81 /* AppDelegate.swift */,
 				237399571A86C5E500A21FE0 /* SplitViewController.swift */,
 				23ECC2DB1A841323000EB3CC /* ProfileTableViewController.swift */,
@@ -380,16 +389,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */,
-				23F4FC3E1AA7999200284F16 /* Clear.c in Sources */,
 				23ECC2D81A840A71000EB3CC /* TutorialViewController.swift in Sources */,
 				021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */,
 				02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */,
 				0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */,
+				02CA73881AA4B2EB00FBFDF0 /* Vigenere.c in Sources */,
+				026B4DBB1AA7A4B5002DB3C6 /* Clear.c in Sources */,
 				02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */,
 				238DCD2E1A93E30E00E4D75B /* ProfileDetailCell.swift in Sources */,
 				021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */,
 				237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */,
 				2373995C1A86D31700A21FE0 /* TutorialModelController.swift in Sources */,
+				026B4DBF1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld in Sources */,
 				2373995A1A86D28100A21FE0 /* TutorialPageViewController.swift in Sources */,
 				23ECC30E1A842DD0000EB3CC /* ProfileDetailViewController.swift in Sources */,
 				238DCD2C1A93DE2000E4D75B /* ProfileDetailHeaderView.swift in Sources */,
@@ -412,10 +423,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				026B4DBC1AA7A528002DB3C6 /* Clear.c in Sources */,
+				02CA73891AA4B82900FBFDF0 /* Vigenere.c in Sources */,
 				05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */,
 				05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */,
 				05AA7D611A840BE000C1B763 /* Affine.c in Sources */,
-				23F4FC3F1AA799A700284F16 /* Clear.c in Sources */,
 				05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */,
 				05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */,
 			);
@@ -671,6 +683,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				026B4DBE1AA7A5E1002DB3C6 /* Enigma.xcdatamodel */,
+			);
+			currentVersion = 026B4DBE1AA7A5E1002DB3C6 /* Enigma.xcdatamodel */;
+			path = Enigma.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 029226FC1A71D9D900A7DD81 /* Project object */;
 }
