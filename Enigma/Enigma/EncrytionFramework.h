@@ -11,12 +11,14 @@
 #import "Affine.h"
 #import "SimpleSub.h"
 #import "Clear.h"
+#import "Vigenere.h"
 
 typedef enum {
 	SimpleSub,
 	Caesar,
 	Affine,
-	Clear
+	Clear,
+	Vigenere
 } EncryptionType;
 
 @interface EncrytionFramework : NSObject
