@@ -11,17 +11,11 @@ import UIKit
 class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 	
 	override func viewDidLoad() {
-		
+		super.viewDidLoad()
 	}
 	
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
-		
-		setNeedsStatusBarAppearanceUpdate()
-	}
-	
-	override func preferredStatusBarStyle() -> UIStatusBarStyle {
-		return .LightContent
 	}
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
