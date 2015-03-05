@@ -175,7 +175,7 @@ class KeyboardViewController: UIInputViewController {
             self.lastTypedWord = " "
         } else {
             //Encryption test :)
-            var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
+            var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
             for ch in self.lastTypedWord{
                 self.proxy.deleteBackward()
             }
@@ -270,7 +270,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func decryptText(text: String) -> String{
-         return EncrytionFramework.decrypt(text, using: Caesar, withKey: "13", andKey: 0)
+         return EncrytionFramework.decrypt(text, using: Vigenere, withKey: "lemon", andKey: 0)
     }
     
     func removeViews(){
