@@ -7,19 +7,22 @@
 //
 
 import UIKit
+import CoreData
 
-class ProfileTableViewController: UITableViewController {
-	var detailViewController: ProfileDetailViewController? = nil
+class ProfileTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
 	
-	let testProfileNames = [ "Sydney", "Jacob Smith", "Derek Facebook", "John iMessage", "John WhatsApp", "Sara Email" ]
+	var profiles = [NSManagedObject]()
+	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		fetchProfiles()
+	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		if let split = self.splitViewController {
-			let controllers = split.viewControllers
-			self.detailViewController = controllers[controllers.count-1].topViewController as? ProfileDetailViewController
-		}
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "profileUpdated:", name: "ProfileUpdated", object: nil)
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -32,14 +35,29 @@ class ProfileTableViewController: UITableViewController {
 		switch segue.identifier! {
 		case "showDetail":
 			if let indexPath = self.tableView.indexPathForSelectedRow() {
-				let name = testProfileNames[indexPath.row] as String
+				let profile = profiles[indexPath.row]
 				let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
 				
-				controller.name = name
+				controller.profile = profile
 			}
 		//case "showSettings":
 		case "addProfile":
 			let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
+			
+			let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+			let managedContext = appDelegate.managedObjectContext!
+			let entity =  NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
+			let profile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+			
+			profile.setValue("test", forKey: "name")
+			
+			var error: NSError?
+			if !managedContext.save(&error) {
+				println("Could not save \(error), \(error?.userInfo)")
+			}
+			
+			profiles.append(profile)
+			controller.profile = profile
 			
 			controller.setEditing(true, animated: false)
 		default:
@@ -47,18 +65,67 @@ class ProfileTableViewController: UITableViewController {
 		}
 	}
 	
-	// MARK: - Table View
+	// MARK: - Table View Data Source
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return testProfileNames.count
+		return profiles.count
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
 		
-		let item = testProfileNames[indexPath.row]
-		cell.textLabel?.text = item
+		let profile = profiles[indexPath.row]
+		cell.textLabel?.text = profile.valueForKey("name") as String?
 		
 		return cell
+	}
+	
+	// MARK: - Table View Delegate
+	
+	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+		return true
+	}
+	
+	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+		if(editingStyle == .Delete ) {
+			let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+			let managedContext = appDelegate.managedObjectContext!
+			let profileToDelete = profiles[indexPath.row]
+			
+			managedContext.deleteObject(profileToDelete)
+			self.fetchProfiles()
+			
+			//tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+			
+			var error : NSError?
+			if (managedContext.save(&error) ) {
+				println(error?.localizedDescription)
+			}
+		}
+	}
+	
+	// MARK: - Core Data
+	
+	func profileUpdated(notification: NSNotification) {
+		fetchProfiles()
+	}
+	
+	func fetchProfiles() {
+		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+		let managedContext = appDelegate.managedObjectContext!
+		
+		let fetchRequest = NSFetchRequest(entityName: "Profiles")
+		let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+		fetchRequest.sortDescriptors = [sortDescriptor]
+		
+		var error: NSError?
+		let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as [NSManagedObject]?
+		if let results = fetchedResults {
+			profiles = results
+		} else {
+			println("Could not fetch \(error), \(error!.userInfo)")
+		}
+		
+		tableView.reloadData()
 	}
 }
