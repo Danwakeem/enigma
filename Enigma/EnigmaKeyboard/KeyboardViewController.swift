@@ -6,16 +6,10 @@
 //  Copyright (c) 2015 Flipped Bit. All rights reserved.
 //
 
-/* I followed a tutorial to get all of this stuff ready to go.
-* We dont have to use this set up if you guys don't want to I am just trying to learn.
-* Here is the URL if you would like to take a look:
-* http://www.appdesignvault.com/ios-8-custom-keyboard-extension/
-* The reason I was looking at this one was becasue it showed you how to set it up without a nib.
-*/
-
 import UIKit
+import CoreData
 
-class KeyboardViewController: UIInputViewController {
+class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerDelegate {
     
     var upperCase: Bool = false
     var caseLock: Bool = false
@@ -23,21 +17,26 @@ class KeyboardViewController: UIInputViewController {
     var lastTypedWord: String = ""
     var proxy: UITextDocumentProxy!
     
+    var managedObjectContext = CoreDataStack().managedObjectContext
+    
+    //EncryptionType to String
+    var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere]
+    
     //21ea == uppercase
     //1f310 == Globe
     let buttonTitles1 = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
     let buttonTitles2 = ["A", "S", "D", "F", "G", "H", "J", "K", "L"]
-    let buttonTitles3 = ["\u{21ea}", "Z", "X", "C", "V", "B", "N", "M", "BP"]
-    let buttonTitles4 = ["123", "\u{1f310}", "SPACE", "RTN"]
+    let buttonTitles3 = ["\u{21E7}", "Z", "X", "C", "V", "B", "N", "M", "\u{232B}"]
+    let buttonTitles4 = ["123", "👱", "\u{1f310}", "space", "rtn"]
     
     let numberButtonTitles1 = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
     let numberButtonTitles2 = ["-", "/", ":", ";", "(", ")", "$", "&", "@", "\""]
-    let numberButtonTitles3 = ["+#=", ".", ",", "?", "!", "'", "BP"]
-    let numberButtonTitles4 = ["ABC", "\u{1f310}", "SPACE", "RTN"]
+    let numberButtonTitles3 = ["+#=", ".", ",", "?", "!", "'", "\u{232B}"]
+    let numberButtonTitles4 = ["ABC", "👱", "\u{1f310}", "space", "rtn"]
     
     let alternateKeyboardButtonTitles1 = ["[", "]", "{", "}", "#", "%", "^", "*", "+", "="]
     let alternateKeyboardButtonTitles2 = ["_", "\\", "|", "~", "<", ">", "¢", "£", "¥", "•"]
-    let alternateKeyboardButtonTitles3 = ["123", ".", ",", "?", "!", "'", "BP"]
+    let alternateKeyboardButtonTitles3 = ["123", ".", ",", "?", "!", "'", "\u{232B}"]
     
     var encryptionRow: UIView!
     var row1: UIView!
@@ -59,6 +58,20 @@ class KeyboardViewController: UIInputViewController {
     let decryptButton: UIButton = UIButton()
     let decryptedTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
     
+    var row0Con: NSLayoutConstraint!
+    var row1Con: NSLayoutConstraint!
+    var row2Con: NSLayoutConstraint!
+    var row3Con: NSLayoutConstraint!
+    var row4Con: NSLayoutConstraint!
+    var row4ConBottom: NSLayoutConstraint!
+    
+    let notificationKey = "com.SlayterDev.selectedProfile"
+    
+    var currentProfile: NSManagedObject!
+    var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
+    
+    var profileTable: ProfileTableView!
+    
     @IBOutlet var nextKeyboardButton: UIButton!
     
     override func updateViewConstraints() {
@@ -70,11 +83,13 @@ class KeyboardViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.whiteColor()
-        //self.view = UIVisualEffectView()
-        //self.view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
+        //self.view.backgroundColor = UIColor.whiteColor()
         self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         self.proxy = textDocumentProxy as UITextDocumentProxy
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedProfile", name: self.notificationKey, object: nil)
+
+        //Load up the most recent encryptionMethod from NSUserDefaults
         
         let alphaSelector: Selector = "toggleAlphaKeyboard:"
         let rightSwipe = UISwipeGestureRecognizer(target: self, action: alphaSelector)
@@ -124,17 +139,17 @@ class KeyboardViewController: UIInputViewController {
         
         if let title = button.titleForState(.Normal) {
             switch title {
-            case "BP" :
+            case "\u{232B}" :
                 self.pressedBackSpace(title)
-            case "RTN" :
+            case "rtn" :
                 self.lastTypedWord = ""
                 self.rawTextLabel.text = ""
                 self.proxy.insertText("\n")
-            case "SPACE" :
+            case "space" :
                 self.pressedSpace(title)
             case "\u{1f310}" :
                 self.advanceToNextInputMode()
-            case "\u{21ea}" :
+            case "\u{21E7}" :
                 self.upperCase = !self.upperCase
             case "123" :
                 self.removeViews()
@@ -145,6 +160,8 @@ class KeyboardViewController: UIInputViewController {
             case "ABC" :
                 self.removeViews()
                 self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+            case "👱":
+                self.toggleProfileTable()
             default :
                 self.insertText(title)
             }
@@ -175,19 +192,30 @@ class KeyboardViewController: UIInputViewController {
             self.lastTypedWord = " "
         } else {
             //Encryption test :)
-            var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
-            for ch in self.lastTypedWord{
-                self.proxy.deleteBackward()
+            var encryptedString: String!
+            
+            for (key,value) in self.currentEncryptionMethods {
+                var eType: EncryptionType = self.encryptionTypes[key]!
+                var key1: String = value[0] as String
+                var key2: Int32!
+                var key2String: String = value[1] as String
+                if let k2 = key2String.toInt() {
+                    key2 = Int32(k2)
+                }
+                encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: eType, withKey: key1, andKey: key2)
             }
+            
+            //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
+            
             self.proxy.insertText(encryptedString + " ")
-            self.lastTypedWord = " "
+            self.lastTypedWord = ""
         }
     }
     
     func insertText(title: String){
         if self.upperCase || self.caseLock || self.firstLetter {
             self.setRawTextlabelText(title)
-            self.proxy.insertText(title)
+            //self.proxy.insertText(title)
             self.lastTypedWord += title
             if self.upperCase {
                 //Undo upercase so the next word wont be capitalized.
@@ -199,7 +227,7 @@ class KeyboardViewController: UIInputViewController {
         } else {
             //Adding a letter to the input and saving each letter so we know what the user just typed in
             self.setRawTextlabelText(title.lowercaseString)
-            self.proxy.insertText(title.lowercaseString)
+            //self.proxy.insertText(title.lowercaseString)
             self.lastTypedWord += title.lowercaseString
         }
     }
@@ -235,15 +263,43 @@ class KeyboardViewController: UIInputViewController {
     func animateDecryptionViewIn(){
         var newBottomConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
         
+        //var row1Con = NSLayoutConstraint(item: self.row1, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        //var row2Con = NSLayoutConstraint(item: self.row2, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        //var row3Con = NSLayoutConstraint(item: self.row3, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        //var row4Con = NSLayoutConstraint(item: self.row4, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        
         UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseOut , animations: {
+            /*
+            self.view.removeConstraints([self.row0Con,self.row4ConBottom])
+            self.view.addConstraint(row1Con)
+            self.view.layoutIfNeeded()
+            */
+
             self.view.removeConstraint(self.decryptionBottomConstraint)
             self.view.addConstraint(newBottomConstraint)
             self.view.layoutIfNeeded()
+
+            
             }, completion: nil)
         
+        /*
+        self.row0Con = row1Con
+        let alphaSelector: Selector = "toggleCryption"
+        let upSwipe = UISwipeGestureRecognizer(target: self, action: alphaSelector)
+        upSwipe.direction = UISwipeGestureRecognizerDirection.Up
+        upSwipe.numberOfTouchesRequired = 1
+        self.view.addGestureRecognizer(upSwipe)
+        
+        self.row1Con = row2Con
+        self.row2Con = row3Con
+        self.row3Con = row4Con
+        */
+
         self.decryptionBottomConstraint = newBottomConstraint
     }
     
+    
+    //Try removing the constraints then calling add constraintstoinputview
     func animateDecryptionViewOut(){
         var newBottomConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: -200)
         
@@ -252,6 +308,10 @@ class KeyboardViewController: UIInputViewController {
             self.view.addConstraint(newBottomConstraint)
             self.view.layoutIfNeeded()
             }, completion: {(complete: Bool) -> Void in
+                self.view.removeConstraint(self.row0Con)
+                //self.view.removeConstraints([self.row0Con,self.row1Con,self.row2Con,self.row3Con,self.row4Con])
+                //self.addConstraintsToInputView(self.view, rowViews: [self.encryptionRow, self.row1, self.row2, self.row3, self.row4])
+                
                 self.decryptionView.removeFromSuperview()
                 self.decryptionDirectionsView.removeFromSuperview()
                 self.decryptionTextView.removeFromSuperview()
@@ -270,7 +330,19 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func decryptText(text: String) -> String{
-         return EncrytionFramework.decrypt(text, using: Caesar, withKey: "13", andKey: 0)
+        var returnString: String = text
+        for (key,value) in self.currentEncryptionMethods {
+            var eType: EncryptionType = self.encryptionTypes[key]!
+            var key1: String = value[0] as String
+            var key2: Int32!
+            var key2String: String = value[1] as String
+            if let k2 = key2String.toInt() {
+                key2 = Int32(k2)
+            }
+            returnString = EncrytionFramework.decrypt(returnString, using: eType, withKey: key1, andKey: key2)
+        }
+        
+        return returnString
     }
     
     func removeViews(){
@@ -300,12 +372,104 @@ class KeyboardViewController: UIInputViewController {
         }
     }
     
+    func toggleProfileTable() {
+        if self.profileTable == nil {
+            if var profiles = self.createProfileTable() {
+                profiles.hidden = true
+                self.view.addSubview(profiles)
+                self.profileTable = profiles
+                
+                profiles.setTranslatesAutoresizingMaskIntoConstraints(false)
+                
+                let widthConstraint = NSLayoutConstraint(item: profiles, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1, constant: 0)
+                let heightConstraint = NSLayoutConstraint(item: profiles, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1, constant: 0)
+                let centerXConstraint = NSLayoutConstraint(item: profiles, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
+                let centerYConstraint = NSLayoutConstraint(item: profiles, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 0)
+                
+                self.view.addConstraints([widthConstraint,heightConstraint,centerXConstraint,centerYConstraint])
+            }
+        }
+        
+        if let table = self.profileTable {
+            let hidden = self.profileTable.hidden
+            table.hidden = !hidden
+            self.encryptionRow.hidden = hidden
+            self.row1.hidden = hidden
+            self.row2.hidden = hidden
+            self.row3.hidden = hidden
+            self.row4.hidden = hidden
+        }
+        
+    }
+    
+    func createProfileTable() -> ProfileTableView? {
+        var profileTab = ProfileTableView()
+        //Create an action for the cells
+        for cell in profileTab.profileTable.visibleCells() as [UITableViewCell] {
+            let alphaSelector: Selector = "selectedProfile"
+            let singleTap = UITapGestureRecognizer(target: self, action: alphaSelector)
+            singleTap.numberOfTapsRequired = 1
+            cell.addGestureRecognizer(singleTap)
+        }
+        
+        profileTab.backButton?.addTarget(self, action: Selector("toggleProfileTable"), forControlEvents: UIControlEvents.TouchUpInside)
+        return profileTab
+    }
+    
+    func selectedProfile(){
+        self.currentProfile = self.profileTable.selectedProfile
+        
+        //This method isnt doing anything until the containing app saves the encryption keys with the profile
+        self.getEncryptions()
+        self.toggleProfileTable()
+    }
+    
+    //Saving the selected EncryptionMethod
+    func getEncryptions(){
+        //Set the Encryption/Decryption Methods that is being used
+        if let encryptions: NSSet = self.currentProfile?.mutableSetValueForKeyPath("encryption") {
+            var newEncryptionMethods = Dictionary<String,[AnyObject]>()
+            
+            //self.currentEncryptionMethods = Dictionary<String,[AnyObject]>()
+            
+            for (index, e) in enumerate(encryptions) {
+                var encryptMethod = e.valueForKeyPath("encryptionType") as String!
+                self.proxy.insertText(encryptMethod + " ")
+                var key1 = e.valueForKeyPath("key1") as String!
+                self.proxy.insertText(key1 + " ")
+                var key2: String!
+                if let k2: String = e.valueForKeyPath("key2") as? String {
+                    key2 = k2
+                } else {
+                    key2 = "0"
+                }
+                self.proxy.insertText(key2 + " ")
+                var keys = [key1,key2]
+                newEncryptionMethods = [encryptMethod: keys]
+                //self.currentEncryptionMethods = newEncryptionMethods
+            }
+            //If this this is printed without anything else it is because no encryption methods were saved when the profile was created.
+            if encryptions.count > 0 {
+                self.proxy.insertText("No Encryption Methods attached")
+            } else {
+                self.proxy.insertText("Okay cool")
+            }
+        } else {
+            println("I know this doesnt actually print to the console but YOLO")
+        }
+    }
+    
     /* Keyboard setup */
     
     func createKeyboard(buttonTitles: [AnyObject]){
         //Row of buttons as a view. Example "qwertyuiop"
+        //self.encryptionRow = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight)) as UIVisualEffectView
+        //self.encryptionRow.frame = CGRectMake(0, 0, 320, 50)
+        
         self.encryptionRow = UIView(frame: CGRectMake(0, 0, 320, 50))
+        //self.encryptionRow.backgroundColor = UIColor(red: 0.388, green: 0.388, blue: 0.388, alpha: 0.2)
         self.encryptionRow.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+        
         self.row1 = rowOfButtons(buttonTitles[0] as [String])
         self.row2 = rowOfButtons(buttonTitles[1] as [String])
         self.row3 = rowOfButtons(buttonTitles[2] as [String])
@@ -365,10 +529,12 @@ class KeyboardViewController: UIInputViewController {
         
         //Change to a D when you are in decrypt mode
         self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
+        self.toggleEncryptDecrypt.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         self.toggleEncryptDecrypt.frame = CGRectMake(0, 0, 50, 50)
         self.toggleEncryptDecrypt.clipsToBounds = true
         self.toggleEncryptDecrypt.sizeToFit()
         self.toggleEncryptDecrypt.titleLabel?.font = UIFont.systemFontOfSize(15)
+        //self.toggleEncryptDecrypt.backgroundColor = UIColor(red: 0.251, green: 0.251, blue: 0.251, alpha: 0.2)
         self.toggleEncryptDecrypt.backgroundColor = UIColor(red: 0.91, green: 0.902, blue: 0.902, alpha: 1.0)
         self.toggleEncryptDecrypt.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
         self.toggleEncryptDecrypt.addTarget(self, action: "toggleCryption", forControlEvents: .TouchUpInside)
@@ -388,7 +554,7 @@ class KeyboardViewController: UIInputViewController {
             keyboardRowView.addSubview(button)
         }
         //Adding the constraints for each button in the row.
-        if(buttons[1].titleForState(.Normal) == "\u{1f310}"){
+        if(buttons[2].titleForState(.Normal) == "\u{1f310}"){
             addBottomRowConstraints(buttons, mainView: keyboardRowView)
         } else {
             addIndividualButtonConstraints(buttons, mainView: keyboardRowView)
@@ -399,32 +565,48 @@ class KeyboardViewController: UIInputViewController {
     
     //Creating a button with the title from the button* arrays
     func createButtonWithTitle(title: String) -> UIButton {
-        
         let button = UIButton.buttonWithType(.System) as UIButton
         button.frame = CGRectMake(0, 0, 20, 20)
         button.clipsToBounds = true
         button.setTitle(title, forState: .Normal)
         button.sizeToFit()
-        button.titleLabel?.font = UIFont.systemFontOfSize(15)
+        button.titleLabel?.font = UIFont.systemFontOfSize(20)
+        button.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        button.titleEdgeInsets = UIEdgeInsets(top: 1.0, left: 1.0, bottom: 1.0, right: 1.0)
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         button.backgroundColor = UIColor.whiteColor()
-        button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        button.layer.cornerRadius = 5
+        button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         
         let singleTap = UITapGestureRecognizer(target: self, action: "buttonTapped:")
         singleTap.numberOfTapsRequired = 1
         button.addTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
         
-        if title == "\u{21ea}" {
+        if title == "\u{21E7}" {
+            button.backgroundColor = UIColor.lightGrayColor()
+            button.layer.opacity = 0.5
+            button.titleLabel?.font = UIFont.systemFontOfSize(15)
+            button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
             let doubleTap = UITapGestureRecognizer(target: self, action: "lockCase:")
             doubleTap.numberOfTapsRequired = 2
             button.addGestureRecognizer(doubleTap)
             singleTap.requireGestureRecognizerToFail(doubleTap)
-        } else if title == "BP" {
+        } else if title == "\u{232B}" {
+            button.backgroundColor = UIColor.lightGrayColor()
+            button.layer.opacity = 0.5
+            //button.titleLabel?.font = UIFont.systemFontOfSize(15)
+            button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
             let longPress = UILongPressGestureRecognizer(target: self, action: "longPressBackSpace:")
             button.addGestureRecognizer(longPress)
             singleTap.requireGestureRecognizerToFail(longPress)
             button.userInteractionEnabled = true
-            
+        } else if title == "space" {
+            button.titleLabel?.font = UIFont.systemFontOfSize(15)
+        } else if title == "123" || title == "rtn" || title == "\u{1f310}" || title == "+#="{
+            button.titleLabel?.font = UIFont.systemFontOfSize(15)
+            button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+            button.layer.opacity = 0.5
+            button.backgroundColor = UIColor.lightGrayColor()
         }
         
         return button
@@ -432,6 +614,7 @@ class KeyboardViewController: UIInputViewController {
     
     func setUpDecryptionView(){
         self.decryptionView = UIView(frame: CGRectMake(0, 0, 320, 50))
+        //self.decryptionView.backgroundColor = UIColor(red: 0.388, green: 0.388, blue: 0.388, alpha: 0.2)
         self.decryptionView.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
         self.view.addSubview(self.decryptionView)
         self.decryptionView.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -528,34 +711,33 @@ class KeyboardViewController: UIInputViewController {
     func addBottomRowConstraints(buttons: [UIButton], mainView: UIView){
         
         for (index, button) in enumerate(buttons) {
-            var topConstraint = NSLayoutConstraint(item: button, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 1)
-            var bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: 0)
+            var topConstraint = NSLayoutConstraint(item: button, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 5)
+            var bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: -5)
             var rightConstraint : NSLayoutConstraint!
             if index == buttons.count - 1 {
-                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: 0)
-                var widthConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 80)
+                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: -5)
+                var widthConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 90)
                 widthConstraint.priority = 800
                 mainView.addConstraint(widthConstraint)
             } else {
                 let nextButton = buttons[index+1]
-                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: nextButton, attribute: .Left, multiplier: 1.0, constant: 0)
+                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: nextButton, attribute: .Left, multiplier: 1.0, constant: -5)
             }
             var leftConstraint : NSLayoutConstraint!
             if index == 0 {
-                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 0)
+                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 5)
                 var widthConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40)
                 widthConstraint.priority = 800
                 mainView.addConstraint(widthConstraint)
             } else {
                 let prevtButton = buttons[index-1]
-                if index == 1 {
-                    var widthConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50)
+                if index == 1 || index == 2{
+                    var widthConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 30)
                     widthConstraint.priority = 800
                     mainView.addConstraint(widthConstraint)
                 }
-                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: 0)
+                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: 5)
             }
-            
             mainView.addConstraints([topConstraint, bottomConstraint, rightConstraint, leftConstraint])
         }
     }
@@ -563,33 +745,36 @@ class KeyboardViewController: UIInputViewController {
     func addIndividualButtonConstraints(buttons: [UIButton], mainView: UIView){
         
         for (index, button) in enumerate(buttons) {
-            var topConstraint = NSLayoutConstraint(item: button, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 1)
-            var bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: 0)
+            var topConstraint = NSLayoutConstraint(item: button, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 5)
+            var bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: -5)
             var rightConstraint : NSLayoutConstraint!
             if index == buttons.count - 1 {
-                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: 0)
+                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: -5)
             } else {
                 let nextButton = buttons[index+1]
-                if button.titleForState(.Normal) == "\u{21ea}" || button.titleForState(.Normal) == "M" {
-                    rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: nextButton, attribute: .Left, multiplier: 1.0, constant: -12)
+                if button.titleForState(.Normal) == "\u{21E7}" {
+                    rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: nextButton, attribute: .Left, multiplier: 1.0, constant: -20)
                 } else {
-                    rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: nextButton, attribute: .Left, multiplier: 1.0, constant: 0)
+                    rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: nextButton, attribute: .Left, multiplier: 1.0, constant: -5)
                 }
             }
             var leftConstraint : NSLayoutConstraint!
             if index == 0 {
-                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 0)
+                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 5)
             } else {
                 let prevtButton = buttons[index-1]
-                if button.titleForState(.Normal) == "BP" {
-                    leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: 12)
+                if button.titleForState(.Normal) == "\u{232B}" {
+                    leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: -40)
+                    var widthConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1.0, constant: 48)
+                    widthConstraint.priority = 800
+                    mainView.addConstraint(widthConstraint)
                 } else {
-                    leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: 0)
+                    leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: prevtButton, attribute: .Right, multiplier: 1.0, constant: 5)
+                    let firstButton = buttons[0]
+                    var widthConstraint = NSLayoutConstraint(item: firstButton, attribute: .Width, relatedBy: .Equal, toItem: button, attribute: .Width, multiplier: 1.0, constant: 0)
+                    widthConstraint.priority = 800
+                    mainView.addConstraint(widthConstraint)
                 }
-                let firstButton = buttons[0]
-                var widthConstraint = NSLayoutConstraint(item: firstButton, attribute: .Width, relatedBy: .Equal, toItem: button, attribute: .Width, multiplier: 1.0, constant: 0)
-                widthConstraint.priority = 800
-                mainView.addConstraint(widthConstraint)
             }
             mainView.addConstraints([topConstraint, bottomConstraint, rightConstraint, leftConstraint])
         }
@@ -624,12 +809,36 @@ class KeyboardViewController: UIInputViewController {
                 heightConstraint.priority = 800
                 inputView.addConstraint(heightConstraint)
             }
+            
+            switch (index) {
+            case 0:
+                self.row0Con = topConstraint
+                inputView.addConstraint(self.row0Con)
+            case 1:
+                self.row1Con = topConstraint
+                inputView.addConstraint(self.row1Con)
+            case 2:
+                self.row2Con = topConstraint
+                inputView.addConstraint(self.row2Con)
+            case 3:
+                self.row3Con = topConstraint
+                inputView.addConstraint(self.row3Con)
+            case 4:
+                self.row4Con = topConstraint
+                inputView.addConstraint(self.row4Con)
+            default:
+                println("Okay now")
+                inputView.addConstraint(topConstraint)
+            }
+            
             inputView.addConstraint(topConstraint)
             
             var bottomConstraint: NSLayoutConstraint
             
             if index == rowViews.count - 1 {
                 bottomConstraint = NSLayoutConstraint(item: rowView, attribute: .Bottom, relatedBy: .Equal, toItem: inputView, attribute: .Bottom, multiplier: 1.0, constant: 0)
+                self.row4ConBottom = bottomConstraint
+                inputView.addConstraint(self.row4ConBottom)
                 
             }else{
                 

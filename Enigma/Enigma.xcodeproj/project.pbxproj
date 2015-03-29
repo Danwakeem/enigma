@@ -26,10 +26,15 @@
 		02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AF1A854176009C76E6 /* PasscodeButton.swift */; };
 		05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05211C4F1A72D16E00660739 /* KeyboardViewController.swift */; };
 		05211C531A72D16E00660739 /* EnigmaKeyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		052FB5281AA810560049DF8A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052FB5271AA810560049DF8A /* CoreDataStack.swift */; };
+		052FB5291AA810610049DF8A /* Enigma.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
+		052FB52A1AA810670049DF8A /* Enigma.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
 		05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
 		05AA7D611A840BE000C1B763 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
 		05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
+		05E3CA461AC62741000EDE84 /* Profiles.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05E3CA451AC62741000EDE84 /* Profiles.xib */; };
+		05E3CA951AC70C53000EDE84 /* ProfileTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */; };
 		237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399571A86C5E500A21FE0 /* SplitViewController.swift */; };
 		2373995A1A86D28100A21FE0 /* TutorialPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399591A86D28100A21FE0 /* TutorialPageViewController.swift */; };
 		2373995C1A86D31700A21FE0 /* TutorialModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2373995B1A86D31700A21FE0 /* TutorialModelController.swift */; };
@@ -103,6 +108,10 @@
 		05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EnigmaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		05211C4E1A72D16E00660739 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05211C4F1A72D16E00660739 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		052FB5271AA810560049DF8A /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		05E3CA451AC62741000EDE84 /* Profiles.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Profiles.xib; sourceTree = "<group>"; };
+		05E3CA931AC69F07000EDE84 /* EnigmaKeyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EnigmaKeyboard.entitlements; sourceTree = "<group>"; };
+		05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableView.swift; sourceTree = "<group>"; };
 		237399571A86C5E500A21FE0 /* SplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		237399591A86D28100A21FE0 /* TutorialPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialPageViewController.swift; sourceTree = "<group>"; };
 		2373995B1A86D31700A21FE0 /* TutorialModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialModelController.swift; sourceTree = "<group>"; };
@@ -238,7 +247,11 @@
 		05211C4C1A72D16E00660739 /* EnigmaKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				05E3CA931AC69F07000EDE84 /* EnigmaKeyboard.entitlements */,
 				05211C4F1A72D16E00660739 /* KeyboardViewController.swift */,
+				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
+				052FB5271AA810560049DF8A /* CoreDataStack.swift */,
+				05E3CA451AC62741000EDE84 /* Profiles.xib */,
 				05211C4D1A72D16E00660739 /* Supporting Files */,
 			);
 			path = EnigmaKeyboard;
@@ -333,6 +346,12 @@
 					};
 					05211C4A1A72D16E00660739 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = Z67LVNYQSE;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -378,6 +397,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05E3CA461AC62741000EDE84 /* Profiles.xib in Resources */,
+				052FB5291AA810610049DF8A /* Enigma.xcdatamodeld in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,13 +444,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				052FB52A1AA810670049DF8A /* Enigma.xcdatamodeld in Sources */,
 				026B4DBC1AA7A528002DB3C6 /* Clear.c in Sources */,
 				02CA73891AA4B82900FBFDF0 /* Vigenere.c in Sources */,
 				05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */,
 				05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */,
 				05AA7D611A840BE000C1B763 /* Affine.c in Sources */,
 				05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */,
+				05E3CA951AC70C53000EDE84 /* ProfileTableView.swift in Sources */,
 				05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */,
+				052FB5281AA810560049DF8A /* CoreDataStack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,11 +577,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Enigma/Enigma.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Enigma/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Enigma/Enigma-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -569,10 +596,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Enigma/Enigma.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Enigma/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Enigma/Enigma-Bridging-Header.h";
 			};
 			name = Release;
@@ -614,6 +644,7 @@
 		05211C541A72D16E00660739 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EnigmaKeyboard/EnigmaKeyboard.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -632,6 +663,7 @@
 		05211C551A72D16E00660739 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EnigmaKeyboard/EnigmaKeyboard.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = EnigmaKeyboard/Info.plist;
