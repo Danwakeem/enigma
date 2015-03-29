@@ -203,10 +203,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                     key2 = Int32(k2)
                 }
                 encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: eType, withKey: key1, andKey: key2)
-                var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
-                for ch in self.lastTypedWord {
-                    self.proxy.deleteBackward()
-                }
+                //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
             }
             //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
             
@@ -448,7 +445,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 self.proxy.insertText(key2 + " ")
                 var keys = [key1,key2]
                 newEncryptionMethods = [encryptMethod: keys]
-                //self.currentEncryptionMethods = newEncryptionMethods
+                self.currentEncryptionMethods = newEncryptionMethods
             }
         } else {
             println("I know this doesnt actually print to the console but YOLO")
