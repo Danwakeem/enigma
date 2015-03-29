@@ -192,7 +192,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.lastTypedWord = " "
         } else {
             //Encryption test :)
-<<<<<<< HEAD
             var encryptedString: String!
             
             for (key,value) in self.currentEncryptionMethods {
@@ -204,20 +203,18 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                     key2 = Int32(k2)
                 }
                 encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: eType, withKey: key1, andKey: key2)
-=======
-            var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
-            for ch in self.lastTypedWord{
-                self.proxy.deleteBackward()
->>>>>>> a09f4be4650ce51df6ede1f8eaf7cc2767edadce
+                var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
+                for ch in self.lastTypedWord {
+                    self.proxy.deleteBackward()
+                }
             }
-            
             //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
             
             self.proxy.insertText(encryptedString + " ")
             self.lastTypedWord = ""
         }
     }
-    
+        
     func insertText(title: String){
         if self.upperCase || self.caseLock || self.firstLetter {
             self.setRawTextlabelText(title)
@@ -336,7 +333,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func decryptText(text: String) -> String{
-<<<<<<< HEAD
         var returnString: String = text
         for (key,value) in self.currentEncryptionMethods {
             var eType: EncryptionType = self.encryptionTypes[key]!
@@ -350,9 +346,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         
         return returnString
-=======
-         return EncrytionFramework.decrypt(text, using: Vigenere, withKey: "lemon", andKey: 0)
->>>>>>> a09f4be4650ce51df6ede1f8eaf7cc2767edadce
     }
     
     func removeViews(){
@@ -428,7 +421,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     func selectedProfile(){
         self.currentProfile = self.profileTable.selectedProfile
-        
         //This method isnt doing anything until the containing app saves the encryption keys with the profile
         self.getEncryptions()
         self.toggleProfileTable()
@@ -457,12 +449,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 var keys = [key1,key2]
                 newEncryptionMethods = [encryptMethod: keys]
                 //self.currentEncryptionMethods = newEncryptionMethods
-            }
-            //If this this is printed without anything else it is because no encryption methods were saved when the profile was created.
-            if encryptions.count > 0 {
-                self.proxy.insertText("No Encryption Methods attached")
-            } else {
-                self.proxy.insertText("Okay cool")
             }
         } else {
             println("I know this doesnt actually print to the console but YOLO")
