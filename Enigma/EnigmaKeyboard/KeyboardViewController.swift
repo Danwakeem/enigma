@@ -192,6 +192,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.lastTypedWord = " "
         } else {
             //Encryption test :)
+<<<<<<< HEAD
             var encryptedString: String!
             
             for (key,value) in self.currentEncryptionMethods {
@@ -203,6 +204,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                     key2 = Int32(k2)
                 }
                 encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: eType, withKey: key1, andKey: key2)
+=======
+            var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
+            for ch in self.lastTypedWord{
+                self.proxy.deleteBackward()
+>>>>>>> a09f4be4650ce51df6ede1f8eaf7cc2767edadce
             }
             
             //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
@@ -330,6 +336,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func decryptText(text: String) -> String{
+<<<<<<< HEAD
         var returnString: String = text
         for (key,value) in self.currentEncryptionMethods {
             var eType: EncryptionType = self.encryptionTypes[key]!
@@ -343,6 +350,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         
         return returnString
+=======
+         return EncrytionFramework.decrypt(text, using: Vigenere, withKey: "lemon", andKey: 0)
+>>>>>>> a09f4be4650ce51df6ede1f8eaf7cc2767edadce
     }
     
     func removeViews(){
