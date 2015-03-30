@@ -16,35 +16,29 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var firstLetter: Bool = true
     var lastTypedWord: String = ""
     var proxy: UITextDocumentProxy!
-    
     var managedObjectContext = CoreDataStack().managedObjectContext
-    
-    var Keyboard: KeyboardView = KeyboardView()
-    
     //EncryptionType to String
     var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere]
-    
     let notificationKey = "com.SlayterDev.selectedProfile"
     
     var currentProfile: NSManagedObject!
     var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
     
+    var Keyboard: KeyboardView = KeyboardView()
     var profileTable: ProfileTableView!
     
     @IBOutlet var nextKeyboardButton: UIButton!
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
-        
         // Add custom view sizing constraints here
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.createKeyboard()
-        
         //self.view.backgroundColor = UIColor.whiteColor()
-        //self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         
         self.proxy = textDocumentProxy as UITextDocumentProxy
         
@@ -99,15 +93,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             case "123" :
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.numberButtonTitles1,Keyboard.numberButtonTitles2,Keyboard.numberButtonTitles3,Keyboard.numberButtonTitles4])
-                //self.createKeyboard([numberButtonTitles1,numberButtonTitles2,numberButtonTitles3,numberButtonTitles4])
             case "+#=":
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.alternateKeyboardButtonTitles1,Keyboard.alternateKeyboardButtonTitles2,Keyboard.alternateKeyboardButtonTitles3,Keyboard.numberButtonTitles4])
-                //self.createKeyboard([alternateKeyboardButtonTitles1,alternateKeyboardButtonTitles2,alternateKeyboardButtonTitles3,numberButtonTitles4])
             case "ABC" :
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
-                //self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
             case "👱":
                 self.toggleProfileTable()
             default :
@@ -257,7 +248,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 profiles.hidden = true
                 self.view.addSubview(profiles)
                 self.profileTable = profiles
-                
                 profiles.setTranslatesAutoresizingMaskIntoConstraints(false)
                 
                 let widthConstraint = NSLayoutConstraint(item: profiles, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1, constant: 0)
@@ -297,7 +287,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     func selectedProfile(){
         self.currentProfile = self.profileTable.selectedProfile
-        //This method isnt doing anything until the containing app saves the encryption keys with the profile
+        //getEncryptions isn't doing anything until the containing app saves the encryption keys with the profile
         self.getEncryptions()
         self.toggleProfileTable()
     }
@@ -308,20 +298,18 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         if let encryptions: NSSet = self.currentProfile?.mutableSetValueForKeyPath("encryption") {
             var newEncryptionMethods = Dictionary<String,[AnyObject]>()
             
+            //Could reinitilize this way if I wanted I guess
             //self.currentEncryptionMethods = Dictionary<String,[AnyObject]>()
             
             for (index, e) in enumerate(encryptions) {
                 var encryptMethod = e.valueForKeyPath("encryptionType") as String!
-                self.proxy.insertText(encryptMethod + " ")
                 var key1 = e.valueForKeyPath("key1") as String!
-                self.proxy.insertText(key1 + " ")
                 var key2: String!
                 if let k2: String = e.valueForKeyPath("key2") as? String {
                     key2 = k2
                 } else {
                     key2 = "0"
                 }
-                self.proxy.insertText(key2 + " ")
                 var keys = [key1,key2]
                 newEncryptionMethods = [encryptMethod: keys]
                 self.currentEncryptionMethods = newEncryptionMethods
