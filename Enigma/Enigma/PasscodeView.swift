@@ -192,8 +192,8 @@ class PasscodeView: UIViewController {
 					}
 				}
 				
-				let defaults = NSUserDefaults.standardUserDefaults()
-				if defaults.stringForKey("passcode") == passcode {
+				let defaults = NSUserDefaults(suiteName: "group.com.enigma")
+				if defaults?.stringForKey("passcode") == passcode {
 					self.dismissViewControllerAnimated(true, completion: nil)
 					delegate.authenticationCompleted(true)
 				} else {
@@ -241,9 +241,9 @@ class PasscodeView: UIViewController {
 	}
 	
 	func storePasscode() {
-		let defaults = NSUserDefaults.standardUserDefaults()
-		defaults.setObject(passcode, forKey: "passcode")
-		defaults.setBool(true, forKey: "PasscodeSet")
+		let defaults = NSUserDefaults(suiteName: "group.com.enigma")
+		defaults?.setObject(passcode, forKey: "passcode")
+		defaults?.setBool(true, forKey: "PasscodeSet")
 	}
 	
 	func deleteTapped(sender: AnyObject) {

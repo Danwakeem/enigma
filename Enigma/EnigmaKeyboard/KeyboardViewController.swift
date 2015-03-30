@@ -71,6 +71,15 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
     
     var profileTable: ProfileTableView!
+	
+	var quickPeriodTimer: NSTimer!
+	var allowQuickPeriod: Bool!
+	
+	var holdDeleteTimer: NSTimer!
+	var deleteKey: UIButton!
+	var isHoldingDelete: Bool! = false
+	
+	var defaults: NSUserDefaults!
     
     @IBOutlet var nextKeyboardButton: UIButton!
     
@@ -82,7 +91,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+		
+		// load defaults
+		defaults = NSUserDefaults(suiteName: "group.com.enigma")
+		allowQuickPeriod = false
+		
         //self.view.backgroundColor = UIColor.whiteColor()
         self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         self.proxy = textDocumentProxy as UITextDocumentProxy
@@ -181,15 +194,21 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         self.rawTextLabel.text = self.lastTypedWord
     }
-    
+	
+	func stopQuickPeriod() {
+		println("Diallow quick period")
+		allowQuickPeriod = false
+	}
+	
     func pressedSpace(title: String){
         self.rawTextLabel.text = ""
         //This is where we would access self.lastTypedWord to encrypt their text.
         //Just use self.proxy.deleteBackward() to delete each char the user typed until it is gone then replace with the encrypted string.
-        if self.lastTypedWord == " " {
+        if self.lastTypedWord == " " && !self.proxy.documentContextBeforeInput.hasSuffix(". ") && allowQuickPeriod! && defaults!.boolForKey("QuickPeriod") {
             self.proxy.deleteBackward()
             self.proxy.insertText(". ")
             self.lastTypedWord = " "
+			allowQuickPeriod = false
         } else {
             //Encryption test :)
             var encryptedString: String!
@@ -206,9 +225,15 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
             }
             //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
-            
+			
+			if self.lastTypedWord != " " {
+				allowQuickPeriod = true
+			}
+			
             self.proxy.insertText(encryptedString + " ")
-            self.lastTypedWord = ""
+            self.lastTypedWord = " "
+			
+			quickPeriodTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("stopQuickPeriod"), userInfo: nil, repeats: false)
         }
     }
         
@@ -589,10 +614,14 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             button.layer.opacity = 0.5
             //button.titleLabel?.font = UIFont.systemFontOfSize(15)
             button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
-            let longPress = UILongPressGestureRecognizer(target: self, action: "longPressBackSpace:")
+			button.removeTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
+			button.addTarget(self, action: "deleteHeld", forControlEvents: .TouchDown)
+			button.addTarget(self, action: "deleteRelease", forControlEvents: UIControlEvents.TouchUpInside|UIControlEvents.TouchUpOutside)
+            /*let longPress = UILongPressGestureRecognizer(target: self, action: "longPressBackSpace:")
             button.addGestureRecognizer(longPress)
             singleTap.requireGestureRecognizerToFail(longPress)
             button.userInteractionEnabled = true
+			deleteKey = button*/
         } else if title == "space" {
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
         } else if title == "123" || title == "rtn" || title == "\u{1f310}" || title == "+#="{
@@ -842,5 +871,53 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             inputView.addConstraint(bottomConstraint)
         }
     }
-    
+	
+	var preTimer: NSTimer!
+	
+	func deleteRelease() {
+		isHoldingDelete = false
+		holdDeleteTimer.invalidate()
+		preTimer.invalidate()
+	}
+	
+	func deleteChar() {
+		pressedBackSpace("\u{232B}")
+	}
+	
+	func startDeleteTimer() {
+		holdDeleteTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("deleteChar"), userInfo: nil, repeats: true)
+	}
+	
+	func deleteHeld() {
+		pressedBackSpace("\u{232B}")
+		
+		isHoldingDelete = true
+		preTimer = NSTimer.scheduledTimerWithTimeInterval(0.75, target: self, selector: Selector("startDeleteTimer"), userInfo: nil, repeats: false)
+	}
+	
+	override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+		println("Touches began")
+		let touch: AnyObject? = touches.anyObject()
+		let location = touch?.locationInView(self.view)
+		
+		if CGRectContainsPoint(deleteKey.frame, location!) {
+			NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("deleteHeld"), userInfo: nil, repeats: false)
+		}
+	}
+	
+	override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+		let touch: AnyObject? = touches.anyObject()
+		let location = touch?.locationInView(self.view)
+		
+		if !CGRectContainsPoint(deleteKey.frame, location!) {
+			isHoldingDelete = false
+			holdDeleteTimer.invalidate()
+		}
+	}
+	
+	override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+		isHoldingDelete = false
+		holdDeleteTimer.invalidate()
+	}
+	
 }

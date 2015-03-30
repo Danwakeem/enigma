@@ -16,8 +16,8 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate,
 	var managedObjectContext: NSManagedObjectContext? = nil
 
 	@IBAction func unwindTutorial(sender: UIStoryboardSegue) {
-		var userDefaults = NSUserDefaults.standardUserDefaults()
-		userDefaults.setBool(true, forKey: "hasSeenTutorial")
+		var userDefaults = NSUserDefaults(suiteName: "group.com.enigma")
+		userDefaults!.setBool(true, forKey: "hasSeenTutorial")
 		authenticated = true
 	}
 	
@@ -30,11 +30,11 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate,
 		super.viewDidAppear(animated)
 		
 		
-		var userDefaults = NSUserDefaults.standardUserDefaults()
-		if (userDefaults.boolForKey("hasSeenTutorial") == false) {
+		var userDefaults = NSUserDefaults(suiteName: "group.com.enigma")
+		if (userDefaults!.boolForKey("hasSeenTutorial") == false) {
 			performSegueWithIdentifier("showTutorial", sender: self)
 		} else {
-			if userDefaults.boolForKey("PasscodeSet") && !authenticated {
+			if userDefaults!.boolForKey("PasscodeSet") && !authenticated {
 				let vc = PasscodeView()
 				vc.delegate = self
 				vc.setup = false
