@@ -75,6 +75,10 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 	var quickPeriodTimer: NSTimer!
 	var allowQuickPeriod: Bool!
 	
+	var holdDeleteTimer: NSTimer!
+	var deleteKey: UIButton!
+	var isHoldingDelete: Bool! = false
+	
 	var defaults: NSUserDefaults!
     
     @IBOutlet var nextKeyboardButton: UIButton!
@@ -614,6 +618,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             button.addGestureRecognizer(longPress)
             singleTap.requireGestureRecognizerToFail(longPress)
             button.userInteractionEnabled = true
+			deleteKey = button
         } else if title == "space" {
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
         } else if title == "123" || title == "rtn" || title == "\u{1f310}" || title == "+#="{
@@ -863,5 +868,39 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             inputView.addConstraint(bottomConstraint)
         }
     }
-    
+	
+	func deleteChar() {
+		self.proxy.deleteBackward()
+	}
+	
+	func deleteHeld() {
+		isHoldingDelete = true
+		holdDeleteTimer = NSTimer.scheduledTimerWithTimeInterval(0.33, target: self, selector: Selector("deleteChar"), userInfo: nil, repeats: true)
+	}
+	
+	override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+		println("Touches began")
+		let touch: AnyObject? = touches.anyObject()
+		let location = touch?.locationInView(self.view)
+		
+		if CGRectContainsPoint(deleteKey.frame, location!) {
+			NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("deleteHeld"), userInfo: nil, repeats: false)
+		}
+	}
+	
+	override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+		let touch: AnyObject? = touches.anyObject()
+		let location = touch?.locationInView(self.view)
+		
+		if !CGRectContainsPoint(deleteKey.frame, location!) {
+			isHoldingDelete = false
+			holdDeleteTimer.invalidate()
+		}
+	}
+	
+	override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+		isHoldingDelete = false
+		holdDeleteTimer.invalidate()
+	}
+	
 }
