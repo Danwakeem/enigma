@@ -614,11 +614,14 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             button.layer.opacity = 0.5
             //button.titleLabel?.font = UIFont.systemFontOfSize(15)
             button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
-            let longPress = UILongPressGestureRecognizer(target: self, action: "longPressBackSpace:")
+			button.removeTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
+			button.addTarget(self, action: "deleteHeld", forControlEvents: .TouchDown)
+			button.addTarget(self, action: "deleteRelease", forControlEvents: UIControlEvents.TouchUpInside|UIControlEvents.TouchUpOutside)
+            /*let longPress = UILongPressGestureRecognizer(target: self, action: "longPressBackSpace:")
             button.addGestureRecognizer(longPress)
             singleTap.requireGestureRecognizerToFail(longPress)
             button.userInteractionEnabled = true
-			deleteKey = button
+			deleteKey = button*/
         } else if title == "space" {
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
         } else if title == "123" || title == "rtn" || title == "\u{1f310}" || title == "+#="{
@@ -869,13 +872,27 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
     }
 	
+	var preTimer: NSTimer!
+	
+	func deleteRelease() {
+		isHoldingDelete = false
+		holdDeleteTimer.invalidate()
+		preTimer.invalidate()
+	}
+	
 	func deleteChar() {
-		self.proxy.deleteBackward()
+		pressedBackSpace("\u{232B}")
+	}
+	
+	func startDeleteTimer() {
+		holdDeleteTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("deleteChar"), userInfo: nil, repeats: true)
 	}
 	
 	func deleteHeld() {
+		pressedBackSpace("\u{232B}")
+		
 		isHoldingDelete = true
-		holdDeleteTimer = NSTimer.scheduledTimerWithTimeInterval(0.33, target: self, selector: Selector("deleteChar"), userInfo: nil, repeats: true)
+		preTimer = NSTimer.scheduledTimerWithTimeInterval(0.75, target: self, selector: Selector("startDeleteTimer"), userInfo: nil, repeats: false)
 	}
 	
 	override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
