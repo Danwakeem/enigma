@@ -71,6 +71,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
     
     var profileTable: ProfileTableView!
+	
+	var quickPeriodTimer: NSTimer!
+	var allowQuickPeriod: Bool!
+	
+	var defaults: NSUserDefaults!
     
     @IBOutlet var nextKeyboardButton: UIButton!
     
@@ -82,7 +87,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+		
+		// load defaults
+		defaults = NSUserDefaults(suiteName: "group.com.enigma")
+		allowQuickPeriod = false
+		
         //self.view.backgroundColor = UIColor.whiteColor()
         self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         self.proxy = textDocumentProxy as UITextDocumentProxy
@@ -181,15 +190,21 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         self.rawTextLabel.text = self.lastTypedWord
     }
-    
+	
+	func stopQuickPeriod() {
+		println("Diallow quick period")
+		allowQuickPeriod = false
+	}
+	
     func pressedSpace(title: String){
         self.rawTextLabel.text = ""
         //This is where we would access self.lastTypedWord to encrypt their text.
         //Just use self.proxy.deleteBackward() to delete each char the user typed until it is gone then replace with the encrypted string.
-        if self.lastTypedWord == " " {
+        if self.lastTypedWord == " " && !self.proxy.documentContextBeforeInput.hasSuffix(". ") && allowQuickPeriod! && defaults!.boolForKey("QuickPeriod") {
             self.proxy.deleteBackward()
             self.proxy.insertText(". ")
             self.lastTypedWord = " "
+			allowQuickPeriod = false
         } else {
             //Encryption test :)
             var encryptedString: String!
@@ -206,9 +221,15 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
             }
             //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
-            
+			
+			if self.lastTypedWord != " " {
+				allowQuickPeriod = true
+			}
+			
             self.proxy.insertText(encryptedString + " ")
-            self.lastTypedWord = ""
+            self.lastTypedWord = " "
+			
+			quickPeriodTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("stopQuickPeriod"), userInfo: nil, repeats: false)
         }
     }
         
