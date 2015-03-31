@@ -13,6 +13,8 @@ protocol KeyboardViewDelegate {
     func buttonTapped(sender: AnyObject)
     func longPressBackSpace(sender: AnyObject)
     func lockCase(sender: AnyObject)
+	func backSpaceTapped(sender: AnyObject)
+	func backSpaceReleased(sender: AnyObject)
 }
 
 class KeyboardView: UIView {
@@ -90,6 +92,14 @@ class KeyboardView: UIView {
     func buttonTapped(sender: AnyObject){
         self.delegate?.buttonTapped(sender)
     }
+	
+	func backSpaceTapped(sender: AnyObject) {
+		self.delegate?.backSpaceTapped(sender)
+	}
+	
+	func backSpaceReleased(sender: AnyObject) {
+		self.delegate?.backSpaceReleased(sender)
+	}
     
     func longPressBackSpace(sender: AnyObject){
         self.delegate?.longPressBackSpace(sender)
@@ -321,10 +331,9 @@ class KeyboardView: UIView {
             button.layer.opacity = 0.5
             //button.titleLabel?.font = UIFont.systemFontOfSize(15)
             button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
-            let longPress = UILongPressGestureRecognizer(target: self, action: "longPressBackSpace:")
-            button.addGestureRecognizer(longPress)
-            singleTap.requireGestureRecognizerToFail(longPress)
-            button.userInteractionEnabled = true
+            button.removeTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
+			button.addTarget(self, action: "backSpaceTapped:", forControlEvents: .TouchDown)
+			button.addTarget(self, action: "backSpaceReleased:", forControlEvents: UIControlEvents.TouchUpInside|UIControlEvents.TouchDragOutside)
         } else if title == "space" {
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
         } else if title == "123" || title == "rtn" || title == "\u{1f310}" || title == "+#="{
