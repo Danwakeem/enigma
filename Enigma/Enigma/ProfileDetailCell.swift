@@ -17,8 +17,23 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 	@IBOutlet weak var keyField: UITextField!
 	
 	var delegate: ProfileDetailCellDelegate! = nil
+	var method = 0
+	
+	var encryptionMethods = [
+		"SimpleSub",
+		"Caesar",
+		"Affine",
+		"Clear",
+		"Vigenere"
+	]
 	
 	func textFieldDidEndEditing(textField: UITextField) {
 		delegate.cypherChanged("key1", value: keyField.text)
+	}
+	
+	@IBAction func changeEncryptionMethod(sender: AnyObject) {
+		method++
+		method %= encryptionMethods.count
+		delegate.cypherChanged("encryptionMethod", value: encryptionMethods[method])
 	}
 }
