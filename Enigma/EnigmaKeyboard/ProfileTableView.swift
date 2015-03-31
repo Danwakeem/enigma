@@ -29,10 +29,10 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
         self.addSubview(rootView)
         rootView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        let left = NSLayoutConstraint(item: rootView, attribute: .Left, relatedBy: .Equal, toItem: self, attribute: .Left, multiplier: 1, constant: 0)
-        let right = NSLayoutConstraint(item: rootView, attribute: .Right, relatedBy: .Equal, toItem: self, attribute: .Right, multiplier: 1, constant: 0)
-        let top = NSLayoutConstraint(item: rootView, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1, constant: 0)
-        let bottom = NSLayoutConstraint(item: rootView, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1, constant: 0)
+        let left = NSLayoutConstraint(item: rootView, attribute: .Left, relatedBy: .Equal, toItem: self, attribute: .Left, multiplier: 1.0, constant: 0)
+        let right = NSLayoutConstraint(item: rootView, attribute: .Right, relatedBy: .Equal, toItem: self, attribute: .Right, multiplier: 1.0, constant: 0)
+        let top = NSLayoutConstraint(item: rootView, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 0)
+        let bottom = NSLayoutConstraint(item: rootView, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: 0)
         
         self.addConstraint(left)
         self.addConstraint(right)

@@ -176,7 +176,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 			}
 			
             self.proxy.insertText(encryptedString + " ")
-            self.lastTypedWord = " "
+            self.lastTypedWord = ""
 			
 			quickPeriodTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("stopQuickPeriod"), userInfo: nil, repeats: false)
         }
@@ -276,10 +276,10 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 self.profileTable = profiles
                 profiles.setTranslatesAutoresizingMaskIntoConstraints(false)
                 
-                let widthConstraint = NSLayoutConstraint(item: profiles, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1, constant: 0)
-                let heightConstraint = NSLayoutConstraint(item: profiles, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1, constant: 0)
-                let centerXConstraint = NSLayoutConstraint(item: profiles, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1, constant: 0)
-                let centerYConstraint = NSLayoutConstraint(item: profiles, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1, constant: 0)
+                let widthConstraint = NSLayoutConstraint(item: profiles, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0)
+                let heightConstraint = NSLayoutConstraint(item: profiles, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1.0, constant: 0)
+                let centerXConstraint = NSLayoutConstraint(item: profiles, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0)
+                let centerYConstraint = NSLayoutConstraint(item: profiles, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1.0, constant: 0)
                 
                 self.view.addConstraints([widthConstraint,heightConstraint,centerXConstraint,centerYConstraint])
             }
@@ -287,7 +287,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         if let table = self.profileTable {
             let hidden = self.profileTable.hidden
-            table.hidden = !hidden
+            self.profileTable.hidden = !hidden
             self.Keyboard.encryptionRow.hidden = hidden
             self.Keyboard.row1.hidden = hidden
             self.Keyboard.row2.hidden = hidden
@@ -323,18 +323,16 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         //Set the Encryption/Decryption Methods that is being used
         if let encryptions: NSSet = self.currentProfile?.mutableSetValueForKeyPath("encryption") {
             var newEncryptionMethods = Dictionary<String,[AnyObject]>()
-            
             //Could reinitilize this way if I wanted I guess
             //self.currentEncryptionMethods = Dictionary<String,[AnyObject]>()
-            
             for (index, e) in enumerate(encryptions) {
                 var encryptMethod = e.valueForKeyPath("encryptionType") as String!
                 var key1 = e.valueForKeyPath("key1") as String!
-                var key2: String!
+                var key2 = "0"
                 if let k2: String = e.valueForKeyPath("key2") as? String {
-                    key2 = k2
-                } else {
-                    key2 = "0"
+                    if k2 != "" {
+                        key2 = k2
+                    }
                 }
                 var keys = [key1,key2]
                 newEncryptionMethods = [encryptMethod: keys]
