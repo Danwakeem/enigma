@@ -13,8 +13,6 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	var profile: NSManagedObject? = nil
 	var encryptions = [NSManagedObject]()
 	
-	var encryptionMethods = [ "Affine", "Ceasar" ]
-	
 	// TODO: Impliment an edit buffer so that multiple encryptions can be handled
 	var name: String = ""
 	var cypher: String = ""
@@ -69,7 +67,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		var encryption = encryptions[indexPath.row]
 		
 		cell.delegate = self
-		cell.cypherButton.setTitle(encryption.valueForKey("encryptionType") as String!, forState: .Normal)
+		cell.cypherButton.setTitle(cypher, forState: .Normal)
 		cell.cypherButton.enabled = editing
 		cell.keyField.text = key1
 		cell.keyField.enabled = editing
@@ -130,6 +128,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			self.key1 = value
 		} else {
 			self.cypher = value
+			collectionView?.reloadData()
 		}
 		
 		if editing == false {
