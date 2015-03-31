@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ProfileDetailCellDelegate {
-	func cypherChanged(cypher: String, key1: String, key2: String)
+	func cypherChanged(key: String, value: String)
 }
 
 class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
@@ -19,6 +19,6 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 	var delegate: ProfileDetailCellDelegate! = nil
 	
 	func textFieldDidEndEditing(textField: UITextField) {
-		delegate.cypherChanged("Caesar", key1: keyField.text, key2: "")
+		delegate.cypherChanged("key1", value: keyField.text)
 	}
 }
