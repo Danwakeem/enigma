@@ -44,6 +44,7 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate,
 			}
 		}
 		
+		splitViewController?.delegate = self
 		setNeedsStatusBarAppearanceUpdate()
 	}
 	
