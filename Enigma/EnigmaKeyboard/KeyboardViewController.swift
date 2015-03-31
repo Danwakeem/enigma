@@ -16,7 +16,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var firstLetter: Bool = true
     var lastTypedWord: String = ""
     var proxy: UITextDocumentProxy!
-    var managedObjectContext = CoreDataStack().managedObjectContext
+    var managedObjectContext: NSManagedObjectContext!
     //EncryptionType to String
     var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere]
     let notificationKey = "com.SlayterDev.selectedProfile"
@@ -48,6 +48,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     override func viewDidLoad() {
         super.viewDidLoad()
         self.createKeyboard()
+        self.managedObjectContext = CoreDataStack().managedObjectContext
 		
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
@@ -69,6 +70,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     override func viewDidAppear(animated: Bool) {
         let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
         self.view.addConstraint(keyboardHeight)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        //Save the encryption methods
+        //self.defaults.setObject(self.currentEncryptionMethods as NSDictionary, forKey: "KeyboardEncryptionMethods")
+        //self.defaults.synchronize()
     }
     
     //MARK: - Load Keyboard into view
@@ -306,7 +313,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func toggleProfileTable() {
         if self.profileTable == nil {
             if var profiles = self.createProfileTable() {
-                profiles.hidden = true
+                //profiles.hidden = true
                 self.view.addSubview(profiles)
                 self.profileTable = profiles
                 profiles.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -318,8 +325,14 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 
                 self.view.addConstraints([widthConstraint,heightConstraint,centerXConstraint,centerYConstraint])
             }
+        } else {
+            self.profileTable.selectedProfile = nil
+            self.profileTable.managedObjectContext = nil
+            self.profileTable.removeFromSuperview()
+            self.profileTable = nil
         }
         
+        /*
         if let table = self.profileTable {
             let hidden = self.profileTable.hidden
             self.profileTable.hidden = !hidden
@@ -329,6 +342,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.Keyboard.row3.hidden = hidden
             self.Keyboard.row4.hidden = hidden
         }
+        */
         
     }
     
@@ -371,8 +385,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 }
                 var keys = [key1,key2]
                 newEncryptionMethods = [encryptMethod: keys]
-                self.currentEncryptionMethods = newEncryptionMethods
             }
+            self.currentEncryptionMethods = newEncryptionMethods
         } else {
             println("I know this doesnt actually print to the console but YOLO")
         }

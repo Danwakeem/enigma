@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
-    var managedObjectContext = CoreDataStack().managedObjectContext
+    var managedObjectContext: NSManagedObjectContext!
     
     @IBOutlet weak var profileTable: UITableView!
     @IBOutlet weak var backButton: UIButton!
@@ -20,6 +20,10 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     
     required override init() {
         super.init(frame: CGRectZero)
+        self.managedObjectContext = CoreDataStack().managedObjectContext
+        if self.profileTable != nil {
+            self.profileTable.reloadData()
+        }
         self.loadFromNib()
     }
     
@@ -139,7 +143,7 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Profile Table View")
+        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
         
@@ -154,5 +158,40 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
         return _fetchedResultsController!
     }
     var _fetchedResultsController: NSFetchedResultsController? = nil
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.profileTable.beginUpdates()
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        switch type {
+        case .Insert:
+            self.profileTable.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        case .Delete:
+            self.profileTable.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        default:
+            return
+        }
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch type {
+        case .Insert:
+            profileTable.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        case .Delete:
+            profileTable.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+        case .Update:
+            self.configureCell(profileTable.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
+        case .Move:
+            profileTable.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            profileTable.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        default:
+            return
+        }
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        self.profileTable.endUpdates()
+    }
     
 }
