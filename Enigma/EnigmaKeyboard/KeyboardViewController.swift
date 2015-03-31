@@ -24,6 +24,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var currentProfile: NSManagedObject?
     var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
     
+    var height: NSLayoutConstraint!
+    
     var Keyboard: KeyboardView = KeyboardView()
     var profileTable: ProfileTableView!
 	
@@ -49,6 +51,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         super.viewDidLoad()
         self.createKeyboard()
 		
+        
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
 		allowQuickPeriod = false
@@ -67,8 +70,29 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     //MARK: - Set height 
     
     override func viewDidAppear(animated: Bool) {
-        let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
-        self.view.addConstraint(keyboardHeight)
+        if UIInterfaceOrientationIsLandscape(self.interfaceOrientation) as Bool == true {
+            let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
+            self.height = keyboardHeight
+            self.view.addConstraint(keyboardHeight)
+        } else {
+            let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
+            self.height = keyboardHeight
+            self.view.addConstraint(keyboardHeight)
+        }
+    }
+    
+    override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        if UIInterfaceOrientationIsLandscape(toInterfaceOrientation) as Bool == true {
+            self.view.removeConstraint(self.height)
+            let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
+            self.height = keyboardHeight
+            self.view.addConstraint(keyboardHeight)
+        } else {
+            self.view.removeConstraint(self.height)
+            let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
+            self.height = keyboardHeight
+            self.view.addConstraint(keyboardHeight)
+        }
     }
     
     //MARK: - User default loading
@@ -130,6 +154,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             case "\u{1f310}" :
                 self.advanceToNextInputMode()
             case "\u{21E7}" :
+                println(button.titleLabel?.font.description)
                 self.upperCase = !self.upperCase
             case "123" :
                 self.Keyboard.removeViews()
