@@ -31,6 +31,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 	var allowQuickPeriod: Bool!
 	
 	var holdDeleteTimer: NSTimer!
+	var preTimer: NSTimer!
 	var deleteKey: UIButton!
 	var isHoldingDelete: Bool! = false
 	
@@ -123,6 +124,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             case "👱":
                 self.toggleProfileTable()
             default :
+				if self.lastTypedWord == " " {
+					self.lastTypedWord = ""
+				}
                 self.insertText(title)
             }
         }
@@ -249,6 +253,37 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         self.proxy.deleteBackward()
         self.Keyboard.rawTextLabel.text = ""
     }
+	
+	func deleteRelease() {
+		isHoldingDelete = false
+		if holdDeleteTimer != nil {
+			holdDeleteTimer.invalidate()
+		}
+		preTimer.invalidate()
+	}
+	
+	func deleteChar() {
+		pressedBackSpace("\u{232B}")
+	}
+	
+	func startTimer() {
+		holdDeleteTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("deleteChar"), userInfo: nil, repeats: true)
+	}
+	
+	func deleteHeld() {
+		pressedBackSpace("\u{232B}")
+		
+		isHoldingDelete = true
+		preTimer = NSTimer.scheduledTimerWithTimeInterval(0.75, target: self, selector: Selector("startTimer"), userInfo: nil, repeats: false)
+	}
+	
+	func backSpaceTapped(sender: AnyObject) {
+		deleteHeld()
+	}
+	
+	func backSpaceReleased(sender: AnyObject) {
+		deleteRelease()
+	}
     
     //MARK: - Default UIInputView functions
     
