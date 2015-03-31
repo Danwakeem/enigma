@@ -44,16 +44,16 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
 		navigationItem.leftItemsSupplementBackButton = true
 		
-		name = profile?.valueForKey("name") as String
+		if let profileName = profile?.valueForKey("name") as? String {
+			name = profileName
+		}
 		fetchEncryptions()
 	}
 	
 	override func viewDidLayoutSubviews() {
 		var collectionViewLayout = collectionView?.collectionViewLayout as UICollectionViewFlowLayout
 		collectionViewLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-		
-		var screenBounds = UIScreen.mainScreen().bounds
-		collectionViewLayout.itemSize = CGSizeMake(screenBounds.size.width - 40, 96)
+		collectionViewLayout.itemSize = CGSizeMake(view.bounds.size.width - 40, 96)
 	}
 	
 	override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -138,6 +138,10 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	func fetchEncryptions() {
+		if profile == nil {
+			return
+		}
+		
 		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
