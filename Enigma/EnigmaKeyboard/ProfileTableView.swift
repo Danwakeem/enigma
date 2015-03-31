@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
-    var managedObjectContext: NSManagedObjectContext!
+    var managedObjectContext = CoreDataStack().managedObjectContext
     
     @IBOutlet weak var profileTable: UITableView!
     @IBOutlet weak var backButton: UIButton!
@@ -20,7 +20,6 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     
     required override init() {
         super.init(frame: CGRectZero)
-        self.managedObjectContext = CoreDataStack().managedObjectContext
         if self.profileTable != nil {
             self.profileTable.reloadData()
         }
