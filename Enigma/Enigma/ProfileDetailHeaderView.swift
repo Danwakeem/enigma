@@ -8,8 +8,16 @@
 
 import UIKit
 
-class ProfileDetailHeaderView: UICollectionReusableView {
+protocol ProfileDetailHeaderViewDelegate {
+	func profileNameChanged(name: String)
+}
+
+class ProfileDetailHeaderView: UICollectionReusableView, UITextFieldDelegate {
 	@IBOutlet weak var profileNameField: UITextField!
 	
+	var delegate: ProfileDetailHeaderViewDelegate! = nil
 	
+	func textFieldDidEndEditing(textField: UITextField) {
+		delegate.profileNameChanged(textField.text)
+	}
 }

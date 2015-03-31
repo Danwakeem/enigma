@@ -150,7 +150,7 @@
 		 */
 		
 		isVigenre = true;
-		NSArray *wordsAndEmpties = [message componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		NSArray *wordsAndEmpties = [asciiNSString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		NSArray *words = [wordsAndEmpties filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
 		
 		asciiNSString = [NSMutableString string];

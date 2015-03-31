@@ -10,18 +10,21 @@ import UIKit
 
 class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 	
-	override func viewDidLoad() {
+	lazy var applicationDocumentsDirectory: NSURL = {
+		// The directory the application uses to store the Core Data store file. This code uses a directory named "com.Danwakeem.Brace_Editor" in the application's documents Application Support directory.
+		//let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+		//return urls[urls.count-1] as NSURL
 		
+		let urls = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.com.enigma")
+		return urls!
+		}()
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
 	}
 	
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
-		
-		setNeedsStatusBarAppearanceUpdate()
-	}
-	
-	override func preferredStatusBarStyle() -> UIStatusBarStyle {
-		return .LightContent
 	}
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,19 +67,19 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 	}
 	
 	func checkSwitchStatus(index: Int) -> Bool {
-		let defaults = NSUserDefaults.standardUserDefaults()
+		let defaults = NSUserDefaults(suiteName: "group.com.enigma")
 		
 		switch index {
 		case 0:
-			if defaults.boolForKey("PasscodeSet") {
+			if ((defaults?.boolForKey("PasscodeSet")) != nil) {
 				return true
 			}
 		case 1:
-			if defaults.boolForKey("QuickPeriod") {
+			if (defaults?.objectForKey("QuickPeriod")?.boolValue != nil) {
 				return true
 			}
 		case 2:
-			if defaults.boolForKey("ProfileSwipe") {
+			if (defaults?.objectForKey("ProfileSwipe")?.boolValue != nil) {
 				return true
 			}
 		default:
@@ -99,23 +102,26 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 	
 	func switchTapped(sender: AnyObject) {
 		let selectedSwitch = sender as UISwitch
-		let defaults = NSUserDefaults.standardUserDefaults()
+		let defaults = NSUserDefaults(suiteName: "group.com.enigma")
+		
+		println(defaults)
 		
 		switch selectedSwitch.tag {
 		case 0:
 			if !selectedSwitch.on {
-				defaults.setBool(false, forKey: "PasscodeSet")
-				defaults.setObject("", forKey: "passcode")
+				defaults?.setBool(false, forKey: "PasscodeSet")
+				defaults?.setValue("", forKey: "passcode")
 			} else {
 				setPasscode()
 			}
 		case 1:
-			defaults.setBool(selectedSwitch.on, forKey: "QuickPeriod")
+			defaults?.setBool(selectedSwitch.on, forKey: "QuickPeriod")
 		case 2:
-			defaults.setBool(selectedSwitch.on, forKey: "ProfileSwipe")
+			defaults?.setBool(selectedSwitch.on, forKey: "ProfileSwipe")
 		default:
 			break
 		}
+		
 	}
 	
 	func createSwitch(index: Int) -> UISwitch {
