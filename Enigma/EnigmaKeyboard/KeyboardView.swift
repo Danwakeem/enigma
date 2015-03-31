@@ -300,13 +300,11 @@ class KeyboardView: UIView {
     
     //Creating a button with the title from the button* arrays
     func createButtonWithTitle(title: String) -> UIButton {
-        let button = UIButton.buttonWithType(.System) as UIButton
+        let button = UIButton.buttonWithType(.Custom) as UIButton
         button.frame = CGRectMake(0, 0, 20, 20)
         button.clipsToBounds = true
         button.setTitle(title, forState: .Normal)
         button.sizeToFit()
-        button.titleLabel?.font = UIFont.systemFontOfSize(20)
-        button.setTitleColor(UIColor.blackColor(), forState: .Normal)
         button.titleEdgeInsets = UIEdgeInsets(top: 1.0, left: 1.0, bottom: 1.0, right: 1.0)
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         button.backgroundColor = UIColor.whiteColor()
@@ -320,8 +318,9 @@ class KeyboardView: UIView {
         if title == "\u{21E7}" {
             button.backgroundColor = UIColor.lightGrayColor()
             button.layer.opacity = 0.5
-            button.titleLabel?.font = UIFont.systemFontOfSize(15)
-            button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+            //button.titleLabel?.font = UIFont.systemFontOfSize(15)
+            button.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 15)
+            //button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
             let doubleTap = UITapGestureRecognizer(target: self, action: "lockCase:")
             doubleTap.numberOfTapsRequired = 2
             button.addGestureRecognizer(doubleTap)
@@ -341,6 +340,9 @@ class KeyboardView: UIView {
             button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
             button.layer.opacity = 0.5
             button.backgroundColor = UIColor.lightGrayColor()
+        } else {
+            button.titleLabel?.font = UIFont.systemFontOfSize(20)
+            button.setTitleColor(UIColor.blackColor(), forState: .Normal)
         }
         
         return button
