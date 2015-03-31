@@ -609,6 +609,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             doubleTap.numberOfTapsRequired = 2
             button.addGestureRecognizer(doubleTap)
             singleTap.requireGestureRecognizerToFail(doubleTap)
+			//button.setImage(UIImage(named: "Arrow.png"), forState: .Normal)
+			//button.tintColor = UIColor.whiteColor()
         } else if title == "\u{232B}" {
             button.backgroundColor = UIColor.lightGrayColor()
             button.layer.opacity = 0.5
@@ -876,7 +878,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 	
 	func deleteRelease() {
 		isHoldingDelete = false
-		holdDeleteTimer.invalidate()
+		if holdDeleteTimer != nil {
+			holdDeleteTimer.invalidate()
+		}
 		preTimer.invalidate()
 	}
 	
