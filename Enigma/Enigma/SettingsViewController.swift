@@ -28,11 +28,11 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 	}
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 4;
+		return 5;
 	}
 	
 	override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		return (UIScreen.mainScreen().bounds.size.height-44.0)/4
+		return (UIScreen.mainScreen().bounds.size.height-44.0)/5
 	}
 	
 	@IBAction func doneTapped(sender: AnyObject) {
@@ -47,19 +47,22 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 			cell.textLabel?.text = "Touch ID/Passcode"
 			cell.detailTextLabel?.text = "Enable touch ID to get access to this app"
 		case 1:
+			cell.textLabel?.text = "Typing Sounds"
+			cell.detailTextLabel?.text = "Play a sound as you type on the keyboard"
+		case 2:
 			cell.textLabel?.text = "Quick Period"
 			cell.detailTextLabel?.text = "Double tap the space bar to insert a period"
-		case 2:
+		case 3:
 			cell.textLabel?.text = "Swipe to Change Profiles"
 			cell.detailTextLabel?.text = "Right swipe across the clear text bar to\nchange encryption profiles"
-		case 3:
+		case 4:
 			cell.textLabel?.text = "Color Scheme"
 			cell.detailTextLabel?.text = "Change the color of the keyboard"
 		default:
 			cell.textLabel?.text = ""
 		}
 		
-		if indexPath.row < 3 {
+		if indexPath.row < 4 {
 			cell.accessoryView = createSwitch(indexPath.row)
 		}
 		
@@ -71,15 +74,19 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 		
 		switch index {
 		case 0:
-			if ((defaults?.boolForKey("PasscodeSet")) != nil) {
+			if (defaults!.boolForKey("PasscodeSet")) {
 				return true
 			}
 		case 1:
-			if (defaults?.objectForKey("QuickPeriod")?.boolValue != nil) {
+			if (defaults!.boolForKey("TypingSounds")) {
 				return true
 			}
 		case 2:
-			if (defaults?.objectForKey("ProfileSwipe")?.boolValue != nil) {
+			if (defaults!.boolForKey("QuickPeriod")) {
+				return true
+			}
+		case 3:
+			if (defaults!.boolForKey("ProfileSwipe")) {
 				return true
 			}
 		default:
@@ -104,8 +111,6 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 		let selectedSwitch = sender as UISwitch
 		let defaults = NSUserDefaults(suiteName: "group.com.enigma")
 		
-		println(defaults)
-		
 		switch selectedSwitch.tag {
 		case 0:
 			if !selectedSwitch.on {
@@ -115,8 +120,10 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 				setPasscode()
 			}
 		case 1:
-			defaults?.setBool(selectedSwitch.on, forKey: "QuickPeriod")
+			defaults?.setBool(selectedSwitch.on, forKey: "TypingSounds")
 		case 2:
+			defaults?.setBool(selectedSwitch.on, forKey: "QuickPeriod")
+		case 3:
 			defaults?.setBool(selectedSwitch.on, forKey: "ProfileSwipe")
 		default:
 			break

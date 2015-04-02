@@ -22,6 +22,7 @@
 		029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */; };
 		02CA73881AA4B2EB00FBFDF0 /* Vigenere.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */; };
 		02CA73891AA4B82900FBFDF0 /* Vigenere.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */; };
+		02E38F2D1ACDEBFD002B77E6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E38F2C1ACDEBFD002B77E6 /* AudioToolbox.framework */; };
 		02F6B87E1ACA1EB400ABA8AD /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6B87D1ACA1EB400ABA8AD /* Arrow.png */; };
 		02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AD1A854136009C76E6 /* PasscodeView.swift */; };
 		02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AF1A854176009C76E6 /* PasscodeButton.swift */; };
@@ -106,6 +107,7 @@
 		0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnigmaTests.swift; sourceTree = "<group>"; };
 		02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Vigenere.c; sourceTree = "<group>"; };
 		02CA73871AA4B2EB00FBFDF0 /* Vigenere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vigenere.h; sourceTree = "<group>"; };
+		02E38F2C1ACDEBFD002B77E6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		02F6B87D1ACA1EB400ABA8AD /* Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Arrow.png; sourceTree = "<group>"; };
 		02FF51AD1A854136009C76E6 /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
 		02FF51AF1A854176009C76E6 /* PasscodeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeButton.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02E38F2D1ACDEBFD002B77E6 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +182,7 @@
 		029226FB1A71D9D900A7DD81 = {
 			isa = PBXGroup;
 			children = (
+				02E38F2C1ACDEBFD002B77E6 /* AudioToolbox.framework */,
 				029227061A71D9D900A7DD81 /* Enigma */,
 				0292271C1A71D9D900A7DD81 /* EnigmaTests */,
 				05211C4C1A72D16E00660739 /* EnigmaKeyboard */,
