@@ -66,6 +66,8 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 			cell.accessoryView = createSwitch(indexPath.row)
 		}
 		
+		cell.selectionStyle = .None
+		
 		return cell
 	}
 	
