@@ -105,6 +105,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		for encryption in encryptions {
 			encryption.setValue(cypher, forKey: "encryptionType")
 			encryption.setValue(key1, forKey: "key1")
+            //Since we only have it saving one encryption type for now I am going to put this here just so we have a 
 		}
 		
 		var error: NSError?
