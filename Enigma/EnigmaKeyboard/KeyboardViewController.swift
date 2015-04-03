@@ -419,11 +419,13 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     //Saving the selected EncryptionMethod
     func getEncryptions(){
         //Set the Encryption/Decryption Methods that is being used
-        if let encryptions: NSSet = self.currentProfile?.mutableSetValueForKeyPath("encryption") {
+        if let encryptions: NSOrderedSet = self.currentProfile?.mutableOrderedSetValueForKeyPath("encryption") {
             var newEncryptionMethods = Dictionary<String,[AnyObject]>()
-            //Could reinitilize this way if I wanted I guess
-            //self.currentEncryptionMethods = Dictionary<String,[AnyObject]>()
-            for (index, e) in enumerate(encryptions) {
+            
+            //NOTE: - NSOrderedSet conforms to sequence type as of Swift 1.2 (Xcode 6.3) but I have not updated yet and I didn't
+            //        know if the rest of my team had either so I didn't want to mess anyone up. Not to mention I don't think Xcode 6.3
+            //        is considered a stable build yet.
+            encryptions.enumerateObjectsUsingBlock { (e, index, stop) -> Void in
                 var encryptMethod = e.valueForKeyPath("encryptionType") as String!
                 var key1 = e.valueForKeyPath("key1") as String!
                 var key2 = "0"
