@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import AudioToolbox
 
 class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerDelegate, KeyboardViewDelegate {
     
@@ -137,7 +138,13 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     //MARK: - Input text operations
-    
+	
+	func playSound() {
+		if defaults.boolForKey("TypingSounds") {
+			AudioServicesPlaySystemSound(1104)
+		}
+	}
+	
     func buttonTapped(sender: AnyObject) {
         let button = sender as UIButton
         
@@ -174,6 +181,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 self.insertText(title)
             }
         }
+		
+		playSound()
     }
     
     func pressedBackSpace(title: String){
@@ -190,6 +199,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         self.Keyboard.rawTextLabel.text = self.lastTypedWord
         //self.rawTextLabel.text = self.lastTypedWord
+		
+		playSound()
     }
 	
 	func stopQuickPeriod() {
@@ -235,6 +246,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 			
 			quickPeriodTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("stopQuickPeriod"), userInfo: nil, repeats: false)
         }
+		
+		playSound()
     }
         
     func insertText(title: String){
