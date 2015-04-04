@@ -29,6 +29,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     var Keyboard: KeyboardView = KeyboardView()
     var profileTable: ProfileTableView!
+    
+    var fetchedResultsController = ProfileFetchModel().fetchedResultsController
 	
 	var quickPeriodTimer: NSTimer!
 	var allowQuickPeriod: Bool!
@@ -396,7 +398,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func createProfileTable() -> ProfileTableView? {
-        var profileTab = ProfileTableView()
+        var profileTab = ProfileTableView(fetchedResultsController: self.fetchedResultsController)
         //Create an action for the cells
         for cell in profileTab.profileTable.visibleCells() as [UITableViewCell] {
             let alphaSelector: Selector = "selectedProfile"
