@@ -25,7 +25,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var currentProfile: NSManagedObject?
     var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
     var currentProfileName: String = "default"
-    var initializedProfileIndex: Int!
+    var initializedProfileIndex: Int = 0
     let swipedNotification = "com.SlayterDev.swipedProfile"
     
     var height: NSLayoutConstraint!
@@ -61,10 +61,10 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         self.loadEncryptionFromUserDefaults()
         
-        if let index = self.initializedProfileIndex {
-            self.Keyboard = KeyboardView(index: index)
+        if 0 < self.fetchedResultsController.fetchedObjects?.count {
+            self.Keyboard = KeyboardView(index: self.initializedProfileIndex)
         } else {
-            self.Keyboard = KeyboardView(index: 0)
+            self.Keyboard = KeyboardView(index: -1)
         }
         
         self.createKeyboard()

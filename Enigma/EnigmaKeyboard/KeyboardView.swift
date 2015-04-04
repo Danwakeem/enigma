@@ -99,9 +99,11 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func buttonTapped(sender: AnyObject){
-        if self.profilePages.view.superview != nil {
-            self.showProfilePages.invalidate()
-            self.togglePages()
+        if self.initilizedPageIndex != -1 {
+            if self.profilePages.view.superview != nil {
+                self.showProfilePages.invalidate()
+                self.togglePages()
+            }
         }
         self.delegate?.buttonTapped(sender)
     }
@@ -221,17 +223,6 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         downSwipe.numberOfTouchesRequired = 1
         self.profileSwipeRow.addGestureRecognizer(downSwipe)
         
-        //Swipes to activate profile pages
-        let aSelector: Selector = "activatePages"
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: aSelector)
-        leftSwipe.direction = UISwipeGestureRecognizerDirection.Left
-        leftSwipe.numberOfTouchesRequired = 1
-        self.profileSwipeRow.addGestureRecognizer(leftSwipe)
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: aSelector)
-        rightSwipe.direction = UISwipeGestureRecognizerDirection.Right
-        rightSwipe.numberOfTouchesRequired = 1
-        self.profileSwipeRow.addGestureRecognizer(rightSwipe)
-        
         //Disable all of the autolayout stuff that gets automatically set by adding a subview that way
         //we can add our own autolayout attributes
         self.encryptionRow.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -252,9 +243,22 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         //Center the text in the label
         self.rawTextLabel.textAlignment = .Center
         
-        self.setupPageView()
-        
-        self.showProfilePages = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("togglePages"), userInfo: nil, repeats: false)
+        if self.initilizedPageIndex != -1 {
+            //Swipes to activate profile pages
+            let aSelector: Selector = "activatePages"
+            let leftSwipe = UISwipeGestureRecognizer(target: self, action: aSelector)
+            leftSwipe.direction = UISwipeGestureRecognizerDirection.Left
+            leftSwipe.numberOfTouchesRequired = 1
+            self.profileSwipeRow.addGestureRecognizer(leftSwipe)
+            let rightSwipe = UISwipeGestureRecognizer(target: self, action: aSelector)
+            rightSwipe.direction = UISwipeGestureRecognizerDirection.Right
+            rightSwipe.numberOfTouchesRequired = 1
+            self.profileSwipeRow.addGestureRecognizer(rightSwipe)
+            
+            self.setupPageView()
+            
+            self.showProfilePages = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("togglePages"), userInfo: nil, repeats: false)
+        }
     }
     
     func activatePages() {
