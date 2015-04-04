@@ -37,6 +37,9 @@
 		05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
 		05AA7D611A840BE000C1B763 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
 		05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
+		05C2F8111ACF9E4C00C2097E /* ProfileSwipeModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C2F8101ACF9E4C00C2097E /* ProfileSwipeModelController.swift */; };
+		05C2F8151ACF9FAB00C2097E /* ProfileSwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C2F8141ACF9FAB00C2097E /* ProfileSwipeViewController.swift */; };
+		05C2F8171ACFA0CC00C2097E /* ProfileFetchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C2F8161ACFA0CC00C2097E /* ProfileFetchModel.swift */; };
 		05E3CA461AC62741000EDE84 /* Profiles.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05E3CA451AC62741000EDE84 /* Profiles.xib */; };
 		05E3CA951AC70C53000EDE84 /* ProfileTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */; };
 		237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399571A86C5E500A21FE0 /* SplitViewController.swift */; };
@@ -117,6 +120,9 @@
 		052FB5271AA810560049DF8A /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		056C3F831AC8AEDB00F1103F /* KeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		0587D6801ACA7AFE00B02109 /* KeyboardButtons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = KeyboardButtons.xcassets; sourceTree = "<group>"; };
+		05C2F8101ACF9E4C00C2097E /* ProfileSwipeModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSwipeModelController.swift; sourceTree = "<group>"; };
+		05C2F8141ACF9FAB00C2097E /* ProfileSwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSwipeViewController.swift; sourceTree = "<group>"; };
+		05C2F8161ACFA0CC00C2097E /* ProfileFetchModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileFetchModel.swift; sourceTree = "<group>"; };
 		05E3CA451AC62741000EDE84 /* Profiles.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Profiles.xib; sourceTree = "<group>"; };
 		05E3CA931AC69F07000EDE84 /* EnigmaKeyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EnigmaKeyboard.entitlements; sourceTree = "<group>"; };
 		05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableView.swift; sourceTree = "<group>"; };
@@ -259,12 +265,10 @@
 			children = (
 				02F6B87D1ACA1EB400ABA8AD /* Arrow.png */,
 				05E3CA931AC69F07000EDE84 /* EnigmaKeyboard.entitlements */,
-				05211C4F1A72D16E00660739 /* KeyboardViewController.swift */,
-				056C3F831AC8AEDB00F1103F /* KeyboardView.swift */,
-				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
-				052FB5271AA810560049DF8A /* CoreDataStack.swift */,
-				05E3CA451AC62741000EDE84 /* Profiles.xib */,
 				0587D6801ACA7AFE00B02109 /* KeyboardButtons.xcassets */,
+				052E3A781AD0523800C97CE0 /* View Controllers */,
+				052E3A791AD0525600C97CE0 /* Models */,
+				052E3A771AD0521200C97CE0 /* Views */,
 				05211C4D1A72D16E00660739 /* Supporting Files */,
 			);
 			path = EnigmaKeyboard;
@@ -276,6 +280,35 @@
 				05211C4E1A72D16E00660739 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		052E3A771AD0521200C97CE0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				056C3F831AC8AEDB00F1103F /* KeyboardView.swift */,
+				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
+				05E3CA451AC62741000EDE84 /* Profiles.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		052E3A781AD0523800C97CE0 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				05211C4F1A72D16E00660739 /* KeyboardViewController.swift */,
+				05C2F8141ACF9FAB00C2097E /* ProfileSwipeViewController.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		052E3A791AD0525600C97CE0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				05C2F8101ACF9E4C00C2097E /* ProfileSwipeModelController.swift */,
+				05C2F8161ACFA0CC00C2097E /* ProfileFetchModel.swift */,
+				052FB5271AA810560049DF8A /* CoreDataStack.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -463,8 +496,11 @@
 				026B4DBC1AA7A528002DB3C6 /* Clear.c in Sources */,
 				02CA73891AA4B82900FBFDF0 /* Vigenere.c in Sources */,
 				05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */,
+				05C2F8171ACFA0CC00C2097E /* ProfileFetchModel.swift in Sources */,
 				056C3F841AC8AEDB00F1103F /* KeyboardView.swift in Sources */,
 				05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */,
+				05C2F8151ACF9FAB00C2097E /* ProfileSwipeViewController.swift in Sources */,
+				05C2F8111ACF9E4C00C2097E /* ProfileSwipeModelController.swift in Sources */,
 				05AA7D611A840BE000C1B763 /* Affine.c in Sources */,
 				05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */,
 				05E3CA951AC70C53000EDE84 /* ProfileTableView.swift in Sources */,

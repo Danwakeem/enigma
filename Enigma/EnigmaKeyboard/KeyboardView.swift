@@ -17,7 +17,7 @@ protocol KeyboardViewDelegate {
 	func backSpaceReleased(sender: AnyObject)
 }
 
-class KeyboardView: UIView {
+class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     var delegate: KeyboardViewDelegate?
     
@@ -45,6 +45,12 @@ class KeyboardView: UIView {
     var decryptionTextView: UIView!
     var decryptionView: UIView!
     var rowHeight: CGFloat!
+    
+    var profileSwipeRow: UIView!
+    var profilePages: UIPageViewController!
+    var initilizedPageIndex: Int!
+    var showProfilePages: NSTimer!
+    var profilePagesHide: Bool = false
 
     var decryptionTopConstraint: NSLayoutConstraint!
     var decryptionBottomConstraint: NSLayoutConstraint!
@@ -67,12 +73,15 @@ class KeyboardView: UIView {
     
     required override init(){
         super.init(frame: CGRectMake(0, 0, 320, 275))
-        //let height = NSLayoutConstraint(item: self, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
-        //let width = NSLayoutConstraint(item: self, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 320)
-        //self.addConstraints([height, width])
         self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
     }
-
+    
+    init(index: Int){
+        super.init(frame: CGRectZero)
+        self.initilizedPageIndex = index
+        self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+    }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -90,6 +99,10 @@ class KeyboardView: UIView {
     }
     
     func buttonTapped(sender: AnyObject){
+        if self.profilePages.view.superview != nil {
+            self.showProfilePages.invalidate()
+            self.togglePages()
+        }
         self.delegate?.buttonTapped(sender)
     }
 	
@@ -115,6 +128,18 @@ class KeyboardView: UIView {
         }
     }
     
+    // MARK: - UIPageViewController delegate methods
+    
+    func pageViewController(pageViewController: UIPageViewController, spineLocationForInterfaceOrientation orientation: UIInterfaceOrientation) -> UIPageViewControllerSpineLocation {
+        // Set the spine position to "min" and the page view controller's view controllers array to contain just one view controller. Setting the spine position to 'UIPageViewControllerSpineLocationMid' in landscape orientation sets the doubleSided property to true, so set it to false here.
+        let currentViewController = self.profilePages!.viewControllers[0] as UIViewController
+        let viewControllers = [currentViewController]
+        self.profilePages!.setViewControllers(viewControllers, direction: .Forward, animated: true, completion: {done in })
+        
+        self.profilePages!.doubleSided = false
+        return .Min
+    }
+    
     //MARK: - Keyboard view animations
     
     func toggleCryption(){
@@ -133,42 +158,15 @@ class KeyboardView: UIView {
     
     func animateDecryptionViewIn(){
         var newBottomConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        //var newBottomConstraint = NSLayoutConstraint(item: self.decryptionView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        
-        //var row1Con = NSLayoutConstraint(item: self.row1, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        //var row2Con = NSLayoutConstraint(item: self.row2, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        //var row3Con = NSLayoutConstraint(item: self.row3, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        //var row4Con = NSLayoutConstraint(item: self.row4, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
         
         UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseOut , animations: {
-            /*
-            self.view.removeConstraints([self.row0Con,self.row4ConBottom])
-            self.view.addConstraint(row1Con)
-            self.view.layoutIfNeeded()
-            */
-            
             self.removeConstraint(self.decryptionBottomConstraint)
             self.addConstraint(newBottomConstraint)
             self.layoutIfNeeded()
             
             
             }, completion: nil)
-        
-        /*
-        self.row0Con = row1Con
-        let alphaSelector: Selector = "toggleCryption"
-        let upSwipe = UISwipeGestureRecognizer(target: self, action: alphaSelector)
-        upSwipe.direction = UISwipeGestureRecognizerDirection.Up
-        upSwipe.numberOfTouchesRequired = 1
-        self.view.addGestureRecognizer(upSwipe)
-        
-        self.row1Con = row2Con
-        self.row2Con = row3Con
-        self.row3Con = row4Con
-        */
-        
         self.decryptionBottomConstraint = newBottomConstraint
-        //self.decryptionBottomConstraint = newBottomConstraint
     }
     
     func animateDecryptionViewOut(){
@@ -180,10 +178,6 @@ class KeyboardView: UIView {
             self.layoutIfNeeded()
             }, completion: {(complete: Bool) -> Void in
                 self.removeConstraint(self.row0Con)
-                //self.view.removeConstraints([self.row0Con,self.row1Con,self.row2Con,self.row3Con,self.row4Con])
-                //self.addConstraintsToInputView(self.view, rowViews: [self.encryptionRow, self.row1, self.row2, self.row3, self.row4])
-                
-                
                 self.decryptionView.removeFromSuperview()
                 self.decryptionDirectionsView.removeFromSuperview()
                 self.decryptionTextView.removeFromSuperview()
@@ -197,13 +191,12 @@ class KeyboardView: UIView {
     //MARK: - Keyboard view creation
     
     func createKeyboard(buttonTitles: [AnyObject]){
-        //Row of buttons as a view. Example "qwertyuiop"
-        //self.encryptionRow = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight)) as UIVisualEffectView
-        //self.encryptionRow.frame = CGRectMake(0, 0, 320, 50)
         
         self.encryptionRow = UIView(frame: CGRectMake(0, 0, 320, 50))
+        self.profileSwipeRow = UIView(frame: CGRectMake(0, 0, 320, 50))
         //self.encryptionRow.backgroundColor = UIColor(red: 0.388, green: 0.388, blue: 0.388, alpha: 0.2)
         self.encryptionRow.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+        self.profileSwipeRow.backgroundColor = UIColor.clearColor()
         
         self.row1 = rowOfButtons(buttonTitles[0] as [String])
         self.row2 = rowOfButtons(buttonTitles[1] as [String])
@@ -216,6 +209,7 @@ class KeyboardView: UIView {
         self.encryptionRow.addSubview(self.rawTextLabel)
         self.rawTextLabel.addSubview(self.toggleEncryptDecrypt)
         self.addSubview(encryptionRow)
+        self.addSubview(self.profileSwipeRow)
         self.addSubview(row1)
         self.addSubview(row2)
         self.addSubview(row3)
@@ -225,11 +219,23 @@ class KeyboardView: UIView {
         let downSwipe = UISwipeGestureRecognizer(target: self, action: alphaSelector)
         downSwipe.direction = UISwipeGestureRecognizerDirection.Down
         downSwipe.numberOfTouchesRequired = 1
-        self.encryptionRow.addGestureRecognizer(downSwipe)
+        self.profileSwipeRow.addGestureRecognizer(downSwipe)
+        
+        //Swipes to activate profile pages
+        let aSelector: Selector = "activatePages"
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: aSelector)
+        leftSwipe.direction = UISwipeGestureRecognizerDirection.Left
+        leftSwipe.numberOfTouchesRequired = 1
+        self.profileSwipeRow.addGestureRecognizer(leftSwipe)
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: aSelector)
+        rightSwipe.direction = UISwipeGestureRecognizerDirection.Right
+        rightSwipe.numberOfTouchesRequired = 1
+        self.profileSwipeRow.addGestureRecognizer(rightSwipe)
         
         //Disable all of the autolayout stuff that gets automatically set by adding a subview that way
         //we can add our own autolayout attributes
         self.encryptionRow.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.profileSwipeRow.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.row1.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.row2.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.row3.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -239,11 +245,86 @@ class KeyboardView: UIView {
         //Adding the constraints to the rows of keys. I took these constraints from the tutorial I followed
         addConstraintsToInputView(self, rowViews: [self.encryptionRow, self.row1, self.row2, self.row3, self.row4])
         
+        self.addConstraintsToProfileSwipeRow()
+        
         //Add the constraints rawTextView to the encryptionRow
         constraintsForRawTextLabel()
         //Center the text in the label
         self.rawTextLabel.textAlignment = .Center
+        
+        self.setupPageView()
+        
+        self.showProfilePages = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("togglePages"), userInfo: nil, repeats: false)
     }
+    
+    func activatePages() {
+        if self.showProfilePages != nil {
+            self.showProfilePages.invalidate()
+        }
+        self.showProfilePages = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("togglePages"), userInfo: nil, repeats: false)
+        self.togglePages()
+    }
+    
+    func togglePages(){
+        if let boo = self.profilePages.view.superview {
+            self.profilePages.view.alpha = 1.0
+            UIView.animateWithDuration(1.0, animations: {self.profilePages.view.alpha = 0.0}, completion: {(yes: Bool) -> Void in
+                self.profilePages.view.removeFromSuperview()
+            })
+            UIView.animateWithDuration(1.0, animations: {self.profilePages.view.alpha = 0.0})
+            //self.profilePages.view.removeFromSuperview()
+        } else {
+            self.profilePages.view.frame = self.profileSwipeRow.frame
+            self.profilePages.view.alpha = 0.0
+            self.profileSwipeRow.addSubview(self.profilePages.view)
+            UIView.animateWithDuration(0.3, animations: {self.profilePages.view.alpha = 1.0})
+        }
+    }
+    
+    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
+        //Increase timer
+        if self.showProfilePages != nil {
+            self.showProfilePages.invalidate()
+        }
+        self.showProfilePages = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("togglePages"), userInfo: nil, repeats: false)
+    }
+    
+    func setupPageView() {
+        self.profilePages = UIPageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
+        self.profilePages!.delegate = self
+        
+        var startingViewController: ProfileSwipeViewController!
+        if self.initilizedPageIndex != nil {
+            startingViewController = self.profileSwipeModelController.viewControllerAtIndex(self.initilizedPageIndex)!
+        } else {
+            startingViewController = self.profileSwipeModelController.viewControllerAtIndex(0)!
+        }
+        let vcs = [startingViewController]
+        self.profilePages.setViewControllers(vcs, direction: .Forward, animated: false, completion: {done in})
+        
+        self.profilePages.dataSource = self.profileSwipeModelController
+        
+        self.profilePages.view.frame = self.profileSwipeRow.frame
+        self.profileSwipeRow.addSubview(self.profilePages.view)
+        
+        //self.profileSwipeRow.gestureRecognizers = self.profilePages.gestureRecognizers
+    }
+    
+    func movePageView(index: Int) {
+        var newPage: ProfileSwipeViewController = self.profileSwipeModelController.viewControllerAtIndex(index)!
+        let vcs = [newPage]
+        self.profilePages.setViewControllers(vcs, direction: .Forward, animated: true, completion: {done in})
+    }
+    
+    var profileSwipeModelController: ProfileSwipeModelController {
+        // Return the model controller object, creating it if necessary.
+        // In more complex implementations, the model controller may be passed to the view controller.
+        if _profileSwipeModelController == nil {
+            _profileSwipeModelController = ProfileSwipeModelController()
+        }
+        return _profileSwipeModelController!
+    }
+    var _profileSwipeModelController: ProfileSwipeModelController? = nil
     
     func createDecryptButton(){
         self.decryptButton.setTitle("Decrypt pasteboard", forState: .Normal)
@@ -386,6 +467,16 @@ class KeyboardView: UIView {
     }
     
     //MARK: Constraints
+    
+    func addConstraintsToProfileSwipeRow(){
+        
+        let bottomConstraint = NSLayoutConstraint(item: self.profileSwipeRow, attribute: .Bottom, relatedBy: .Equal, toItem: self.row1, attribute: .Top, multiplier: 1.0, constant: 0)
+        let top = NSLayoutConstraint(item: self.profileSwipeRow, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 0)
+        let leftConstraint = NSLayoutConstraint(item: self.profileSwipeRow, attribute: .Left, relatedBy: .Equal, toItem: self, attribute: .Left, multiplier: 1.0, constant: 0)
+        let rightConstraint = NSLayoutConstraint(item: self.profileSwipeRow, attribute: .Right, relatedBy: .Equal, toItem: self, attribute: .Right, multiplier: 1.0, constant: 0)
+        
+        self.addConstraints([bottomConstraint,top,leftConstraint,rightConstraint])
+    }
     
     func decryptionViewConstraints(){
         var encryptionRowHeight = NSLayoutConstraint(item: self.encryptionRow, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: self.rowHeight!)
