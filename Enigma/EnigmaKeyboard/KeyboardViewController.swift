@@ -24,10 +24,13 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     var currentProfile: NSManagedObject?
     var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
+    var currentProfileName: String = "default"
+    var initializedProfileIndex: Int!
+    let swipedNotification = "com.SlayterDev.swipedProfile"
     
     var height: NSLayoutConstraint!
     
-    var Keyboard: KeyboardView = KeyboardView()
+    var Keyboard: KeyboardView!
     var profileTable: ProfileTableView!
     
     var fetchedResultsController = ProfileFetchModel().fetchedResultsController
@@ -47,25 +50,29 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     override func updateViewConstraints() {
         super.updateViewConstraints()
         // Add custom view sizing constraints here
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.createKeyboard()
 		
-        
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
 		allowQuickPeriod = false
-		
-        //self.view.backgroundColor = UIColor.whiteColor()
+        
+        self.loadEncryptionFromUserDefaults()
+        
+        if let index = self.initializedProfileIndex {
+            self.Keyboard = KeyboardView(index: index)
+        } else {
+            self.Keyboard = KeyboardView(index: 0)
+        }
+        
+        self.createKeyboard()
         
         self.proxy = textDocumentProxy as UITextDocumentProxy
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedProfile", name: self.notificationKey, object: nil)
-        
-        self.loadEncryptionFromUserDefaults()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedProfile:", name: self.notificationKey, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "swipedProfile:", name: self.swipedNotification, object: nil)
         
         self.view.userInteractionEnabled = true
     }
@@ -108,6 +115,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.defaults.setObject(value, forKey: key)
         }
         self.defaults.setObject(keyArray, forKey: "EncryptionDictionaryKeys")
+        self.defaults.setValue(self.currentProfileName, forKey: "CurrentProfileName")
         self.defaults.synchronize()
     }
     
@@ -121,6 +129,17 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 }
             }
             self.currentEncryptionMethods = encryptionMethods
+        }
+        if let profileName = self.defaults.valueForKey("CurrentProfileName") as? String {
+            self.currentProfileName = profileName
+        }
+        
+        if let profiles = self.fetchedResultsController.fetchedObjects as? [NSManagedObject] {
+            for (index, profile) in enumerate(profiles) {
+                if profile.valueForKey("name")?.description == self.currentProfileName {
+                    self.initializedProfileIndex = index
+                }
+            }
         }
     }
     
@@ -411,16 +430,22 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         return profileTab
     }
     
-    func selectedProfile(){
+    func selectedProfile(notification: NSNotification){
+        var dict = notification.userInfo as Dictionary<String,NSIndexPath>
+        var indexPath = dict["Index"]!
+        var index: Int = indexPath.row
         self.currentProfile = self.profileTable.selectedProfile
         //getEncryptions isn't doing anything until the containing app saves the encryption keys with the profile
         self.getEncryptions()
         self.toggleProfileTable()
+        //Move pageView
+        self.Keyboard.movePageView(index)
     }
     
     //Saving the selected EncryptionMethod
     func getEncryptions(){
         //Set the Encryption/Decryption Methods that is being used
+        self.currentProfileName = self.currentProfile?.valueForKey("name") as String
         if let encryptions: NSOrderedSet = self.currentProfile?.mutableOrderedSetValueForKeyPath("encryption") {
             var newEncryptionMethods = Dictionary<String,[AnyObject]>()
             
@@ -441,5 +466,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             }
             self.currentEncryptionMethods = newEncryptionMethods
         }
+    }
+    
+    func swipedProfile(notification: NSNotification){
+        var dict = notification.userInfo as Dictionary <String,NSManagedObject>
+        self.currentProfile = dict["Profile"]
+        self.getEncryptions()
     }
 }

@@ -105,9 +105,9 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let index = self.profileTable.indexPathForSelectedRow() {
+        if let index: NSIndexPath = self.profileTable.indexPathForSelectedRow() {
             self.selectedProfile = self.fetchedResultsController.objectAtIndexPath(index) as NSManagedObject
-            NSNotificationCenter.defaultCenter().postNotificationName(self.notificationKey, object: self)
+            NSNotificationCenter.defaultCenter().postNotificationName(self.notificationKey, object: self, userInfo:["Index" : index])
         }
     }
     

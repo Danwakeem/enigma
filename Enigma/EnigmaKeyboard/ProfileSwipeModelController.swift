@@ -11,8 +11,9 @@ import UIKit
 class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
     
     var profileData = NSArray()
-    
+    var currentData: NSManagedObject!
     var fetchedResultsController = ProfileFetchModel().fetchedResultsController
+    let swipedNotification = "com.SlayterDev.swipedProfile"
     
     override init() {
         super.init()
@@ -28,6 +29,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         }
         
         var profile: NSManagedObject = profileData[index] as NSManagedObject
+        self.currentData = profile
         var name = profile.valueForKey("name")?.description
         
         let profileSwipeViewController = ProfileSwipeViewController(obj: profile)
@@ -39,6 +41,8 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         // Return the index of the given data view controller.
         // For simplicity, this implementation uses a static array of model objects and the view controller stores the model object; you can therefore use the model object to identify the index.
         if let dataObject: AnyObject = viewController.profileObject {
+            var dict = ["Profile": dataObject as NSManagedObject]
+            NSNotificationCenter.defaultCenter().postNotificationName(self.swipedNotification, object: self, userInfo: dict)
             return self.profileData.indexOfObject(dataObject)
         } else {
             return NSNotFound
