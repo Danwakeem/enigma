@@ -25,6 +25,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var currentProfile: NSManagedObject?
     var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
     var currentProfileName: String = "default"
+    var currentObjectId: NSURL!
     var initializedProfileIndex: Int = 0
     let swipedNotification = "com.SlayterDev.swipedProfile"
     
@@ -108,38 +109,36 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     //MARK: - User default loading
     
     override func viewWillDisappear(animated: Bool) {
-        //Save the encryption methods
-        var keyArray = [String]()
-        for (key,value) in self.currentEncryptionMethods {
-            keyArray.append(key)
-            self.defaults.setObject(value, forKey: key)
-        }
-        self.defaults.setObject(keyArray, forKey: "EncryptionDictionaryKeys")
-        self.defaults.setValue(self.currentProfileName, forKey: "CurrentProfileName")
+        //Saving the coredata objectId
+        self.defaults.setURL(self.currentObjectId, forKey: "CurrentProfileId")
         self.defaults.synchronize()
     }
     
     func loadEncryptionFromUserDefaults(){
         //Load up the most recent encryptionMethod from NSUserDefaults
-        if let keys = self.defaults.arrayForKey("EncryptionDictionaryKeys") as? [String] {
-            var encryptionMethods = Dictionary<String,[AnyObject]>()
-            for key in keys {
-                if let encryption = self.defaults.arrayForKey(key) {
-                    encryptionMethods[key] = encryption
+        if let id: NSURL = self.defaults.URLForKey("CurrentProfileId"){
+            self.currentObjectId = id
+            if let objId: NSManagedObjectID = self.managedObjectContext?.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(id) {
+                if let obj = self.managedObjectContext?.objectWithID(objId) {
+                    if let profileName = obj.valueForKey("name")?.description {
+                        self.currentProfileName = profileName
+                    }
+                    self.getEncryptions(obj)
+                    if let profiles = self.fetchedResultsController.fetchedObjects as? [NSManagedObject] {
+                        for (index, profile) in enumerate(profiles) {
+                            if profile.valueForKey("name")?.description == self.currentProfileName {
+                                self.initializedProfileIndex = index
+                            }
+                        }
+                    }
+                } else {
+                    println("The object no longer exists")
                 }
+            } else {
+                println("Couldn't find the object ID")
             }
-            self.currentEncryptionMethods = encryptionMethods
-        }
-        if let profileName = self.defaults.valueForKey("CurrentProfileName") as? String {
-            self.currentProfileName = profileName
-        }
-        
-        if let profiles = self.fetchedResultsController.fetchedObjects as? [NSManagedObject] {
-            for (index, profile) in enumerate(profiles) {
-                if profile.valueForKey("name")?.description == self.currentProfileName {
-                    self.initializedProfileIndex = index
-                }
-            }
+        } else {
+            println("User default for current profile id was empty")
         }
     }
     
@@ -182,7 +181,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             case "\u{1f310}" :
                 self.advanceToNextInputMode()
             case "\u{21E7}" :
-                println(button.titleLabel?.font.description)
                 self.upperCase = !self.upperCase
             case "123" :
                 self.Keyboard.removeViews()
@@ -435,18 +433,23 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         var indexPath = dict["Index"]!
         var index: Int = indexPath.row
         self.currentProfile = self.profileTable.selectedProfile
+        var trigger = self.currentProfile?.valueForKey("name") as String
+        self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
         //getEncryptions isn't doing anything until the containing app saves the encryption keys with the profile
-        self.getEncryptions()
+        self.getEncryptions(self.currentProfile!)
         self.toggleProfileTable()
         //Move pageView
         self.Keyboard.movePageView(index)
     }
     
     //Saving the selected EncryptionMethod
-    func getEncryptions(){
+    func getEncryptions(currentProfile: NSManagedObject){
         //Set the Encryption/Decryption Methods that is being used
-        self.currentProfileName = self.currentProfile?.valueForKey("name") as String
-        if let encryptions: NSOrderedSet = self.currentProfile?.mutableOrderedSetValueForKeyPath("encryption") {
+        self.currentProfileName = currentProfile.valueForKey("name") as String
+        //Just to make it optional so I would have to change the code. In other words I is lazy :)
+        var profile: NSManagedObject!
+        profile = currentProfile
+        if let encryptions: NSOrderedSet = profile?.mutableOrderedSetValueForKeyPath("encryption") {
             var newEncryptionMethods = Dictionary<String,[AnyObject]>()
             
             //NOTE: - NSOrderedSet conforms to sequence type as of Swift 1.2 (Xcode 6.3) but I have not updated yet and I didn't
@@ -471,6 +474,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func swipedProfile(notification: NSNotification){
         var dict = notification.userInfo as Dictionary <String,NSManagedObject>
         self.currentProfile = dict["Profile"]
-        self.getEncryptions()
+        var trigger = self.currentProfile?.valueForKey("name") as String
+        self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+        self.getEncryptions(self.currentProfile!)
     }
 }
