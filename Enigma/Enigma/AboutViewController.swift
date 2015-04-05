@@ -26,11 +26,11 @@ class AboutViewController: UIViewController {
 	}
 	
 	@IBAction func danTapped(sender: AnyObject) {
-		
+		UIApplication.sharedApplication().openURL(NSURL(string: "http://www.wakeemmedia.com")!)
 	}
 	
 	@IBAction func jakeTapped(sender: AnyObject) {
-		
+		UIApplication.sharedApplication().openURL(NSURL(string: "http://www.jakesinger.com")!)
 	}
 
 	
