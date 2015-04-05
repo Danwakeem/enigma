@@ -64,10 +64,13 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         self.loadEncryptionFromUserDefaults()
         
-        if self.initializedProfileIndex != -1 && self.keyboardColor != nil {
+        if 0 < self.fetchedResultsController.fetchedObjects?.count && self.keyboardColor != nil {
+            println("Both are selected")
             self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: self.keyboardColor)
         } else if 0 < self.fetchedResultsController.fetchedObjects?.count {
             self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: "Default")
+        } else if self.keyboardColor != nil {
+            self.Keyboard = KeyboardView(index: -1, color: self.keyboardColor)
         } else {
             self.Keyboard = KeyboardView(index: -1, color: "Default")
         }
@@ -148,6 +151,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         if let color: String = self.defaults.stringForKey("KeyboardColor") {
             println("Keyboard Color: \(color)")
             self.keyboardColor = color
+            println(self.keyboardColor)
+        } else {
+            println("Keyboard Color not set")
         }
     }
     
@@ -448,7 +454,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         self.getEncryptions(self.currentProfile!)
         self.toggleProfileTable()
         //Move pageView
-        self.Keyboard.movePageView(index)
+        if self.Keyboard.profilePages != nil {
+            self.Keyboard.movePageView(index)
+        }
     }
     
     //Saving the selected EncryptionMethod
