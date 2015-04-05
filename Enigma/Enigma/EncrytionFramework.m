@@ -184,7 +184,7 @@
 	
 	[strProf appendString:[NSString stringWithFormat:@"%@,", [profile valueForKey:@"name"]]];
 	
-	NSSet *encryptions = [profile mutableSetValueForKey:@"encryption"];
+	NSOrderedSet *encryptions = [profile mutableOrderedSetValueForKey:@"encryption"];
 	[strProf appendString:[NSString stringWithFormat:@"%lu,", (unsigned long)encryptions.count]];
 	
 	for (NSManagedObject *e in encryptions) {
