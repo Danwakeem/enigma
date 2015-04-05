@@ -11,12 +11,14 @@ import UIKit
 class ProfileSwipeViewController: UIViewController {
     var profileNameLabel: UILabel!
     var profileObject: NSManagedObject?
+    var textColor: UIColor!
     
-    init(obj: NSManagedObject) {
+    init(obj: NSManagedObject, color: UIColor) {
         super.init()
         self.profileNameLabel = UILabel(frame: CGRectMake(0, 0, 320, 50))
         self.profileNameLabel.textAlignment = .Center
         self.profileObject = obj
+        self.textColor = color
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -34,6 +36,7 @@ class ProfileSwipeViewController: UIViewController {
         self.view.backgroundColor = UIColor.clearColor()
         self.view.addSubview(self.profileNameLabel)
         self.profileNameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.profileNameLabel.textColor = self.textColor
         self.labelConstraints()
     }
     

@@ -26,8 +26,10 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
     var currentProfileName: String = "default"
     var currentObjectId: NSURL!
-    var initializedProfileIndex: Int = 0
+    var initializedProfileIndex: Int = -1
     let swipedNotification = "com.SlayterDev.swipedProfile"
+    
+    var keyboardColor: String!
     
     var height: NSLayoutConstraint!
     
@@ -62,10 +64,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         self.loadEncryptionFromUserDefaults()
         
-        if 0 < self.fetchedResultsController.fetchedObjects?.count {
-            self.Keyboard = KeyboardView(index: self.initializedProfileIndex)
+        if self.initializedProfileIndex != -1 && self.keyboardColor != nil {
+            self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: self.keyboardColor)
+        } else if 0 < self.fetchedResultsController.fetchedObjects?.count {
+            self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: "Default")
         } else {
-            self.Keyboard = KeyboardView(index: -1)
+            self.Keyboard = KeyboardView(index: -1, color: "Default")
         }
         
         self.createKeyboard()
@@ -139,6 +143,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             }
         } else {
             println("User default for current profile id was empty")
+        }
+        
+        if let color: String = self.defaults.stringForKey("KeyboardColor") {
+            println("Keyboard Color: \(color)")
+            self.keyboardColor = color
         }
     }
     

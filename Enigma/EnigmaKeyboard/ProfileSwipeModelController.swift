@@ -14,6 +14,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
     var currentData: NSManagedObject!
     var fetchedResultsController = ProfileFetchModel().fetchedResultsController
     let swipedNotification = "com.SlayterDev.swipedProfile"
+    var textColor: UIColor!
     
     override init() {
         super.init()
@@ -22,8 +23,9 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         
     }
 
-    func viewControllerAtIndex(index: Int) -> ProfileSwipeViewController? {
+    func viewControllerAtIndex(index: Int, textColor: UIColor) -> ProfileSwipeViewController? {
         // Return the data view controller for the given index.
+        self.textColor = textColor
         if (profileData.count == 0) || (index >= profileData.count) {
             return nil
         }
@@ -32,7 +34,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         self.currentData = profile
         var name = profile.valueForKey("name")?.description
         
-        let profileSwipeViewController = ProfileSwipeViewController(obj: profile)
+        let profileSwipeViewController = ProfileSwipeViewController(obj: profile, color: self.textColor)
         
         return profileSwipeViewController
     }
@@ -58,7 +60,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         }
         
         index--
-        return self.viewControllerAtIndex(index)
+        return self.viewControllerAtIndex(index, textColor: self.textColor)
     }
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
@@ -71,6 +73,6 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         if index == self.profileData.count {
             return nil
         }
-        return self.viewControllerAtIndex(index)
+        return self.viewControllerAtIndex(index, textColor: self.textColor)
     }
 }
