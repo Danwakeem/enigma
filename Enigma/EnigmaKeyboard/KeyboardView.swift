@@ -305,8 +305,15 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         }
         let vcs = [startingViewController]
         self.profilePages.setViewControllers(vcs, direction: .Forward, animated: false, completion: {done in})
-        
-        self.profilePages.dataSource = self.profileSwipeModelController
+		
+		
+		let defaults = NSUserDefaults(suiteName: "group.com.enigma")
+		
+		if defaults!.boolForKey("ProfileSwipe") == false {
+			self.profilePages.view.userInteractionEnabled = false
+		}
+		
+		self.profilePages.dataSource = self.profileSwipeModelController
         
         self.profilePages.view.frame = self.profileSwipeRow.frame
         self.profileSwipeRow.addSubview(self.profilePages.view)
