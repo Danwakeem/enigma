@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsViewController: UITableViewController, PasscodeViewDelegate {
+class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 	
 	lazy var applicationDocumentsDirectory: NSURL = {
 		// The directory the application uses to store the Core Data store file. This code uses a directory named "com.Danwakeem.Brace_Editor" in the application's documents Application Support directory.
@@ -18,13 +18,31 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 		let urls = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.com.enigma")
 		return urls!
 		}()
+    
+    var colorSelection = ["Default", "Black", "White", "Blue", "Pink"]
+    var pickerView: UIPickerView!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        self.pickerView = UIPickerView(frame: CGRectMake(0, 0, 100, 60))
+        self.pickerView.showsSelectionIndicator = true
+        self.pickerView.delegate = self
+        self.pickerView.dataSource = self
+        self.pickerView.setTranslatesAutoresizingMaskIntoConstraints(false)
 	}
 	
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
+        let defaults = NSUserDefaults(suiteName: "group.com.enigma")
+        if let color = defaults?.valueForKey("KeyboardColor") as? String {
+            var selectedColor: Int!
+            for (index,value) in enumerate(self.colorSelection) {
+                if value == color {
+                    selectedColor = index
+                }
+            }
+            self.pickerView.selectRow(selectedColor, inComponent: 0, animated: true)
+        }
 	}
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,6 +76,12 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 		case 4:
 			cell.textLabel?.text = "Color Scheme"
 			cell.detailTextLabel?.text = "Change the color of the keyboard"
+            var pickerContainter = UIView(frame: CGRectMake(0, 0, 100, 100))
+            pickerContainter.backgroundColor = UIColor.clearColor()
+            pickerContainter.setTranslatesAutoresizingMaskIntoConstraints(false)
+            cell.addSubview(pickerContainter)
+            pickerContainter.addSubview(self.pickerView)
+            self.constraintsForPickerView(cell, pickerView: pickerContainter)
 		default:
 			cell.textLabel?.text = ""
 		}
@@ -142,5 +166,46 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate {
 		
 		return newSwitch
 	}
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let defaults = NSUserDefaults(suiteName: "group.com.enigma")
+        defaults?.setValue(self.colorSelection[row], forKey: "KeyboardColor")
+        println(self.colorSelection[row])
+    }
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return self.colorSelection.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+        if row >= 0 && row < self.colorSelection.count {
+            return self.colorSelection[row]
+        } else {
+            return "ERROR"
+        }
+    }
+    
+    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        return 100.0
+    }
+    
+    func constraintsForPickerView(cell: UIView, pickerView: UIView) {
+        let top = NSLayoutConstraint(item: pickerView, attribute: .Top, relatedBy: .Equal, toItem: cell, attribute: .Top, multiplier: 1.0, constant: 30)
+        //let centerX = NSLayoutConstraint(item: pickerView, attribute: .CenterX, relatedBy: .Equal, toItem: cell, attribute: .CenterX, multiplier: 1.0, constant: 0)
+        let right = NSLayoutConstraint(item: pickerView, attribute: .Right, relatedBy: .Equal, toItem: cell, attribute: .Right, multiplier: 1.0, constant: -20)
+        let height = NSLayoutConstraint(item: pickerView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 60)
+        let width = NSLayoutConstraint(item: pickerView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 100)
+        cell.addConstraints([top,right,height,width])
+        
+        let pvTop = NSLayoutConstraint(item: self.pickerView, attribute: .Top, relatedBy: .Equal, toItem: pickerView, attribute: .Top, multiplier: 1.0, constant: 0)
+        let pvLeft = NSLayoutConstraint(item: self.pickerView, attribute: .Left, relatedBy: .Equal, toItem: pickerView, attribute: .Left, multiplier: 1.0, constant: 0)
+        let pvRight = NSLayoutConstraint(item: self.pickerView, attribute: .Right, relatedBy: .Equal, toItem: pickerView, attribute: .Right, multiplier: 1.0, constant: 0)
+        let pvBottom = NSLayoutConstraint(item: self.pickerView, attribute: .Bottom, relatedBy: .Equal, toItem: pickerView, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        pickerView.addConstraints([pvTop,pvLeft,pvRight,pvBottom])
+    }
 	
 }

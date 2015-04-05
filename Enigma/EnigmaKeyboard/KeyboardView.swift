@@ -69,6 +69,20 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     let decryptButton: UIButton = UIButton()
     let decryptedTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
     
+    var viewBackgroundColor = UIColor.clearColor()
+    var encryptionRowColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+    var decryptEncryptButtonTextColor = UIColor.darkGrayColor()
+    var decryptEncryptButtonColor = UIColor(red: 0.91, green: 0.902, blue: 0.902, alpha: 1.0)
+    var keysBackgroundColor = UIColor.whiteColor()
+    var keysTextColor = UIColor.darkTextColor()
+    var specialKeysButtonColor = UIColor.lightGrayColor()
+    var otherSpecialKeysTextColor = UIColor.lightGrayColor()
+    var decryptionViewColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+    var profilePageTextColor = UIColor.lightGrayColor()
+    var decryptedTextColor = UIColor.darkTextColor()
+    
+    var keysPressedColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1.0)
+    
     //MARK: - initialization
     
     required override init(){
@@ -76,14 +90,71 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
     }
     
-    init(index: Int){
+    init(index: Int, color: String){
         super.init(frame: CGRectZero)
         self.initilizedPageIndex = index
-        self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+        if color == "Default" {
+            self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+        } else {
+            self.changeColorsToSettings(color)
+        }
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK - Change keyboard color
+    
+    func changeColorsToSettings(color: String) {
+        switch color {
+        case "White":
+            self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+        case "Black":
+            self.backgroundColor = UIColor(red: 0.22, green: 0.22, blue: 0.22, alpha: 1.0)
+            self.encryptionRowColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1.0)
+            self.decryptEncryptButtonTextColor = UIColor.whiteColor()
+            self.decryptEncryptButtonColor = UIColor(red: 0.114, green: 0.114, blue: 0.114, alpha: 1.0)
+            self.keysBackgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1.0)
+            self.keysTextColor = UIColor.whiteColor()
+            self.specialKeysButtonColor = UIColor(red: 0.169, green: 0.169, blue: 0.169, alpha: 1.0)
+            self.decryptionViewColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1.0)
+            self.profilePageTextColor = UIColor.whiteColor()
+            self.decryptedTextColor = UIColor.whiteColor()
+            self.rawTextLabel.textColor = UIColor.whiteColor()
+            self.keysPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
+            self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+        case "Blue":
+            self.backgroundColor = UIColor(red: 0.161, green: 0.62, blue: 0.91, alpha: 1.0)
+            self.encryptionRowColor = UIColor(red: 0.106, green: 0.396, blue: 0.831, alpha: 1.0)
+            self.decryptEncryptButtonTextColor = UIColor.whiteColor()
+            self.decryptEncryptButtonColor = UIColor(red: 0.043, green: 0.506, blue: 0.8, alpha: 1.0)
+            self.keysBackgroundColor = UIColor(red: 0.106, green: 0.396, blue: 0.831, alpha: 1.0)
+            self.keysTextColor = UIColor.whiteColor()
+            self.specialKeysButtonColor = UIColor(red: 0.043, green: 0.506, blue: 0.8, alpha: 1.0)
+            self.decryptionViewColor = UIColor(red: 0.106, green: 0.396, blue: 0.831, alpha: 1.0)
+            self.profilePageTextColor = UIColor.whiteColor()
+            self.decryptedTextColor = UIColor.whiteColor()
+            self.rawTextLabel.textColor = UIColor.whiteColor()
+            self.keysPressedColor = UIColor(red: 0.075, green: 0.325, blue: 0.628, alpha: 1.0)
+            self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+        case "Pink":
+            self.backgroundColor = UIColor(red: 0.953, green: 0.604, blue: 0.792, alpha: 1.0)
+            self.encryptionRowColor = UIColor(red: 0.918, green: 0.388, blue: 0.675, alpha: 1.0)
+            self.decryptEncryptButtonTextColor = UIColor.whiteColor()
+            self.decryptEncryptButtonColor = UIColor(red: 0.933, green: 0.478, blue: 0.722, alpha: 1.0)
+            self.keysBackgroundColor = UIColor(red: 0.918, green: 0.388, blue: 0.675, alpha: 1.0)
+            self.keysTextColor = UIColor.whiteColor()
+            self.specialKeysButtonColor = UIColor(red: 0.933, green: 0.478, blue: 0.722, alpha: 1.0)
+            self.decryptionViewColor = UIColor(red: 0.918, green: 0.388, blue: 0.675, alpha: 1.0)
+            self.profilePageTextColor = UIColor.whiteColor()
+            self.decryptedTextColor = UIColor.whiteColor()
+            self.rawTextLabel.textColor = UIColor.whiteColor()
+            self.keysPressedColor = UIColor(red: 0.827, green: 0.318, blue: 0.592, alpha: 1.0)
+            self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+        default:
+            self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+        }
     }
     
     //MARK: - Delegate methods
@@ -102,18 +173,36 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         if self.initilizedPageIndex != -1 {
             if self.profilePages.view.superview != nil {
                 self.showProfilePages.invalidate()
-                self.togglePages()
+                self.profilePages.view.alpha = 0.0
+                self.profilePages.view.removeFromSuperview()
             }
         }
+        let button = sender as UIButton
+        var title: String = button.titleForState(.Normal)!
+        switch (title) {
+            case "123":
+                button.backgroundColor = self.specialKeysButtonColor
+            case "rtn":
+                button.backgroundColor = self.specialKeysButtonColor
+            case "+#=":
+                button.backgroundColor = self.specialKeysButtonColor
+            default:
+                button.backgroundColor = self.keysBackgroundColor
+        }
+
         self.delegate?.buttonTapped(sender)
     }
 	
 	func backSpaceTapped(sender: AnyObject) {
-		self.delegate?.backSpaceTapped(sender)
+		var button = sender as UIButton
+        button.backgroundColor = self.specialKeysButtonColor
+        self.delegate?.backSpaceTapped(sender)
 	}
 	
 	func backSpaceReleased(sender: AnyObject) {
-		self.delegate?.backSpaceReleased(sender)
+        var button = sender as UIButton
+        button.backgroundColor = self.specialKeysButtonColor
+        self.delegate?.backSpaceReleased(sender)
 	}
     
     func longPressBackSpace(sender: AnyObject){
@@ -121,13 +210,20 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func lockCase(sender: AnyObject){
+        var button = sender as UIButton
         self.delegate?.lockCase(sender)
+        button.backgroundColor = self.specialKeysButtonColor
     }
     
     func removeViews(){
         for v in self.subviews {
             v.removeFromSuperview()
         }
+    }
+    
+    func buttonPressed(sender: AnyObject) {
+        var button = sender as UIButton
+        button.backgroundColor = self.keysPressedColor
     }
     
     // MARK: - UIPageViewController delegate methods
@@ -196,8 +292,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         
         self.encryptionRow = UIView(frame: CGRectMake(0, 0, 320, 50))
         self.profileSwipeRow = UIView(frame: CGRectMake(0, 0, 320, 50))
-        //self.encryptionRow.backgroundColor = UIColor(red: 0.388, green: 0.388, blue: 0.388, alpha: 0.2)
-        self.encryptionRow.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+        self.encryptionRow.backgroundColor = self.encryptionRowColor
         self.profileSwipeRow.backgroundColor = UIColor.clearColor()
         
         self.row1 = rowOfButtons(buttonTitles[0] as [String])
@@ -299,9 +394,9 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         
         var startingViewController: ProfileSwipeViewController!
         if self.initilizedPageIndex != nil {
-            startingViewController = self.profileSwipeModelController.viewControllerAtIndex(self.initilizedPageIndex)!
+            startingViewController = self.profileSwipeModelController.viewControllerAtIndex(self.initilizedPageIndex, textColor: self.profilePageTextColor)!
         } else {
-            startingViewController = self.profileSwipeModelController.viewControllerAtIndex(0)!
+            startingViewController = self.profileSwipeModelController.viewControllerAtIndex(0, textColor: self.profilePageTextColor)!
         }
         let vcs = [startingViewController]
         self.profilePages.setViewControllers(vcs, direction: .Forward, animated: false, completion: {done in})
@@ -322,7 +417,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func movePageView(index: Int) {
-        var newPage: ProfileSwipeViewController = self.profileSwipeModelController.viewControllerAtIndex(index)!
+        var newPage: ProfileSwipeViewController = self.profileSwipeModelController.viewControllerAtIndex(index, textColor: self.profilePageTextColor)!
         let vcs = [newPage]
         self.profilePages.setViewControllers(vcs, direction: .Forward, animated: true, completion: {done in})
     }
@@ -344,7 +439,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         self.decryptButton.sizeToFit()
         self.decryptButton.titleLabel?.font = UIFont.systemFontOfSize(15)
         self.decryptButton.backgroundColor = UIColor.clearColor()
-        self.decryptButton.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        self.decryptButton.setTitleColor(self.decryptEncryptButtonTextColor, forState: .Normal)
         self.decryptButton.addTarget(self, action: "decryptPasteboard", forControlEvents: .TouchUpInside)
         self.decryptButton.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
@@ -356,14 +451,13 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         
         //Change to a D when you are in decrypt mode
         self.toggleEncryptDecrypt.setTitle("E", forState: .Normal)
-        self.toggleEncryptDecrypt.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        self.toggleEncryptDecrypt.setTitleColor(self.decryptEncryptButtonTextColor, forState: .Normal)
         self.toggleEncryptDecrypt.frame = CGRectMake(0, 0, 50, 50)
         self.toggleEncryptDecrypt.clipsToBounds = true
         self.toggleEncryptDecrypt.sizeToFit()
         self.toggleEncryptDecrypt.titleLabel?.font = UIFont.systemFontOfSize(15)
-        //self.toggleEncryptDecrypt.backgroundColor = UIColor(red: 0.251, green: 0.251, blue: 0.251, alpha: 0.2)
-        self.toggleEncryptDecrypt.backgroundColor = UIColor(red: 0.91, green: 0.902, blue: 0.902, alpha: 1.0)
-        self.toggleEncryptDecrypt.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        self.toggleEncryptDecrypt.backgroundColor = self.decryptEncryptButtonColor
+        self.toggleEncryptDecrypt.setTitleColor(self.decryptEncryptButtonTextColor, forState: .Normal)
         self.toggleEncryptDecrypt.addTarget(self, action: "toggleCryption", forControlEvents: .TouchUpInside)
         self.toggleEncryptDecrypt.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
@@ -399,29 +493,30 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         button.sizeToFit()
         button.titleEdgeInsets = UIEdgeInsets(top: 1.0, left: 1.0, bottom: 1.0, right: 1.0)
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
-        button.backgroundColor = UIColor.whiteColor()
+        button.backgroundColor = self.keysBackgroundColor
         button.layer.cornerRadius = 5
-        button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        button.setTitleColor(self.keysTextColor, forState: .Normal)
+        
+        let pressDown = UITapGestureRecognizer(target: self, action: "buttonPressed:")
+        pressDown.numberOfTapsRequired = 1
+        button.addTarget(self, action: "buttonPressed:", forControlEvents: .TouchDown)
         
         let singleTap = UITapGestureRecognizer(target: self, action: "buttonTapped:")
         singleTap.numberOfTapsRequired = 1
         button.addTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
         
         if title == "\u{21E7}" {
-            button.backgroundColor = UIColor.lightGrayColor()
+            button.backgroundColor = self.specialKeysButtonColor
             button.layer.opacity = 0.5
-            //button.titleLabel?.font = UIFont.systemFontOfSize(15)
             button.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 15)
-            //button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
             let doubleTap = UITapGestureRecognizer(target: self, action: "lockCase:")
             doubleTap.numberOfTapsRequired = 2
             button.addGestureRecognizer(doubleTap)
             singleTap.requireGestureRecognizerToFail(doubleTap)
         } else if title == "\u{232B}" {
-            button.backgroundColor = UIColor.lightGrayColor()
+            button.backgroundColor = self.specialKeysButtonColor
             button.layer.opacity = 0.5
-            //button.titleLabel?.font = UIFont.systemFontOfSize(15)
-            button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+            button.setTitleColor(self.keysTextColor, forState: .Normal)
             button.removeTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
 			button.addTarget(self, action: "backSpaceTapped:", forControlEvents: .TouchDown)
 			button.addTarget(self, action: "backSpaceReleased:", forControlEvents: UIControlEvents.TouchUpInside|UIControlEvents.TouchDragOutside)
@@ -429,12 +524,11 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
         } else if title == "123" || title == "rtn" || title == "\u{1f310}" || title == "+#="{
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
-            button.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+            button.setTitleColor(self.keysTextColor, forState: .Normal)
             button.layer.opacity = 0.5
-            button.backgroundColor = UIColor.lightGrayColor()
+            button.backgroundColor = self.specialKeysButtonColor
         } else {
             button.titleLabel?.font = UIFont.systemFontOfSize(20)
-            button.setTitleColor(UIColor.blackColor(), forState: .Normal)
         }
         
         return button
@@ -442,8 +536,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     func setUpDecryptionView(){
         self.decryptionView = UIView(frame: CGRectMake(0, 0, 320, 50))
-        //self.decryptionView.backgroundColor = UIColor(red: 0.388, green: 0.388, blue: 0.388, alpha: 0.2)
-        self.decryptionView.backgroundColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
+        self.decryptionView.backgroundColor = self.decryptionViewColor
         self.addSubview(self.decryptionView)
         self.decryptionView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
@@ -469,6 +562,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         self.addDecryptButtonConstraints()
         
         self.decryptedTextLabel.text = ""
+        self.decryptedTextLabel.textColor = self.decryptedTextColor
         self.decryptionTextView.addSubview(self.decryptedTextLabel)
         self.decryptedTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.addDecryptedTextLabelConstraints()
