@@ -19,8 +19,14 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
     override init() {
         super.init()
         // Create the data model.
-        self.profileData = fetchedResultsController.fetchedObjects as [NSManagedObject]
-        
+        var data = fetchedResultsController.fetchedObjects as [NSManagedObject]
+
+        //Adding clearText to the list of encryption types
+        var clearText: NSManagedObject = NSEntityDescription.insertNewObjectForEntityForName("Profiles", inManagedObjectContext: CoreDataStack().managedObjectContext!) as NSManagedObject
+        clearText.setValue("Clear", forKey: "name")
+        data.append(clearText)
+
+        self.profileData = data
     }
 
     func viewControllerAtIndex(index: Int, textColor: UIColor) -> ProfileSwipeViewController? {

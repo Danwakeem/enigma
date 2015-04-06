@@ -23,7 +23,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     let notificationKey = "com.SlayterDev.selectedProfile"
     
     var currentProfile: NSManagedObject?
-    var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
+    var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Clear": ["0", "0"]]
     var currentProfileName: String = "default"
     var currentObjectId: NSURL!
     var initializedProfileIndex: Int = -1
@@ -117,32 +117,43 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     override func viewWillDisappear(animated: Bool) {
         //Saving the coredata objectId
-        self.defaults.setURL(self.currentObjectId, forKey: "CurrentProfileId")
-        self.defaults.synchronize()
+        if self.currentObjectId != nil {
+            self.defaults.setURL(self.currentObjectId, forKey: "CurrentProfileId")
+            self.defaults.synchronize()
+        } else {
+            self.defaults.setURL(NSURL(string: "Clear")!, forKey: "CurrentProfileId")
+            self.defaults.synchronize()
+        }
     }
     
     func loadEncryptionFromUserDefaults(){
         //Load up the most recent encryptionMethod from NSUserDefaults
         if let id: NSURL = self.defaults.URLForKey("CurrentProfileId"){
             self.currentObjectId = id
-            if let objId: NSManagedObjectID = self.managedObjectContext?.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(id) {
-                if let obj = self.managedObjectContext?.objectWithID(objId) {
-                    if let profileName = obj.valueForKey("name")?.description {
-                        self.currentProfileName = profileName
-                    }
-                    self.getEncryptions(obj)
-                    if let profiles = self.fetchedResultsController.fetchedObjects as? [NSManagedObject] {
-                        for (index, profile) in enumerate(profiles) {
-                            if profile.valueForKey("name")?.description == self.currentProfileName {
-                                self.initializedProfileIndex = index
+            if id.description != "Clear" {
+                if let objId: NSManagedObjectID = self.managedObjectContext?.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(id) {
+                    if let obj = self.managedObjectContext?.objectWithID(objId) {
+                        if let profileName = obj.valueForKey("name")?.description {
+                            self.currentProfileName = profileName
+                        }
+                        self.getEncryptions(obj)
+                        if let profiles = self.fetchedResultsController.fetchedObjects as? [NSManagedObject] {
+                            for (index, profile) in enumerate(profiles) {
+                                if profile.valueForKey("name")?.description == self.currentProfileName {
+                                    self.initializedProfileIndex = index
+                                }
                             }
                         }
+                    } else {
+                        println("The object no longer exists")
                     }
                 } else {
-                    println("The object no longer exists")
+                    println("Couldn't find the object ID")
                 }
             } else {
-                println("Couldn't find the object ID")
+                var numOfObjects = self.fetchedResultsController.fetchedObjects?.count
+                self.currentProfileName = "Clear"
+                self.initializedProfileIndex = numOfObjects!
             }
         } else {
             println("User default for current profile id was empty")
@@ -254,6 +265,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.proxy.insertText(". ")
             self.lastTypedWord = " "
 			allowQuickPeriod = false
+        } else if self.currentProfileName == "Clear" {
+            self.proxy.insertText(" ")
         } else {
             //Encryption test :)
             var encryptedString: String!
@@ -287,7 +300,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func insertText(title: String){
         if self.upperCase || self.caseLock || self.firstLetter {
             self.setRawTextlabelText(title)
-            //self.proxy.insertText(title)
+            self.clearTextInsert(title)
             self.lastTypedWord += title
             if self.upperCase {
                 //Undo upercase so the next word wont be capitalized.
@@ -295,12 +308,22 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             } else if self.firstLetter {
                 //Uncheck first letter so the next one wont be capitalized.
                 self.firstLetter = !self.firstLetter
+            } else {
+                if self.currentProfileName == "Clear" {
+                    
+                }
             }
         } else {
             //Adding a letter to the input and saving each letter so we know what the user just typed in
             self.setRawTextlabelText(title.lowercaseString)
-            //self.proxy.insertText(title.lowercaseString)
+            self.clearTextInsert(title.lowercaseString)
             self.lastTypedWord += title.lowercaseString
+        }
+    }
+    
+    func clearTextInsert(char: String){
+        if self.currentProfileName == "Clear" {
+            self.proxy.insertText(char)
         }
     }
     
@@ -440,7 +463,24 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         
         profileTab.backButton?.addTarget(self, action: Selector("toggleProfileTable"), forControlEvents: UIControlEvents.TouchUpInside)
+        profileTab.clearText.addTarget(self, action: Selector("tableSelectedClearText"), forControlEvents: .TouchUpInside)
         return profileTab
+    }
+    
+    func tableSelectedClearText(){
+        self.selectedClearText()
+        self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+        self.toggleProfileTable()
+    }
+    
+    func selectedClearText(){
+        //Selected Clear for encryption method
+        var encryptionDictionary = Dictionary<String,[AnyObject]>()
+        encryptionDictionary = ["Clear": ["0","0"]]
+        self.currentProfileName = "Clear"
+        self.currentEncryptionMethods = encryptionDictionary
+        self.currentObjectId = nil
+        self.currentProfile = nil
     }
     
     func selectedProfile(notification: NSNotification){
@@ -488,11 +528,16 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
     }
     
-    func swipedProfile(notification: NSNotification){
+    func swipedProfile(notification: NSNotification!){
         var dict = notification.userInfo as Dictionary <String,NSManagedObject>
         self.currentProfile = dict["Profile"]
         var trigger = self.currentProfile?.valueForKey("name") as String
-        self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
-        self.getEncryptions(self.currentProfile!)
+        if trigger == "Clear" {
+            self.selectedClearText()
+            self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+        } else {
+            self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+            self.getEncryptions(self.currentProfile!)
+        }
     }
 }

@@ -14,6 +14,8 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     
     @IBOutlet weak var profileTable: UITableView!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var clearText: UIButton!
+    
     
     var selectedProfile: NSManagedObject!
     let notificationKey = "com.SlayterDev.selectedProfile"
