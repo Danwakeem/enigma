@@ -152,6 +152,20 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.827, green: 0.318, blue: 0.592, alpha: 1.0)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
+        case "Green":
+            self.backgroundColor = UIColor(red: 0.016, green: 0.792, blue: 0.353, alpha: 1.0)
+            self.encryptionRowColor = UIColor(red: 0.067, green: 0.584, blue: 0.29, alpha: 1.0)
+            self.decryptEncryptButtonTextColor = UIColor.whiteColor()
+            self.decryptEncryptButtonColor = UIColor(red: 0.027, green: 0.663, blue: 0.302, alpha: 1.0)
+            self.keysBackgroundColor = UIColor(red: 0.067, green: 0.584, blue: 0.29, alpha: 1.0)
+            self.keysTextColor = UIColor.whiteColor()
+            self.specialKeysButtonColor = UIColor(red: 0.027, green: 0.663, blue: 0.302, alpha: 1.0)
+            self.decryptionViewColor = UIColor(red: 0.067, green: 0.584, blue: 0.29, alpha: 1.0)
+            self.profilePageTextColor = UIColor.whiteColor()
+            self.decryptedTextColor = UIColor.whiteColor()
+            self.rawTextLabel.textColor = UIColor.whiteColor()
+            self.keysPressedColor = UIColor(red: 0.047, green: 0.482, blue: 0.235, alpha: 1.0)
+            self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         default:
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         }
