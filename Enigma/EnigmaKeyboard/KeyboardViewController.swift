@@ -198,7 +198,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             switch title {
             case "\u{232B}" :
                 self.pressedBackSpace(title)
-            case "rtn" :
+            case "return" :
                 self.lastTypedWord = ""
                 self.Keyboard.rawTextLabel.text = ""
                 self.proxy.insertText("\n")
