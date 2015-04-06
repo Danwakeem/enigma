@@ -25,12 +25,12 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     let buttonTitles1 = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
     let buttonTitles2 = ["A", "S", "D", "F", "G", "H", "J", "K", "L"]
     let buttonTitles3 = ["\u{21E7}", "Z", "X", "C", "V", "B", "N", "M", "\u{232B}"]
-    let buttonTitles4 = ["123", "👱", "\u{1f310}", "space", "rtn"]
+    let buttonTitles4 = ["123", "👱", "\u{1f310}", "space", "return"]
     
     let numberButtonTitles1 = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
     let numberButtonTitles2 = ["-", "/", ":", ";", "(", ")", "$", "&", "@", "\""]
     let numberButtonTitles3 = ["+#=", ".", ",", "?", "!", "'", "\u{232B}"]
-    let numberButtonTitles4 = ["ABC", "👱", "\u{1f310}", "space", "rtn"]
+    let numberButtonTitles4 = ["ABC", "👱", "\u{1f310}", "space", "return"]
     
     let alternateKeyboardButtonTitles1 = ["[", "]", "{", "}", "#", "%", "^", "*", "+", "="]
     let alternateKeyboardButtonTitles2 = ["_", "\\", "|", "~", "<", ">", "¢", "£", "¥", "•"]
@@ -196,7 +196,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         switch (title) {
             case "123":
                 button.backgroundColor = self.specialKeysButtonColor
-            case "rtn":
+            case "return":
                 button.backgroundColor = self.specialKeysButtonColor
             case "+#=":
                 button.backgroundColor = self.specialKeysButtonColor
@@ -515,6 +515,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         button.backgroundColor = self.keysBackgroundColor
         button.layer.cornerRadius = 5
         button.setTitleColor(self.keysTextColor, forState: .Normal)
+        button.titleLabel?.font = UIFont.systemFontOfSize(20)
         
         let pressDown = UITapGestureRecognizer(target: self, action: "buttonPressed:")
         pressDown.numberOfTapsRequired = 1
@@ -527,7 +528,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         if title == "\u{21E7}" {
             button.backgroundColor = self.specialKeysButtonColor
             button.layer.opacity = 0.5
-            button.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 15)
+            button.titleLabel?.font = UIFont(name: "LucidaGrande", size: 20)
             let doubleTap = UITapGestureRecognizer(target: self, action: "lockCase:")
             doubleTap.numberOfTapsRequired = 2
             button.addGestureRecognizer(doubleTap)
@@ -535,13 +536,19 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         } else if title == "\u{232B}" {
             button.backgroundColor = self.specialKeysButtonColor
             button.layer.opacity = 0.5
+            button.titleLabel?.font = UIFont(name: "LucidaGrande", size: 20)
             button.setTitleColor(self.keysTextColor, forState: .Normal)
             button.removeTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
 			button.addTarget(self, action: "backSpaceTapped:", forControlEvents: .TouchDown)
 			button.addTarget(self, action: "backSpaceReleased:", forControlEvents: UIControlEvents.TouchUpInside|UIControlEvents.TouchDragOutside)
         } else if title == "space" {
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
-        } else if title == "123" || title == "rtn" || title == "\u{1f310}" || title == "+#="{
+        } else if title == "\u{1f310}" {
+            button.titleLabel?.font = UIFont(name: "Quivira", size: 30.0)
+            button.setTitleColor(self.keysTextColor, forState: .Normal)
+            button.layer.opacity = 0.5
+            button.backgroundColor = self.specialKeysButtonColor
+        } else if title == "123" || title == "return" || title == "\u{1f310}" || title == "+#="{
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
             button.setTitleColor(self.keysTextColor, forState: .Normal)
             button.layer.opacity = 0.5

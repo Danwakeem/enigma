@@ -57,7 +57,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		
+        
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
 		allowQuickPeriod = false
