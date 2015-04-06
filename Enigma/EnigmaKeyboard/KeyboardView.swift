@@ -415,7 +415,10 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         self.profilePages.view.frame = self.profileSwipeRow.frame
         self.profileSwipeRow.addSubview(self.profilePages.view)
         
-        //self.profileSwipeRow.gestureRecognizers = self.profilePages.gestureRecognizers
+        var click = UITapGestureRecognizer(target: self, action: "toggleCryption")
+        click.numberOfTapsRequired = 1
+        self.profilePages.view.addGestureRecognizer(click)
+        
     }
     
     func movePageView(index: Int) {
