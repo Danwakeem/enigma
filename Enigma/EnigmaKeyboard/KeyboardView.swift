@@ -305,6 +305,8 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         //add the views of button arrays to the screen
         self.encryptionRow.addSubview(self.rawTextLabel)
         self.rawTextLabel.addSubview(self.toggleEncryptDecrypt)
+        self.profileSwipeRow.addSubview(self.toggleEncryptDecrypt)
+        self.encryptDecryptToggleConstraints()
         self.addSubview(encryptionRow)
         self.addSubview(self.profileSwipeRow)
         self.addSubview(row1)
@@ -573,6 +575,15 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     //MARK: Constraints
     
+    func encryptDecryptToggleConstraints(){
+        println("Hello")
+        let widthConstraint = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50)
+        let top = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Top, relatedBy: .Equal, toItem: self.profileSwipeRow, attribute: .Top, multiplier: 1.0, constant: 0)
+        let left = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Left, relatedBy: .Equal, toItem: self.profileSwipeRow, attribute: .Left, multiplier: 1.0, constant: 0)
+        let bottom = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Bottom, relatedBy: .Equal, toItem: self.profileSwipeRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
+        self.profileSwipeRow.addConstraints([widthConstraint,top,left,bottom])
+    }
+    
     func addConstraintsToProfileSwipeRow(){
         
         let bottomConstraint = NSLayoutConstraint(item: self.profileSwipeRow, attribute: .Bottom, relatedBy: .Equal, toItem: self.row1, attribute: .Top, multiplier: 1.0, constant: 0)
@@ -627,11 +638,13 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     //Constraints for the raw text encryption row
     func constraintsForRawTextLabel(){
+        /*
         var buttonTop = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Top, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Top, multiplier: 1.0, constant: 0)
         var buttonBottom = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Bottom, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Bottom, multiplier: 1.0, constant: 0)
         var buttonLeft = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Left, relatedBy: .Equal, toItem: self.rawTextLabel, attribute: .Left, multiplier: 1.0, constant: 0)
         var widthConstraint = NSLayoutConstraint(item: self.toggleEncryptDecrypt, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50)
         self.rawTextLabel.addConstraints([buttonTop,buttonBottom,buttonLeft,widthConstraint])
+        */
         
         var topConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Top, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Top, multiplier: 1.0, constant: 0)
         var bottomConstraint = NSLayoutConstraint(item: self.rawTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.encryptionRow, attribute: .Bottom, multiplier: 1.0, constant: 0)
