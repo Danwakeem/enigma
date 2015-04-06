@@ -19,7 +19,7 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 		return urls!
 		}()
     
-    var colorSelection = ["Default", "Black", "White", "Blue", "Pink"]
+    var colorSelection = ["Default", "Black", "White", "Green", "Blue", "Pink"]
     var pickerView: UIPickerView!
 	
 	override func viewDidLoad() {

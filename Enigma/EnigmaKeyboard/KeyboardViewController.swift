@@ -470,6 +470,10 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func tableSelectedClearText(){
         self.selectedClearText()
         self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+        if self.Keyboard.profilePages != nil {
+            var clearIndex = self.fetchedResultsController.fetchedObjects?.count
+            self.Keyboard.movePageView(clearIndex!)
+        }
         self.toggleProfileTable()
     }
     
