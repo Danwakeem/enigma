@@ -49,8 +49,6 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         // Return the index of the given data view controller.
         // For simplicity, this implementation uses a static array of model objects and the view controller stores the model object; you can therefore use the model object to identify the index.
         if let dataObject: AnyObject = viewController.profileObject {
-            var dict = ["Profile": dataObject as NSManagedObject]
-            NSNotificationCenter.defaultCenter().postNotificationName(self.swipedNotification, object: self, userInfo: dict)
             return self.profileData.indexOfObject(dataObject)
         } else {
             return NSNotFound
@@ -79,6 +77,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         if index == self.profileData.count + 1 {
             return nil
         }
+        
         return self.viewControllerAtIndex(index, textColor: self.textColor)
     }
 }

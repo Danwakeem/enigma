@@ -12,6 +12,7 @@ class ProfileSwipeViewController: UIViewController {
     var profileNameLabel: UILabel!
     var profileObject: NSManagedObject?
     var textColor: UIColor!
+    let swipedNotification = "com.SlayterDev.swipedProfile"
     
     init(obj: NSManagedObject, color: UIColor) {
         super.init()
@@ -47,12 +48,13 @@ class ProfileSwipeViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        //self.profileNameLabel.text = "Hey there"
         if let obj: String = profileObject?.valueForKey("name")?.description {
             self.profileNameLabel.text = obj
         } else {
             self.profileNameLabel.text = ""
         }
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(self.swipedNotification, object: self, userInfo: ["Profile": self.profileObject!])
     }
     
     func labelConstraints(){

@@ -547,8 +547,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func swipedProfile(notification: NSNotification!){
         var dict = notification.userInfo as Dictionary <String,NSManagedObject>
         self.currentProfile = dict["Profile"]
-        println("Profile swipe selection: \(self.currentProfile)")
+        //println("Profile swipe selection: \(self.currentProfile)")
         var trigger = self.currentProfile?.valueForKey("name") as String
+        println("Profile name: \(trigger)")
         if trigger == "Clear" {
             self.selectedClearText()
             self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
