@@ -111,7 +111,6 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
             self.selectedProfile = self.fetchedResultsController.objectAtIndexPath(index) as NSManagedObject
 
             NSNotificationCenter.defaultCenter().postNotificationName(self.notificationKey, object: self, userInfo:["Index" : index, "Profile" : self.selectedProfile])
-            NSNotificationCenter.defaultCenter().postNotificationName(self.notificationKey, object: self, userInfo:["Index" : index])
 			
 			self.profileTable.deselectRowAtIndexPath(indexPath, animated: true)
         }

@@ -20,7 +20,7 @@
                     <rect key="frame" x="0.0" y="1" width="679" height="391"/>
                     <subviews>
                         <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PIq-gg-rs6">
-                            <rect key="frame" x="0.0" y="0.0" width="679" height="390.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="679" height="350.5"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="umr-1B-IrQ"/>
@@ -31,8 +31,8 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="PIq-gg-rs6" firstAttribute="top" secondItem="Ibn-Pg-NVs" secondAttribute="top" id="5T4-Et-0qD"/>
-                        <constraint firstAttribute="bottom" secondItem="PIq-gg-rs6" secondAttribute="bottom" id="EIH-QE-G7s"/>
                         <constraint firstAttribute="trailing" secondItem="PIq-gg-rs6" secondAttribute="trailing" id="JoT-Qt-6kS"/>
+                        <constraint firstAttribute="bottom" secondItem="PIq-gg-rs6" secondAttribute="bottom" constant="40.5" id="WEq-Ix-MaI"/>
                         <constraint firstItem="PIq-gg-rs6" firstAttribute="leading" secondItem="Ibn-Pg-NVs" secondAttribute="leading" id="ol6-uh-Kgp"/>
                     </constraints>
                 </view>
