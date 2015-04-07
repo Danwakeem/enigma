@@ -209,12 +209,15 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             case "\u{21E7}" :
                 self.upperCase = !self.upperCase
             case "123" :
+                println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.numberButtonTitles1,Keyboard.numberButtonTitles2,Keyboard.numberButtonTitles3,Keyboard.numberButtonTitles4])
             case "+#=":
+                println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.alternateKeyboardButtonTitles1,Keyboard.alternateKeyboardButtonTitles2,Keyboard.alternateKeyboardButtonTitles3,Keyboard.numberButtonTitles4])
             case "ABC" :
+                println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
             case "👱":
@@ -502,6 +505,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         var indexPath: NSIndexPath = dict["Index"]! as NSIndexPath
         var index: Int = indexPath.row
         //self.currentProfile = self.profileTable.selectedProfile
+        self.initializedProfileIndex = index
         var selectedProfile: NSManagedObject = dict["Profile"]! as NSManagedObject
         self.currentProfile = selectedProfile
         var trigger = self.currentProfile?.valueForKey("name") as String
@@ -545,11 +549,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func swipedProfile(notification: NSNotification!){
-        var dict = notification.userInfo as Dictionary <String,NSManagedObject>
-        self.currentProfile = dict["Profile"]
+        var dict = notification.userInfo as Dictionary <String,AnyObject>
+        self.currentProfile = dict["Profile"] as? NSManagedObject
+        self.Keyboard.initilizedPageIndex = dict["Index"] as? Int
         //println("Profile swipe selection: \(self.currentProfile)")
         var trigger = self.currentProfile?.valueForKey("name") as String
-        println("Profile name: \(trigger)")
         if trigger == "Clear" {
             self.selectedClearText()
             self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
