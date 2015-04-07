@@ -76,7 +76,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         }
         
         index++
-        if index == self.profileData.count {
+        if index == self.profileData.count + 1 {
             return nil
         }
         return self.viewControllerAtIndex(index, textColor: self.textColor)
