@@ -51,6 +51,8 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     var initilizedPageIndex: Int!
     var showProfilePages: NSTimer!
     var profilePagesHide: Bool = false
+    
+    var shiftKey: UIButton!
 
     var decryptionTopConstraint: NSLayoutConstraint!
     var decryptionBottomConstraint: NSLayoutConstraint!
@@ -82,6 +84,8 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     var decryptedTextColor = UIColor.darkTextColor()
     
     var keysPressedColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1.0)
+    var shiftKeyPressedColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1.0)
+    
     
     //MARK: - initialization
     
@@ -123,6 +127,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.decryptedTextColor = UIColor.whiteColor()
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
+            self.shiftKeyPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Blue":
             self.backgroundColor = UIColor(red: 0.161, green: 0.62, blue: 0.91, alpha: 1.0)
@@ -137,6 +142,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.decryptedTextColor = UIColor.whiteColor()
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.075, green: 0.325, blue: 0.628, alpha: 1.0)
+            self.shiftKeyPressedColor = UIColor(red: 0.075, green: 0.325, blue: 0.628, alpha: 1.0)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Pink":
             self.backgroundColor = UIColor(red: 0.953, green: 0.604, blue: 0.792, alpha: 1.0)
@@ -151,6 +157,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.decryptedTextColor = UIColor.whiteColor()
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.827, green: 0.318, blue: 0.592, alpha: 1.0)
+            self.shiftKeyPressedColor = UIColor(red: 0.827, green: 0.318, blue: 0.592, alpha: 1.0)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Green":
             self.backgroundColor = UIColor(red: 0.016, green: 0.792, blue: 0.353, alpha: 1.0)
@@ -165,6 +172,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.decryptedTextColor = UIColor.whiteColor()
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.047, green: 0.482, blue: 0.235, alpha: 1.0)
+            self.shiftKeyPressedColor = UIColor(red: 0.047, green: 0.482, blue: 0.235, alpha: 1.0)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         default:
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
@@ -191,18 +199,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
                 self.profilePages.view.removeFromSuperview()
             }
         }
-        let button = sender as UIButton
-        var title: String = button.titleForState(.Normal)!
-        switch (title) {
-            case "123":
-                button.backgroundColor = self.specialKeysButtonColor
-            case "return":
-                button.backgroundColor = self.specialKeysButtonColor
-            case "+#=":
-                button.backgroundColor = self.specialKeysButtonColor
-            default:
-                button.backgroundColor = self.keysBackgroundColor
-        }
+        self.toggleColor(sender)
 
         self.delegate?.buttonTapped(sender)
     }
@@ -238,6 +235,23 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     func buttonPressed(sender: AnyObject) {
         var button = sender as UIButton
         button.backgroundColor = self.keysPressedColor
+    }
+    
+    func toggleColor(sender: AnyObject){
+        let button = sender as UIButton
+        var title: String = button.titleForState(.Normal)!
+        switch (title) {
+        case "123":
+            button.backgroundColor = self.specialKeysButtonColor
+        case "return":
+            button.backgroundColor = self.specialKeysButtonColor
+        case "+#=":
+            button.backgroundColor = self.specialKeysButtonColor
+        case "\u{21E7}":
+            button.backgroundColor = self.specialKeysButtonColor
+        default:
+            button.backgroundColor = self.keysBackgroundColor
+        }
     }
     
     // MARK: - UIPageViewController delegate methods
@@ -525,6 +539,10 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         singleTap.numberOfTapsRequired = 1
         button.addTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
         
+        let touchOutside = UITapGestureRecognizer(target: self, action: "toggleColor:")
+        touchOutside.numberOfTapsRequired = 1
+        button.addTarget(self, action: "toggleColor:", forControlEvents: .TouchUpOutside)
+        
         if title == "\u{21E7}" {
             button.backgroundColor = self.specialKeysButtonColor
             button.layer.opacity = 0.5
@@ -533,6 +551,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             doubleTap.numberOfTapsRequired = 2
             button.addGestureRecognizer(doubleTap)
             singleTap.requireGestureRecognizerToFail(doubleTap)
+            self.shiftKey = button
         } else if title == "\u{232B}" {
             button.backgroundColor = self.specialKeysButtonColor
             button.layer.opacity = 0.5

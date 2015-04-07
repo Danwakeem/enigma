@@ -230,6 +230,16 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 		playSound()
     }
     
+    /*
+    func changeShiftColor(){
+        if self.Keyboard.shiftKey.backgroundColor == self.Keyboard.shiftKeyPressedColor {
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.keysPressedColor
+        } else if self.Keyboard.shiftKey.backgroundColor == self.Keyboard.keysPressedColor {
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+        }
+    }
+    */
+    
     func pressedBackSpace(title: String){
         self.proxy.deleteBackward()
         //Getting rid of the last typed word with input field
@@ -488,10 +498,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func selectedProfile(notification: NSNotification){
-        var dict = notification.userInfo as Dictionary<String,NSIndexPath>
-        var indexPath = dict["Index"]!
+        var dict = notification.userInfo as Dictionary<String,AnyObject>
+        var indexPath: NSIndexPath = dict["Index"]! as NSIndexPath
         var index: Int = indexPath.row
-        self.currentProfile = self.profileTable.selectedProfile
+        var selectedProfile: NSManagedObject = dict["Profile"]! as NSManagedObject
+        self.currentProfile = selectedProfile
+        //self.currentProfile = self.profileTable.selectedProfile
         var trigger = self.currentProfile?.valueForKey("name") as String
         self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
         //getEncryptions isn't doing anything until the containing app saves the encryption keys with the profile
@@ -535,6 +547,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func swipedProfile(notification: NSNotification!){
         var dict = notification.userInfo as Dictionary <String,NSManagedObject>
         self.currentProfile = dict["Profile"]
+        println("Profile swipe selection: \(self.currentProfile)")
         var trigger = self.currentProfile?.valueForKey("name") as String
         if trigger == "Clear" {
             self.selectedClearText()
