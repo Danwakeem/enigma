@@ -45,7 +45,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 	var preTimer: NSTimer!
 	var deleteKey: UIButton!
 	var isHoldingDelete: Bool! = false
-	
+    
 	var defaults: NSUserDefaults!
     
     @IBOutlet var nextKeyboardButton: UIButton!
@@ -57,6 +57,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.proxy = textDocumentProxy as UITextDocumentProxy
         
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
@@ -65,19 +66,24 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         self.loadEncryptionFromUserDefaults()
         
         if 0 < self.fetchedResultsController.fetchedObjects?.count && self.keyboardColor != nil {
-            println("Both are selected")
-            self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: self.keyboardColor)
+            if self.keyboardColor == "Default" {
+                self.setDefaultKeyboardColor(self.initializedProfileIndex)
+            } else {
+                self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: self.keyboardColor)
+            }
         } else if 0 < self.fetchedResultsController.fetchedObjects?.count {
-            self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: "Default")
+            self.setDefaultKeyboardColor(self.initializedProfileIndex)
         } else if self.keyboardColor != nil {
-            self.Keyboard = KeyboardView(index: -1, color: self.keyboardColor)
+            if self.keyboardColor == "Default" {
+                self.setDefaultKeyboardColor(-1)
+            } else {
+                self.Keyboard = KeyboardView(index: -1, color: self.keyboardColor)
+            }
         } else {
-            self.Keyboard = KeyboardView(index: -1, color: "Default")
+            self.setDefaultKeyboardColor(-1)
         }
         
         self.createKeyboard()
-        
-        self.proxy = textDocumentProxy as UITextDocumentProxy
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedProfile:", name: self.notificationKey, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "swipedProfile:", name: self.swipedNotification, object: nil)
@@ -85,9 +91,25 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         self.view.userInteractionEnabled = true
     }
     
-    //MARK: - Set height 
+    func setDefaultKeyboardColor(index: Int){
+        if self.proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
+            self.Keyboard = KeyboardView(index: index, color: "Black")
+        } else {
+            self.Keyboard = KeyboardView(index: index, color: self.keyboardColor)
+        }
+    }
+    
+    //MARK: - Set height
     
     override func viewDidAppear(animated: Bool) {
+        if self.keyboardColor == "Default" {
+            if self.proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
+                self.Keyboard.removeViews()
+                self.Keyboard.loadAsDarkKeyboard()
+                self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
+            }
+        }
+        self.Keyboard.hidden = false
         if UIInterfaceOrientationIsLandscape(self.interfaceOrientation) as Bool == true {
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
             self.height = keyboardHeight
@@ -173,6 +195,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func createKeyboard(){
         self.Keyboard.delegate = self
         self.Keyboard.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.Keyboard.hidden = true
         self.view.addSubview(self.Keyboard)
         
         let left = NSLayoutConstraint(item: self.Keyboard, attribute: .Left, relatedBy: .Equal, toItem: self.view, attribute: .Left, multiplier: 1.0, constant: 0)

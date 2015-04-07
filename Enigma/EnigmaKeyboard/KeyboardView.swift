@@ -179,6 +179,22 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         }
     }
     
+    func loadAsDarkKeyboard(){
+        self.backgroundColor = UIColor(red: 0.22, green: 0.22, blue: 0.22, alpha: 1.0)
+        self.encryptionRowColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1.0)
+        self.decryptEncryptButtonTextColor = UIColor.whiteColor()
+        self.decryptEncryptButtonColor = UIColor(red: 0.114, green: 0.114, blue: 0.114, alpha: 1.0)
+        self.keysBackgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1.0)
+        self.keysTextColor = UIColor.whiteColor()
+        self.specialKeysButtonColor = UIColor(red: 0.169, green: 0.169, blue: 0.169, alpha: 1.0)
+        self.decryptionViewColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1.0)
+        self.profilePageTextColor = UIColor.whiteColor()
+        self.decryptedTextColor = UIColor.whiteColor()
+        self.rawTextLabel.textColor = UIColor.whiteColor()
+        self.keysPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
+        self.shiftKeyPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
+    }
+    
     //MARK: - Delegate methods
     
     func removeGestures(){
