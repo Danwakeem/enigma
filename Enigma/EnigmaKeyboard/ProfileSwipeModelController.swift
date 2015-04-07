@@ -40,7 +40,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
         self.currentData = profile
         var name = profile.valueForKey("name")?.description
         
-        let profileSwipeViewController = ProfileSwipeViewController(obj: profile, color: self.textColor)
+        let profileSwipeViewController = ProfileSwipeViewController(obj: profile, color: self.textColor, index: index)
         
         return profileSwipeViewController
     }
