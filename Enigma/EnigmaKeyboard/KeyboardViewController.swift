@@ -501,14 +501,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         var dict = notification.userInfo as Dictionary<String,AnyObject>
         var indexPath: NSIndexPath = dict["Index"]! as NSIndexPath
         var index: Int = indexPath.row
-        /*
-        if self.profileTable == nil {
-            var selectedProfile: NSManagedObject = dict["Profile"]! as NSManagedObject
-            self.currentProfile = selectedProfile
-        } else {
-            self.currentProfile = self.profileTable.selectedProfile
-        }
-        */
+        //self.currentProfile = self.profileTable.selectedProfile
         var selectedProfile: NSManagedObject = dict["Profile"]! as NSManagedObject
         self.currentProfile = selectedProfile
         var trigger = self.currentProfile?.valueForKey("name") as String
