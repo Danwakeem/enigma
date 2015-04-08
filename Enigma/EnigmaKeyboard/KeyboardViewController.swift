@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import AudioToolbox
 
 class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerDelegate, KeyboardViewDelegate {
     
@@ -22,12 +23,20 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     let notificationKey = "com.SlayterDev.selectedProfile"
     
     var currentProfile: NSManagedObject?
-    var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Caesar": ["13", "0"]]
+    var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Clear": ["0", "0"]]
+    var currentProfileName: String = "default"
+    var currentObjectId: NSURL!
+    var initializedProfileIndex: Int = -1
+    let swipedNotification = "com.SlayterDev.swipedProfile"
+    
+    var keyboardColor: String!
     
     var height: NSLayoutConstraint!
     
-    var Keyboard: KeyboardView = KeyboardView()
+    var Keyboard: KeyboardView!
     var profileTable: ProfileTableView!
+    
+    var fetchedResultsController = ProfileFetchModel().fetchedResultsController
 	
 	var quickPeriodTimer: NSTimer!
 	var allowQuickPeriod: Bool!
@@ -36,7 +45,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 	var preTimer: NSTimer!
 	var deleteKey: UIButton!
 	var isHoldingDelete: Bool! = false
-	
+    
 	var defaults: NSUserDefaults!
     
     @IBOutlet var nextKeyboardButton: UIButton!
@@ -44,32 +53,63 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     override func updateViewConstraints() {
         super.updateViewConstraints()
         // Add custom view sizing constraints here
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.createKeyboard()
-		
+        self.proxy = textDocumentProxy as UITextDocumentProxy
         
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
 		allowQuickPeriod = false
-		
-        //self.view.backgroundColor = UIColor.whiteColor()
-        
-        self.proxy = textDocumentProxy as UITextDocumentProxy
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedProfile", name: self.notificationKey, object: nil)
         
         self.loadEncryptionFromUserDefaults()
+        
+        if 0 < self.fetchedResultsController.fetchedObjects?.count && self.keyboardColor != nil {
+            if self.keyboardColor == "Default" {
+                self.setDefaultKeyboardColor(self.initializedProfileIndex)
+            } else {
+                self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: self.keyboardColor)
+            }
+        } else if 0 < self.fetchedResultsController.fetchedObjects?.count {
+            self.setDefaultKeyboardColor(self.initializedProfileIndex)
+        } else if self.keyboardColor != nil {
+            if self.keyboardColor == "Default" {
+                self.setDefaultKeyboardColor(-1)
+            } else {
+                self.Keyboard = KeyboardView(index: -1, color: self.keyboardColor)
+            }
+        } else {
+            self.setDefaultKeyboardColor(-1)
+        }
+        
+        self.createKeyboard()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedProfile:", name: self.notificationKey, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "swipedProfile:", name: self.swipedNotification, object: nil)
         
         self.view.userInteractionEnabled = true
     }
     
-    //MARK: - Set height 
+    func setDefaultKeyboardColor(index: Int){
+        if self.proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
+            self.Keyboard = KeyboardView(index: index, color: "Black")
+        } else {
+            self.Keyboard = KeyboardView(index: index, color: self.keyboardColor)
+        }
+    }
+    
+    //MARK: - Set height
     
     override func viewDidAppear(animated: Bool) {
+        if self.keyboardColor == "Default" {
+            if self.proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
+                self.Keyboard.removeViews()
+                self.Keyboard.loadAsDarkKeyboard()
+                self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
+            }
+        }
+        self.Keyboard.hidden = false
         if UIInterfaceOrientationIsLandscape(self.interfaceOrientation) as Bool == true {
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
             self.height = keyboardHeight
@@ -98,26 +138,55 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     //MARK: - User default loading
     
     override func viewWillDisappear(animated: Bool) {
-        //Save the encryption methods
-        var keyArray = [String]()
-        for (key,value) in self.currentEncryptionMethods {
-            keyArray.append(key)
-            self.defaults.setObject(value, forKey: key)
+        //Saving the coredata objectId
+        if self.currentObjectId != nil {
+            self.defaults.setURL(self.currentObjectId, forKey: "CurrentProfileId")
+            self.defaults.synchronize()
+        } else {
+            self.defaults.setURL(NSURL(string: "Clear")!, forKey: "CurrentProfileId")
+            self.defaults.synchronize()
         }
-        self.defaults.setObject(keyArray, forKey: "EncryptionDictionaryKeys")
-        self.defaults.synchronize()
     }
     
     func loadEncryptionFromUserDefaults(){
         //Load up the most recent encryptionMethod from NSUserDefaults
-        if let keys = self.defaults.arrayForKey("EncryptionDictionaryKeys") as? [String] {
-            var encryptionMethods = Dictionary<String,[AnyObject]>()
-            for key in keys {
-                if let encryption = self.defaults.arrayForKey(key) {
-                    encryptionMethods[key] = encryption
+        if let id: NSURL = self.defaults.URLForKey("CurrentProfileId"){
+            self.currentObjectId = id
+            if id.description != "Clear" {
+                if let objId: NSManagedObjectID = self.managedObjectContext?.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(id) {
+                    if let obj = self.managedObjectContext?.objectWithID(objId) {
+                        if let profileName = obj.valueForKey("name")?.description {
+                            self.currentProfileName = profileName
+                        }
+                        self.getEncryptions(obj)
+                        if let profiles = self.fetchedResultsController.fetchedObjects as? [NSManagedObject] {
+                            for (index, profile) in enumerate(profiles) {
+                                if profile.valueForKey("name")?.description == self.currentProfileName {
+                                    self.initializedProfileIndex = index
+                                }
+                            }
+                        }
+                    } else {
+                        println("The object no longer exists")
+                    }
+                } else {
+                    println("Couldn't find the object ID")
                 }
+            } else {
+                var numOfObjects = self.fetchedResultsController.fetchedObjects?.count
+                self.currentProfileName = "Clear"
+                self.initializedProfileIndex = numOfObjects!
             }
-            self.currentEncryptionMethods = encryptionMethods
+        } else {
+            println("User default for current profile id was empty")
+        }
+        
+        if let color: String = self.defaults.stringForKey("KeyboardColor") {
+            println("Keyboard Color: \(color)")
+            self.keyboardColor = color
+            println(self.keyboardColor)
+        } else {
+            println("Keyboard Color not set")
         }
     }
     
@@ -126,6 +195,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func createKeyboard(){
         self.Keyboard.delegate = self
         self.Keyboard.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.Keyboard.hidden = true
         self.view.addSubview(self.Keyboard)
         
         let left = NSLayoutConstraint(item: self.Keyboard, attribute: .Left, relatedBy: .Equal, toItem: self.view, attribute: .Left, multiplier: 1.0, constant: 0)
@@ -137,7 +207,13 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     //MARK: - Input text operations
-    
+	
+	func playSound() {
+		if defaults.boolForKey("TypingSounds") {
+			AudioServicesPlaySystemSound(1104)
+		}
+	}
+	
     func buttonTapped(sender: AnyObject) {
         let button = sender as UIButton
         
@@ -145,7 +221,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             switch title {
             case "\u{232B}" :
                 self.pressedBackSpace(title)
-            case "rtn" :
+            case "return" :
                 self.lastTypedWord = ""
                 self.Keyboard.rawTextLabel.text = ""
                 self.proxy.insertText("\n")
@@ -154,15 +230,17 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             case "\u{1f310}" :
                 self.advanceToNextInputMode()
             case "\u{21E7}" :
-                println(button.titleLabel?.font.description)
                 self.upperCase = !self.upperCase
             case "123" :
+                println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.numberButtonTitles1,Keyboard.numberButtonTitles2,Keyboard.numberButtonTitles3,Keyboard.numberButtonTitles4])
             case "+#=":
+                println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.alternateKeyboardButtonTitles1,Keyboard.alternateKeyboardButtonTitles2,Keyboard.alternateKeyboardButtonTitles3,Keyboard.numberButtonTitles4])
             case "ABC" :
+                println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
             case "👱":
@@ -174,7 +252,19 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 self.insertText(title)
             }
         }
+		
+		playSound()
     }
+    
+    /*
+    func changeShiftColor(){
+        if self.Keyboard.shiftKey.backgroundColor == self.Keyboard.shiftKeyPressedColor {
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.keysPressedColor
+        } else if self.Keyboard.shiftKey.backgroundColor == self.Keyboard.keysPressedColor {
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+        }
+    }
+    */
     
     func pressedBackSpace(title: String){
         self.proxy.deleteBackward()
@@ -190,6 +280,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         self.Keyboard.rawTextLabel.text = self.lastTypedWord
         //self.rawTextLabel.text = self.lastTypedWord
+		
+		playSound()
     }
 	
 	func stopQuickPeriod() {
@@ -209,6 +301,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.proxy.insertText(". ")
             self.lastTypedWord = " "
 			allowQuickPeriod = false
+        } else if self.currentProfileName == "Clear" {
+            self.proxy.insertText(" ")
         } else {
             //Encryption test :)
             var encryptedString: String!
@@ -235,12 +329,14 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 			
 			quickPeriodTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("stopQuickPeriod"), userInfo: nil, repeats: false)
         }
+		
+		playSound()
     }
         
     func insertText(title: String){
         if self.upperCase || self.caseLock || self.firstLetter {
             self.setRawTextlabelText(title)
-            //self.proxy.insertText(title)
+            self.clearTextInsert(title)
             self.lastTypedWord += title
             if self.upperCase {
                 //Undo upercase so the next word wont be capitalized.
@@ -248,12 +344,22 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             } else if self.firstLetter {
                 //Uncheck first letter so the next one wont be capitalized.
                 self.firstLetter = !self.firstLetter
+            } else {
+                if self.currentProfileName == "Clear" {
+                    
+                }
             }
         } else {
             //Adding a letter to the input and saving each letter so we know what the user just typed in
             self.setRawTextlabelText(title.lowercaseString)
-            //self.proxy.insertText(title.lowercaseString)
+            self.clearTextInsert(title.lowercaseString)
             self.lastTypedWord += title.lowercaseString
+        }
+    }
+    
+    func clearTextInsert(char: String){
+        if self.currentProfileName == "Clear" {
+            self.proxy.insertText(char)
         }
     }
     
@@ -383,7 +489,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func createProfileTable() -> ProfileTableView? {
-        var profileTab = ProfileTableView()
+        var profileTab = ProfileTableView(fetchedResultsController: self.fetchedResultsController)
         //Create an action for the cells
         for cell in profileTab.profileTable.visibleCells() as [UITableViewCell] {
             let alphaSelector: Selector = "selectedProfile"
@@ -393,24 +499,63 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         
         profileTab.backButton?.addTarget(self, action: Selector("toggleProfileTable"), forControlEvents: UIControlEvents.TouchUpInside)
+        profileTab.clearText.addTarget(self, action: Selector("tableSelectedClearText"), forControlEvents: .TouchUpInside)
         return profileTab
     }
     
-    func selectedProfile(){
-        self.currentProfile = self.profileTable.selectedProfile
-        //getEncryptions isn't doing anything until the containing app saves the encryption keys with the profile
-        self.getEncryptions()
+    func tableSelectedClearText(){
+        self.selectedClearText()
+        self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+        if self.Keyboard.profilePages != nil {
+            var clearIndex = self.fetchedResultsController.fetchedObjects?.count
+            self.Keyboard.movePageView(clearIndex!)
+        }
         self.toggleProfileTable()
     }
     
+    func selectedClearText(){
+        //Selected Clear for encryption method
+        var encryptionDictionary = Dictionary<String,[AnyObject]>()
+        encryptionDictionary = ["Clear": ["0","0"]]
+        self.currentProfileName = "Clear"
+        self.currentEncryptionMethods = encryptionDictionary
+        self.currentObjectId = nil
+        self.currentProfile = nil
+    }
+    
+    func selectedProfile(notification: NSNotification){
+        var dict = notification.userInfo as Dictionary<String,AnyObject>
+        var indexPath: NSIndexPath = dict["Index"]! as NSIndexPath
+        var index: Int = indexPath.row
+        //self.currentProfile = self.profileTable.selectedProfile
+        self.initializedProfileIndex = index
+        var selectedProfile: NSManagedObject = dict["Profile"]! as NSManagedObject
+        self.currentProfile = selectedProfile
+        var trigger = self.currentProfile?.valueForKey("name") as String
+        self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+        //getEncryptions isn't doing anything until the containing app saves the encryption keys with the profile
+        self.getEncryptions(self.currentProfile!)
+        self.toggleProfileTable()
+        //Move pageView
+        if self.Keyboard.profilePages != nil {
+            self.Keyboard.movePageView(index)
+        }
+    }
+    
     //Saving the selected EncryptionMethod
-    func getEncryptions(){
+    func getEncryptions(currentProfile: NSManagedObject){
         //Set the Encryption/Decryption Methods that is being used
-        if let encryptions: NSSet = self.currentProfile?.mutableSetValueForKeyPath("encryption") {
+        self.currentProfileName = currentProfile.valueForKey("name") as String
+        //Just to make it optional so I would have to change the code. In other words I is lazy :)
+        var profile: NSManagedObject!
+        profile = currentProfile
+        if let encryptions: NSOrderedSet = profile?.mutableOrderedSetValueForKeyPath("encryption") {
             var newEncryptionMethods = Dictionary<String,[AnyObject]>()
-            //Could reinitilize this way if I wanted I guess
-            //self.currentEncryptionMethods = Dictionary<String,[AnyObject]>()
-            for (index, e) in enumerate(encryptions) {
+            
+            //NOTE: - NSOrderedSet conforms to sequence type as of Swift 1.2 (Xcode 6.3) but I have not updated yet and I didn't
+            //        know if the rest of my team had either so I didn't want to mess anyone up. Not to mention I don't think Xcode 6.3
+            //        is considered a stable build yet.
+            encryptions.enumerateObjectsUsingBlock { (e, index, stop) -> Void in
                 var encryptMethod = e.valueForKeyPath("encryptionType") as String!
                 var key1 = e.valueForKeyPath("key1") as String!
                 var key2 = "0"
@@ -423,6 +568,21 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 newEncryptionMethods = [encryptMethod: keys]
             }
             self.currentEncryptionMethods = newEncryptionMethods
+        }
+    }
+    
+    func swipedProfile(notification: NSNotification!){
+        var dict = notification.userInfo as Dictionary <String,AnyObject>
+        self.currentProfile = dict["Profile"] as? NSManagedObject
+        self.Keyboard.initilizedPageIndex = dict["Index"] as? Int
+        //println("Profile swipe selection: \(self.currentProfile)")
+        var trigger = self.currentProfile?.valueForKey("name") as String
+        if trigger == "Clear" {
+            self.selectedClearText()
+            self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+        } else {
+            self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
+            self.getEncryptions(self.currentProfile!)
         }
     }
 }

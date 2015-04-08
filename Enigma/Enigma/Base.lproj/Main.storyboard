@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14D127a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UMq-g1-Tal">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UMq-g1-Tal">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -237,7 +239,7 @@
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQd-5f-w9B" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQd-5f-w9B" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
                                     <rect key="frame" x="205" y="46" width="190" height="40"/>
                                     <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" title="Decrypt">
@@ -624,6 +626,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Settings" id="0zB-N8-MLw">
+                        <barButtonItem key="leftBarButtonItem" title="About" id="YCf-KF-lcJ">
+                            <connections>
+                                <segue destination="vsP-Rh-YCj" kind="show" id="IbC-8v-qXS"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Done" id="rYW-zx-MFt">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -635,6 +642,107 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dRU-fB-Rka" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2362" y="225"/>
+        </scene>
+        <!--About View Controller-->
+        <scene sceneID="YDe-Ik-r4e">
+            <objects>
+                <viewController id="vsP-Rh-YCj" customClass="AboutViewController" customModule="Enigma" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Dxy-db-jhs"/>
+                        <viewControllerLayoutGuide type="bottom" id="CBM-8L-tUr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="z53-I6-DsD">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enigma" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNo-n4-qUO">
+                                <rect key="frame" x="175" y="52" width="250" height="92"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="1J7-iO-EwH"/>
+                                    <constraint firstAttribute="height" constant="92" id="AXm-sx-ChJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="47"/>
+                                <color key="textColor" red="0.96862745098039216" green="0.015686274509803921" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Lca-Ve-vgr">
+                                <rect key="frame" x="180" y="219" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="Xrk-oP-qos"/>
+                                </constraints>
+                                <string key="text" base64-UTF8="YES">
+Q3JlYXRlZCBieToNQnJhZCBTbGF5dGVyEQ1EYW4gV2FrZWVtDUpha2UgU2luZ2VyA
+</string>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="27"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3e4-a5-W79" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="182" y="411" width="47" height="40"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <state key="normal" title="Brad">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="bradTapped:" destination="vsP-Rh-YCj" eventType="touchUpInside" id="DHE-xg-lAY"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7z-aH-c3a" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="281" y="409" width="39" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <state key="normal" title="Dan">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="danTapped:" destination="vsP-Rh-YCj" eventType="touchUpInside" id="pr2-QB-VF3"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Other Work" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ks-5j-lWe">
+                                <rect key="frame" x="257" y="382" width="87" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="uFY-Rw-syd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8j7-4W-DUQ" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="365" y="417" width="55" height="28"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="a93-a0-JTy"/>
+                                    <constraint firstAttribute="width" constant="55" id="yOk-Hn-8CM"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <state key="normal" title="Jake"/>
+                                <connections>
+                                    <action selector="jakeTapped:" destination="vsP-Rh-YCj" eventType="touchUpInside" id="fbh-mg-xGY"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="U7z-aH-c3a" firstAttribute="leading" secondItem="3e4-a5-W79" secondAttribute="trailing" constant="52" id="1MM-A1-MDF"/>
+                            <constraint firstItem="8j7-4W-DUQ" firstAttribute="baseline" secondItem="3e4-a5-W79" secondAttribute="firstBaseline" id="3tJ-4z-fbM"/>
+                            <constraint firstItem="3e4-a5-W79" firstAttribute="baseline" secondItem="8j7-4W-DUQ" secondAttribute="firstBaseline" id="83x-lx-eGH"/>
+                            <constraint firstItem="jNo-n4-qUO" firstAttribute="top" secondItem="Dxy-db-jhs" secondAttribute="bottom" constant="52" id="JIN-tv-Zc9"/>
+                            <constraint firstItem="8ks-5j-lWe" firstAttribute="centerX" secondItem="U7z-aH-c3a" secondAttribute="centerX" id="M7u-zQ-XsJ"/>
+                            <constraint firstItem="Lca-Ve-vgr" firstAttribute="centerX" secondItem="z53-I6-DsD" secondAttribute="centerX" id="MzN-m5-qz7"/>
+                            <constraint firstItem="3e4-a5-W79" firstAttribute="top" secondItem="Lca-Ve-vgr" secondAttribute="bottom" constant="64" id="VPE-mh-h8z"/>
+                            <constraint firstItem="jNo-n4-qUO" firstAttribute="centerX" secondItem="Lca-Ve-vgr" secondAttribute="centerX" id="Yzj-5v-sBP"/>
+                            <constraint firstItem="Lca-Ve-vgr" firstAttribute="centerX" secondItem="8ks-5j-lWe" secondAttribute="centerX" id="fMS-LB-foh"/>
+                            <constraint firstItem="U7z-aH-c3a" firstAttribute="top" secondItem="8ks-5j-lWe" secondAttribute="bottom" constant="6" id="ffp-PV-wN7"/>
+                            <constraint firstItem="U7z-aH-c3a" firstAttribute="bottom" secondItem="3e4-a5-W79" secondAttribute="bottom" id="gXs-4Q-OhI"/>
+                            <constraint firstItem="CBM-8L-tUr" firstAttribute="top" secondItem="3e4-a5-W79" secondAttribute="bottom" constant="85" id="gc6-7D-bZO"/>
+                            <constraint firstItem="8j7-4W-DUQ" firstAttribute="top" secondItem="Lca-Ve-vgr" secondAttribute="bottom" constant="70" id="h2B-Pv-Myp"/>
+                            <constraint firstItem="8j7-4W-DUQ" firstAttribute="leading" secondItem="U7z-aH-c3a" secondAttribute="trailing" constant="45" id="kBU-ec-J9y"/>
+                            <constraint firstItem="Lca-Ve-vgr" firstAttribute="top" secondItem="jNo-n4-qUO" secondAttribute="bottom" constant="75" id="mWC-yn-3gC"/>
+                            <constraint firstItem="8ks-5j-lWe" firstAttribute="top" secondItem="Lca-Ve-vgr" secondAttribute="bottom" constant="35" id="wpk-o0-X7j"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eUf-pE-qob" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2416" y="1055"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WsF-tq-VZm">

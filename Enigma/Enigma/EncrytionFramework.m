@@ -179,4 +179,27 @@
 	return asciiNSString;
 }
 
++(NSString *) stringFromProfile:(NSManagedObject *)profile {
+	NSMutableString *strProf = [NSMutableString string];
+	
+	[strProf appendString:[NSString stringWithFormat:@"%@,", [profile valueForKey:@"name"]]];
+	
+	NSOrderedSet *encryptions = [profile mutableOrderedSetValueForKey:@"encryption"];
+	[strProf appendString:[NSString stringWithFormat:@"%lu,", (unsigned long)encryptions.count]];
+	
+	for (NSManagedObject *e in encryptions) {
+		NSString *method = [e valueForKey:@"encryptionType"];
+		NSString *key1 = [e valueForKey:@"key1"];
+		NSString *key2 = [e valueForKey:@"key2"];
+						  
+		[strProf appendString:[NSString stringWithFormat:@"%@,%@", method, key1]];
+		if (key2 && ![key2 isEqualToString:@""])
+			[strProf appendString:[NSString stringWithFormat:@",%@", key2]];
+	}
+	
+	NSLog(@"Profile as string: %@", strProf);
+	
+	return strProf;
+}
+
 @end

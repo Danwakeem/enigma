@@ -7,6 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileTableView" customModule="EnigmaKeyboard" customModuleProvider="target">
             <connections>
                 <outlet property="backButton" destination="x35-jI-wEW" id="AQ0-43-spe"/>
+                <outlet property="clearText" destination="hXg-n0-sTo" id="bOS-Xr-f2I"/>
                 <outlet property="profileTable" destination="PIq-gg-rs6" id="N0K-Be-X3D"/>
             </connections>
         </placeholder>
@@ -19,7 +20,7 @@
                     <rect key="frame" x="0.0" y="1" width="679" height="391"/>
                     <subviews>
                         <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PIq-gg-rs6">
-                            <rect key="frame" x="0.0" y="0.0" width="679" height="390.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="679" height="350.5"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="umr-1B-IrQ"/>
@@ -30,8 +31,8 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="PIq-gg-rs6" firstAttribute="top" secondItem="Ibn-Pg-NVs" secondAttribute="top" id="5T4-Et-0qD"/>
-                        <constraint firstAttribute="bottom" secondItem="PIq-gg-rs6" secondAttribute="bottom" id="EIH-QE-G7s"/>
                         <constraint firstAttribute="trailing" secondItem="PIq-gg-rs6" secondAttribute="trailing" id="JoT-Qt-6kS"/>
+                        <constraint firstAttribute="bottom" secondItem="PIq-gg-rs6" secondAttribute="bottom" constant="40.5" id="WEq-Ix-MaI"/>
                         <constraint firstItem="PIq-gg-rs6" firstAttribute="leading" secondItem="Ibn-Pg-NVs" secondAttribute="leading" id="ol6-uh-Kgp"/>
                     </constraints>
                 </view>
@@ -61,6 +62,12 @@
                                     <constraint firstAttribute="height" constant="1" id="8r2-39-dpi"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hXg-n0-sTo">
+                                <rect key="frame" x="602" y="5" width="69" height="30"/>
+                                <state key="normal" title="Clear Text">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="centerY" secondItem="x35-jI-wEW" secondAttribute="centerY" id="CWy-gZ-H4o"/>
@@ -68,8 +75,10 @@
                             <constraint firstItem="x35-jI-wEW" firstAttribute="leading" secondItem="EjZ-Jw-9eM" secondAttribute="leading" id="JnW-Dq-l8s"/>
                             <constraint firstAttribute="centerX" secondItem="YuR-yT-g8t" secondAttribute="centerX" id="LCD-5y-VTJ"/>
                             <constraint firstItem="ooR-t1-RO3" firstAttribute="leading" secondItem="EjZ-Jw-9eM" secondAttribute="leading" id="O6G-ec-UA4"/>
+                            <constraint firstAttribute="trailing" secondItem="hXg-n0-sTo" secondAttribute="trailing" constant="8" id="PxH-TD-kyc"/>
                             <constraint firstAttribute="centerY" secondItem="YuR-yT-g8t" secondAttribute="centerY" id="UL6-HN-Y6O"/>
                             <constraint firstItem="ooR-t1-RO3" firstAttribute="top" secondItem="EjZ-Jw-9eM" secondAttribute="top" id="twN-4I-7ty"/>
+                            <constraint firstAttribute="centerY" secondItem="hXg-n0-sTo" secondAttribute="centerY" id="zRk-a8-zfX"/>
                         </constraints>
                     </view>
                     <constraints>
