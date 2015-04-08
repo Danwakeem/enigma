@@ -43,31 +43,7 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 		//case "showSettings":
 		case "addProfile":
 			let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
-			
-			let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-			let managedContext = appDelegate.managedObjectContext!
-			
-			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
-			let profile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-			let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
-			let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
-			
-			profile.setValue("", forKey: "name")
-			profile.setValue(NSDate(), forKey: "timestamp")
-			
-			encryption.setValue("Caesar", forKey: "encryptionType")
-			encryption.setValue("13", forKey: "key1")
-			encryption.setValue("", forKey: "key2")
-			encryption.setValue(profile, forKey: "profiles")
-			
-			var error: NSError?
-			if !managedContext.save(&error) {
-				println("Could not save \(error), \(error?.userInfo)")
-			}
-			
-			profiles.append(profile)
-			controller.profile = profile
-			
+			controller.profile = nil
 			controller.setEditing(true, animated: false)
 		default:
 			println("Default segue")

@@ -15,7 +15,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	
 	// TODO: Impliment an edit buffer so that multiple encryptions can be handled
 	var name: String = ""
-	var cypher: String = ""
+	var cypher: String = "Cypher"
 	var key1: String = ""
 	
 	@IBAction func toggleEdit(sender: AnyObject) {
@@ -64,7 +64,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		cell.layer.borderColor = UIColor(white: 204.0/255.0, alpha: 1.0).CGColor
 		cell.layer.borderWidth = 0.5
 		
-		var encryption = encryptions[indexPath.row]
+		//var encryption = encryptions[indexPath.row]
 		
 		cell.delegate = self
 		cell.cypherButton.setTitle(cypher, forState: .Normal)
@@ -93,18 +93,35 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-		return encryptions.count
+		return max(1, encryptions.count)
 	}
 	
 	func saveProfile() {
 		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
-		profile?.setValue(name, forKey: "name")
-		
-		for encryption in encryptions {
+		if let existingProfile = profile {
+			existingProfile.setValue(name, forKey: "name")
+			
+			for encryption in encryptions {
+				encryption.setValue(cypher, forKey: "encryptionType")
+				encryption.setValue(key1, forKey: "key1")
+			}
+		} else {
+			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
+			let newProfile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+			let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
+			let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
+			
+			newProfile.setValue("", forKey: "name")
+			newProfile.setValue(NSDate(), forKey: "timestamp")
+			
 			encryption.setValue(cypher, forKey: "encryptionType")
 			encryption.setValue(key1, forKey: "key1")
+			encryption.setValue("", forKey: "key2")
+			encryption.setValue(newProfile, forKey: "profiles")
+			
+			profile = newProfile
 		}
 		
 		var error: NSError?

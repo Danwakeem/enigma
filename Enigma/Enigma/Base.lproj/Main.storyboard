@@ -251,6 +251,9 @@
                                     <state key="normal" title="Share">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
+                                    <connections>
+                                        <segue destination="HhY-PJ-YGn" kind="show" id="rUb-hz-6bv"/>
+                                    </connections>
                                 </button>
                                 <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ptS-ln-gIn" userLabel="Hairline">
                                     <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -305,6 +308,64 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mdy-6e-Bup" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="948" y="934"/>
+        </scene>
+        <!--Scan-->
+        <scene sceneID="clt-no-GNl">
+            <objects>
+                <viewController title="Scan" id="ahh-yq-G5z" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ZZ0-ae-ryn"/>
+                        <viewControllerLayoutGuide type="bottom" id="SIF-fu-MZq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UXq-Yr-YEi">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Scan" id="Hsk-FB-xcu"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dS8-6E-h3B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2362" y="1653"/>
+        </scene>
+        <!--Share-->
+        <scene sceneID="ywR-Pp-W5t">
+            <objects>
+                <viewController title="Share" id="Up7-P2-mvw" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="G0v-vb-Zm1"/>
+                        <viewControllerLayoutGuide type="bottom" id="6sE-Pw-Ync"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tPD-xO-Kyf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Share" id="UGY-sQ-M7N"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z8y-Ml-5w4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2362" y="934"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="8go-E1-GE8">
+            <objects>
+                <tabBarController id="HhY-PJ-YGn" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="o6h-qn-ONI"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="0tf-xI-lLe">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="Up7-P2-mvw" kind="relationship" relationship="viewControllers" id="WB0-gC-a93"/>
+                        <segue destination="ahh-yq-G5z" kind="relationship" relationship="viewControllers" id="yRV-8H-bPT"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="i5O-vB-z7x" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1658" y="934"/>
         </scene>
         <!--Profile Table View Controller-->
         <scene sceneID="ogc-Xq-uh9">
@@ -573,7 +634,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dRU-fB-Rka" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2416" y="225"/>
+            <point key="canvasLocation" x="2362" y="225"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WsF-tq-VZm">
@@ -600,6 +661,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="hjc-4W-bYD"/>
+        <segue reference="Aew-a5-O4E"/>
     </inferredMetricsTieBreakers>
 </document>
