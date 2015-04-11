@@ -177,4 +177,16 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			println("Could not fetch \(error), \(error!.userInfo)")
 		}
 	}
+	
+	// MARK: - Segues
+	
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		switch segue.identifier! {
+		case "showShare":
+			var shareViewController = segue.destinationViewController as ShareViewController
+			shareViewController.profile = profile
+		default:
+			println("Default segue")
+		}
+	}
 }
