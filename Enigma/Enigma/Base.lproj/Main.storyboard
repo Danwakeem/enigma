@@ -89,7 +89,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e54-1S-90n" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="261" y="355" width="80" height="40"/>
+                                <rect key="frame" x="261" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="Z7e-kI-aus"/>
@@ -232,7 +232,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="600" height="95"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8gH-fY-Pju" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8gH-fY-Pju" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
                                     <rect key="frame" x="8" y="46" width="189" height="40"/>
                                     <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" title="Encrypt">
@@ -240,7 +240,7 @@
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQd-5f-w9B" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQd-5f-w9B" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
                                     <rect key="frame" x="205" y="46" width="190" height="40"/>
                                     <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" title="Decrypt">
@@ -248,7 +248,7 @@
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="auC-Ei-AQq" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="auC-Ei-AQq" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
                                     <rect key="frame" x="403" y="47" width="189" height="40"/>
                                     <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" title="Share">
@@ -324,37 +324,69 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aGY-ZL-A4f">
+                                <rect key="frame" x="0.0" y="545" width="600" height="55"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFZ-wt-TRt" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                        <rect key="frame" x="514" y="8" width="78" height="40"/>
+                                        <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Done">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="done:" destination="Up7-P2-mvw" eventType="touchUpInside" id="0xa-Tq-Mmo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="b2r-KK-aAf"/>
+                                    <constraint firstAttribute="centerY" secondItem="yFZ-wt-TRt" secondAttribute="centerY" constant="-0.5" id="x97-t9-MbA"/>
+                                    <constraint firstItem="yFZ-wt-TRt" firstAttribute="trailing" secondItem="aGY-ZL-A4f" secondAttribute="trailingMargin" id="zxv-3H-VbQ"/>
+                                </constraints>
+                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="t1z-5P-uZ6">
                                 <rect key="frame" x="75" y="75" width="450" height="450"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="t1z-5P-uZ6" secondAttribute="height" multiplier="1:1" id="ehG-xV-1AR"/>
                                 </constraints>
-                                <variation key="heightClass=compact" ambiguous="YES">
-                                    <rect key="frame" x="150" y="50" width="300" height="300"/>
-                                </variation>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFZ-wt-TRt" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="506" y="540" width="78" height="40"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Done">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="done:" destination="Up7-P2-mvw" eventType="touchUpInside" id="0xa-Tq-Mmo"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="6sE-Pw-Ync" firstAttribute="top" relation="greaterThanOrEqual" secondItem="t1z-5P-uZ6" secondAttribute="bottom" constant="50" id="1c7-c8-AQh">
+                                <variation key="heightClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="aGY-ZL-A4f" firstAttribute="top" relation="greaterThanOrEqual" secondItem="t1z-5P-uZ6" secondAttribute="bottom" constant="25" id="Bqt-Bo-gsm">
+                                <variation key="heightClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="6sE-Pw-Ync" firstAttribute="top" secondItem="aGY-ZL-A4f" secondAttribute="bottom" id="CUL-08-wFR"/>
+                            <constraint firstAttribute="centerY" secondItem="t1z-5P-uZ6" secondAttribute="centerY" priority="750" id="H1h-ma-MPT"/>
+                            <constraint firstAttribute="trailing" secondItem="aGY-ZL-A4f" secondAttribute="trailing" id="PAR-Am-qS7"/>
                             <constraint firstAttribute="centerX" secondItem="t1z-5P-uZ6" secondAttribute="centerX" id="YJo-ZP-hxm"/>
                             <constraint firstItem="t1z-5P-uZ6" firstAttribute="width" secondItem="tPD-xO-Kyf" secondAttribute="width" multiplier="0.75" priority="750" id="bsz-Kz-RyC"/>
-                            <constraint firstAttribute="centerY" secondItem="t1z-5P-uZ6" secondAttribute="centerY" id="kty-Mf-Mfe"/>
-                            <constraint firstItem="6sE-Pw-Ync" firstAttribute="top" secondItem="yFZ-wt-TRt" secondAttribute="bottom" constant="20" id="mar-U8-m8c"/>
-                            <constraint firstItem="yFZ-wt-TRt" firstAttribute="trailing" secondItem="tPD-xO-Kyf" secondAttribute="trailingMargin" id="xrK-tf-44j"/>
+                            <constraint firstItem="aGY-ZL-A4f" firstAttribute="leading" secondItem="tPD-xO-Kyf" secondAttribute="leading" id="eRQ-kZ-uts"/>
+                            <constraint firstItem="t1z-5P-uZ6" firstAttribute="top" relation="greaterThanOrEqual" secondItem="G0v-vb-Zm1" secondAttribute="bottom" constant="30" id="vZ5-5a-cMe">
+                                <variation key="heightClass=compact" constant="20"/>
+                            </constraint>
                             <constraint firstItem="t1z-5P-uZ6" firstAttribute="height" relation="lessThanOrEqual" secondItem="tPD-xO-Kyf" secondAttribute="height" multiplier="0.75" priority="750" id="zGK-eX-CBa"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="vZ5-5a-cMe"/>
+                                <exclude reference="Bqt-Bo-gsm"/>
+                                <exclude reference="1c7-c8-AQh"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact">
+                            <mask key="constraints">
+                                <include reference="vZ5-5a-cMe"/>
+                                <include reference="Bqt-Bo-gsm"/>
+                                <exclude reference="1c7-c8-AQh"/>
+                            </mask>
+                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Share" id="UGY-sQ-M7N"/>
                     <connections>
@@ -477,7 +509,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tga-Df-6HX" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="304" y="355" width="80" height="40"/>
+                                <rect key="frame" x="304" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Enable">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -488,7 +520,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="31B-to-dQe" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="216" y="355" width="80" height="40"/>
+                                <rect key="frame" x="216" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Not now">
                                     <color key="titleColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -535,7 +567,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKl-3p-OkM" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="304" y="355" width="80" height="40"/>
+                                <rect key="frame" x="304" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Done">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -546,7 +578,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qvq-HR-5RV" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="216" y="355" width="80" height="40"/>
+                                <rect key="frame" x="216" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Back">
                                     <color key="titleColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -673,7 +705,7 @@ Q3JlYXRlZCBieToNQnJhZCBTbGF5dGVyEQ1EYW4gV2FrZWVtDUpha2UgU2luZ2VyA
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="27"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3e4-a5-W79" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3e4-a5-W79" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
                                 <rect key="frame" x="182" y="411" width="47" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Brad">
@@ -683,7 +715,7 @@ Q3JlYXRlZCBieToNQnJhZCBTbGF5dGVyEQ1EYW4gV2FrZWVtDUpha2UgU2luZ2VyA
                                     <action selector="bradTapped:" destination="vsP-Rh-YCj" eventType="touchUpInside" id="DHE-xg-lAY"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7z-aH-c3a" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7z-aH-c3a" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
                                 <rect key="frame" x="281" y="409" width="39" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Dan">
@@ -702,7 +734,7 @@ Q3JlYXRlZCBieToNQnJhZCBTbGF5dGVyEQ1EYW4gV2FrZWVtDUpha2UgU2luZ2VyA
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8j7-4W-DUQ" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8j7-4W-DUQ" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
                                 <rect key="frame" x="365" y="417" width="55" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="a93-a0-JTy"/>
