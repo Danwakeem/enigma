@@ -19,7 +19,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     var proxy: UITextDocumentProxy!
     var managedObjectContext = CoreDataStack().managedObjectContext
     //EncryptionType to String
-    var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere]
+    var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere, "Cypher": Clear]
     let notificationKey = "com.SlayterDev.selectedProfile"
     
     var currentProfile: NSManagedObject?
@@ -552,10 +552,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         if let encryptions: NSOrderedSet = profile?.mutableOrderedSetValueForKeyPath("encryption") {
             var newEncryptionMethods = Dictionary<String,[AnyObject]>()
             
-            //NOTE: - NSOrderedSet conforms to sequence type as of Swift 1.2 (Xcode 6.3) but I have not updated yet and I didn't
-            //        know if the rest of my team had either so I didn't want to mess anyone up. Not to mention I don't think Xcode 6.3
-            //        is considered a stable build yet.
-            encryptions.enumerateObjectsUsingBlock { (e, index, stop) -> Void in
+            //NOTE 2.0 - Hey since we are using swift 1.2 we can now use NSOrderedSet as a sequence type now we don't have to use the dumb
+            //           completion handler thing. NICE!
+            for e in encryptions {
                 var encryptMethod = e.valueForKeyPath("encryptionType") as! String!
                 var key1 = e.valueForKeyPath("key1") as! String!
                 var key2 = "0"
@@ -568,6 +567,22 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 newEncryptionMethods = [encryptMethod: keys]
             }
             self.currentEncryptionMethods = newEncryptionMethods
+            
+            /*
+            //NOTE - This was how NSOrderedSets were handled before swift 1.2 was released. Going to keep this here for refference just in case.
+            encryptions.enumerateObjectsUsingBlock { (e, index, stop) -> Void in
+                var encryptMethod = e.valueForKeyPath("encryptionType") as! String!
+                var key1 = e.valueForKeyPath("key1") as! String!
+                var key2 = "0"
+                if let k2: String = e.valueForKeyPath("key2") as? String {
+                    if k2 != "" {
+                        key2 = k2
+                    }
+                }
+                var keys = [key1,key2]
+                newEncryptionMethods = [encryptMethod: keys]
+            }
+            */
         }
     }
     
