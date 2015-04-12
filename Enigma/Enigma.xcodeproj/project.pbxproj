@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0208AF7E1AD6FF0D00A977FD /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
+		0208AF7F1AD6FF0D00A977FD /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DB91AA7A4B5002DB3C6 /* Clear.c */; };
+		0208AF801AD6FF0D00A977FD /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
+		0208AF811AD6FF0D00A977FD /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
+		0208AF821AD6FF0D00A977FD /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
+		0208AF831AD6FF0D00A977FD /* Vigenere.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */; };
 		021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
 		021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
 		021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
@@ -496,6 +502,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0208AF7E1AD6FF0D00A977FD /* EncrytionFramework.m in Sources */,
+				0208AF7F1AD6FF0D00A977FD /* Clear.c in Sources */,
+				0208AF801AD6FF0D00A977FD /* Ceasar.c in Sources */,
+				0208AF811AD6FF0D00A977FD /* Affine.c in Sources */,
+				0208AF821AD6FF0D00A977FD /* SimpleSub.c in Sources */,
+				0208AF831AD6FF0D00A977FD /* Vigenere.c in Sources */,
 				029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
