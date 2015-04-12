@@ -58,7 +58,7 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+		let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
 		
 		switch indexPath.row {
 		case 0:
@@ -134,7 +134,7 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 	}
 	
 	func switchTapped(sender: AnyObject) {
-		let selectedSwitch = sender as UISwitch
+		let selectedSwitch = sender as! UISwitch
 		let defaults = NSUserDefaults(suiteName: "group.com.enigma")
 		
 		switch selectedSwitch.tag {

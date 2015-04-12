@@ -36,13 +36,13 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 		case "showDetail":
 			if let indexPath = self.tableView.indexPathForSelectedRow() {
 				let profile = profiles[indexPath.row]
-				let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
+				let controller = (segue.destinationViewController as! UINavigationController).topViewController as! ProfileDetailViewController
 				
 				controller.profile = profile
 			}
 		//case "showSettings":
 		case "addProfile":
-			let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
+			let controller = (segue.destinationViewController as! UINavigationController).topViewController as! ProfileDetailViewController
 			controller.profile = nil
 			controller.setEditing(true, animated: false)
 		default:
@@ -57,10 +57,10 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+		let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
 		
 		let profile = profiles[indexPath.row]
-		cell.textLabel?.text = profile.valueForKey("name") as String?
+		cell.textLabel?.text = profile.valueForKey("name") as! String?
 		
 		return cell
 	}
@@ -73,7 +73,7 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	
 	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 		if(editingStyle == .Delete ) {
-			let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+			let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 			let managedContext = appDelegate.managedObjectContext!
 			let profileToDelete = profiles[indexPath.row]
 			
@@ -96,7 +96,7 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	}
 	
 	func fetchProfiles() {
-		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
 		let fetchRequest = NSFetchRequest(entityName: "Profiles")
@@ -104,7 +104,7 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 		fetchRequest.sortDescriptors = [sortDescriptor]
 		
 		var error: NSError?
-		let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as [NSManagedObject]?
+		let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as! [NSManagedObject]?
 		if let results = fetchedResults {
 			profiles = results
 		} else {

@@ -89,7 +89,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     //MARK: - initialization
     
-    required override init(){
+    required init(){
         super.init(frame: CGRectMake(0, 0, 320, 275))
         self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
     }
@@ -198,7 +198,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     //MARK: - Delegate methods
     
     func removeGestures(){
-        for gesture in self.gestureRecognizers as [UIGestureRecognizer] {
+        for gesture in self.gestureRecognizers as! [UIGestureRecognizer] {
             self.removeGestureRecognizer(gesture)
         }
     }
@@ -221,13 +221,13 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
 	
 	func backSpaceTapped(sender: AnyObject) {
-		var button = sender as UIButton
+		var button = sender as! UIButton
         button.backgroundColor = self.specialKeysButtonColor
         self.delegate?.backSpaceTapped(sender)
 	}
 	
 	func backSpaceReleased(sender: AnyObject) {
-        var button = sender as UIButton
+        var button = sender as! UIButton
         button.backgroundColor = self.specialKeysButtonColor
         self.delegate?.backSpaceReleased(sender)
 	}
@@ -237,7 +237,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func lockCase(sender: AnyObject){
-        var button = sender as UIButton
+        var button = sender as! UIButton
         self.delegate?.lockCase(sender)
         button.backgroundColor = self.specialKeysButtonColor
     }
@@ -249,12 +249,12 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func buttonPressed(sender: AnyObject) {
-        var button = sender as UIButton
+        var button = sender as! UIButton
         button.backgroundColor = self.keysPressedColor
     }
     
     func toggleColor(sender: AnyObject){
-        let button = sender as UIButton
+        let button = sender as! UIButton
         var title: String = button.titleForState(.Normal)!
         switch (title) {
         case "123":
@@ -274,7 +274,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     func pageViewController(pageViewController: UIPageViewController, spineLocationForInterfaceOrientation orientation: UIInterfaceOrientation) -> UIPageViewControllerSpineLocation {
         // Set the spine position to "min" and the page view controller's view controllers array to contain just one view controller. Setting the spine position to 'UIPageViewControllerSpineLocationMid' in landscape orientation sets the doubleSided property to true, so set it to false here.
-        let currentViewController = self.profilePages!.viewControllers[0] as UIViewController
+        let currentViewController = self.profilePages!.viewControllers[0] as! UIViewController
         let viewControllers = [currentViewController]
         self.profilePages!.setViewControllers(viewControllers, direction: .Forward, animated: true, completion: {done in })
         
@@ -339,10 +339,10 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         self.encryptionRow.backgroundColor = self.encryptionRowColor
         self.profileSwipeRow.backgroundColor = UIColor.clearColor()
         
-        self.row1 = rowOfButtons(buttonTitles[0] as [String])
-        self.row2 = rowOfButtons(buttonTitles[1] as [String])
-        self.row3 = rowOfButtons(buttonTitles[2] as [String])
-        self.row4 = rowOfButtons(buttonTitles[3] as [String])
+        self.row1 = rowOfButtons(buttonTitles[0] as! [String])
+        self.row2 = rowOfButtons(buttonTitles[1] as! [String])
+        self.row3 = rowOfButtons(buttonTitles[2] as! [String])
+        self.row4 = rowOfButtons(buttonTitles[3] as! [String])
         
         self.createEncryptDecryptToggleButton()
         
@@ -519,7 +519,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         var keyboardRowView = UIView(frame: CGRectMake(0, 0, 320, 50))
         //Create each button in the row
         for buttonTitle in buttonTitles{
-            let button = createButtonWithTitle(buttonTitle)
+            var button = createButtonWithTitle(buttonTitle as String)
             buttons.append(button)
             keyboardRowView.addSubview(button)
         }
@@ -535,7 +535,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     //Creating a button with the title from the button* arrays
     func createButtonWithTitle(title: String) -> UIButton {
-        let button = UIButton.buttonWithType(.Custom) as UIButton
+        let button = UIButton.buttonWithType(.Custom) as! UIButton
         button.frame = CGRectMake(0, 0, 20, 20)
         button.clipsToBounds = true
         button.setTitle(title, forState: .Normal)

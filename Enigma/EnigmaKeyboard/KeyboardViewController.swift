@@ -57,7 +57,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.proxy = textDocumentProxy as UITextDocumentProxy
+        self.proxy = textDocumentProxy as! UITextDocumentProxy
         
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
@@ -215,7 +215,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 	}
 	
     func buttonTapped(sender: AnyObject) {
-        let button = sender as UIButton
+        let button = sender as! UIButton
         
         if let title = button.titleForState(.Normal) {
             switch title {
@@ -309,9 +309,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             
             for (key,value) in self.currentEncryptionMethods {
                 var eType: EncryptionType = self.encryptionTypes[key]!
-                var key1: String = value[0] as String
+                var key1: String = value[0] as! String
                 var key2: Int32!
-                var key2String: String = value[1] as String
+                var key2String: String = value[1] as! String
                 if let k2 = key2String.toInt() {
                     key2 = Int32(k2)
                 }
@@ -383,9 +383,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         var returnString: String = text
         for (key,value) in self.currentEncryptionMethods {
             var eType: EncryptionType = self.encryptionTypes[key]!
-            var key1: String = value[0] as String
+            var key1: String = value[0] as! String
             var key2: Int32!
-            var key2String: String = value[1] as String
+            var key2String: String = value[1] as! String
             if let k2 = key2String.toInt() {
                 key2 = Int32(k2)
             }
@@ -450,7 +450,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         // The app has just changed the document's contents, the document context has been updated.
         
         var textColor: UIColor
-        var proxy = self.textDocumentProxy as UITextDocumentProxy
+        var proxy = self.textDocumentProxy as! UITextDocumentProxy
         if proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
             textColor = UIColor.whiteColor()
         } else {
@@ -491,7 +491,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func createProfileTable() -> ProfileTableView? {
         var profileTab = ProfileTableView(fetchedResultsController: self.fetchedResultsController)
         //Create an action for the cells
-        for cell in profileTab.profileTable.visibleCells() as [UITableViewCell] {
+        for cell in profileTab.profileTable.visibleCells() as! [UITableViewCell] {
             let alphaSelector: Selector = "selectedProfile"
             let singleTap = UITapGestureRecognizer(target: self, action: alphaSelector)
             singleTap.numberOfTapsRequired = 1
@@ -524,14 +524,14 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func selectedProfile(notification: NSNotification){
-        var dict = notification.userInfo as Dictionary<String,AnyObject>
-        var indexPath: NSIndexPath = dict["Index"]! as NSIndexPath
+        var dict = notification.userInfo as! Dictionary<String,AnyObject>
+        var indexPath: NSIndexPath = dict["Index"]! as! NSIndexPath
         var index: Int = indexPath.row
         //self.currentProfile = self.profileTable.selectedProfile
         self.initializedProfileIndex = index
-        var selectedProfile: NSManagedObject = dict["Profile"]! as NSManagedObject
+        var selectedProfile: NSManagedObject = dict["Profile"]! as! NSManagedObject
         self.currentProfile = selectedProfile
-        var trigger = self.currentProfile?.valueForKey("name") as String
+        var trigger = self.currentProfile?.valueForKey("name") as! String
         self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()
         //getEncryptions isn't doing anything until the containing app saves the encryption keys with the profile
         self.getEncryptions(self.currentProfile!)
@@ -545,7 +545,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     //Saving the selected EncryptionMethod
     func getEncryptions(currentProfile: NSManagedObject){
         //Set the Encryption/Decryption Methods that is being used
-        self.currentProfileName = currentProfile.valueForKey("name") as String
+        self.currentProfileName = currentProfile.valueForKey("name") as! String
         //Just to make it optional so I would have to change the code. In other words I is lazy :)
         var profile: NSManagedObject!
         profile = currentProfile
@@ -556,8 +556,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             //        know if the rest of my team had either so I didn't want to mess anyone up. Not to mention I don't think Xcode 6.3
             //        is considered a stable build yet.
             encryptions.enumerateObjectsUsingBlock { (e, index, stop) -> Void in
-                var encryptMethod = e.valueForKeyPath("encryptionType") as String!
-                var key1 = e.valueForKeyPath("key1") as String!
+                var encryptMethod = e.valueForKeyPath("encryptionType") as! String!
+                var key1 = e.valueForKeyPath("key1") as! String!
                 var key2 = "0"
                 if let k2: String = e.valueForKeyPath("key2") as? String {
                     if k2 != "" {
@@ -572,11 +572,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func swipedProfile(notification: NSNotification!){
-        var dict = notification.userInfo as Dictionary <String,AnyObject>
+        var dict = notification.userInfo as! Dictionary <String,AnyObject>
         self.currentProfile = dict["Profile"] as? NSManagedObject
         self.Keyboard.initilizedPageIndex = dict["Index"] as? Int
         //println("Profile swipe selection: \(self.currentProfile)")
-        var trigger = self.currentProfile?.valueForKey("name") as String
+        var trigger = self.currentProfile?.valueForKey("name") as! String
         if trigger == "Clear" {
             self.selectedClearText()
             self.currentObjectId = self.currentProfile?.objectID.URIRepresentation()

@@ -19,10 +19,10 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
     override init() {
         super.init()
         // Create the data model.
-        var data = fetchedResultsController.fetchedObjects as [NSManagedObject]
+        var data = fetchedResultsController.fetchedObjects as! [NSManagedObject]
 
         //Adding clearText to the list of encryption types
-        var clearText: NSManagedObject = NSEntityDescription.insertNewObjectForEntityForName("Profiles", inManagedObjectContext: CoreDataStack().managedObjectContext!) as NSManagedObject
+        var clearText: NSManagedObject = NSEntityDescription.insertNewObjectForEntityForName("Profiles", inManagedObjectContext: CoreDataStack().managedObjectContext!)as! NSManagedObject
         clearText.setValue("Clear", forKey: "name")
         data.append(clearText)
 
@@ -36,7 +36,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
             return nil
         }
         
-        var profile: NSManagedObject = profileData[index] as NSManagedObject
+        var profile: NSManagedObject = profileData[index] as! NSManagedObject
         self.currentData = profile
         var name = profile.valueForKey("name")?.description
         
@@ -58,7 +58,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
     // MARK: - Page View Controller Data Source
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-        var index = self.indexOfViewController(viewController as ProfileSwipeViewController)
+        var index = self.indexOfViewController(viewController as! ProfileSwipeViewController)
         if (index == 0) || (index == NSNotFound) {
             return nil
         }
@@ -68,7 +68,7 @@ class ProfileSwipeModelController: NSObject, UIPageViewControllerDataSource {
     }
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-        var index = self.indexOfViewController(viewController as ProfileSwipeViewController)
+        var index = self.indexOfViewController(viewController as! ProfileSwipeViewController)
         if index == NSNotFound {
             return nil
         }
