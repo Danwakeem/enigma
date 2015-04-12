@@ -17,6 +17,10 @@ class ProfileDetailHeaderView: UICollectionReusableView, UITextFieldDelegate {
 	
 	var delegate: ProfileDetailHeaderViewDelegate! = nil
 	
+	required init(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+	}
+	
 	func textFieldDidEndEditing(textField: UITextField) {
 		delegate.profileNameChanged(textField.text)
 	}
