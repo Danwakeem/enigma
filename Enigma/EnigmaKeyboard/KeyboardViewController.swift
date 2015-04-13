@@ -110,7 +110,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             }
         }
         self.Keyboard.hidden = false
-        if UIInterfaceOrientationIsLandscape(self.interfaceOrientation) as Bool == true {
+        
+        //NOTE - Old method of detecting screen orientation was depricated so I came up with this solution.
+        if UIScreen.mainScreen().bounds.size.width > UIScreen.mainScreen().bounds.size.height {
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
