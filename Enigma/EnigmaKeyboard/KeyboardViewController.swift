@@ -95,18 +95,24 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         if self.proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
             self.Keyboard = KeyboardView(index: index, color: "Black")
         } else {
-            self.Keyboard = KeyboardView(index: index, color: self.keyboardColor)
+            if self.keyboardColor != nil {
+                self.Keyboard = KeyboardView(index: index, color: self.keyboardColor)
+            } else {
+                self.Keyboard = KeyboardView(index: index, color: "White")
+            }
         }
     }
     
     //MARK: - Set height
     
     override func viewDidAppear(animated: Bool) {
-        if self.keyboardColor == "Default" {
-            if self.proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
-                self.Keyboard.removeViews()
-                self.Keyboard.loadAsDarkKeyboard()
-                self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
+        if self.keyboardColor != nil {
+            if self.keyboardColor == "Default" {
+                if self.proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
+                    self.Keyboard.removeViews()
+                    self.Keyboard.loadAsDarkKeyboard()
+                    self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
+                }
             }
         }
         self.Keyboard.hidden = false
