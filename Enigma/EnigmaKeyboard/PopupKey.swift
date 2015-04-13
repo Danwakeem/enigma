@@ -11,6 +11,8 @@ import UIKit
 class PopupKey: UIView {
     
     var title = UIButton()
+    var buttonBackgroundColor: UIColor!
+    var textColor: UIColor!
     
     init(title: String){
         super.init(frame: CGRectZero)
@@ -19,13 +21,22 @@ class PopupKey: UIView {
         self.setUpTitleButton()
     }
 
+    init(backgroundColor: UIColor, textColor: UIColor){
+        super.init(frame: CGRectZero)
+        self.backgroundColor = UIColor.clearColor()
+        self.buttonBackgroundColor = backgroundColor
+        self.textColor = textColor
+        self.title.setTitle("H", forState: .Normal)
+        self.setUpTitleButton()
+    }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func setUpTitleButton() {
-        self.title.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
-        self.title.backgroundColor = UIColor.whiteColor()
+        self.title.setTitleColor(self.textColor, forState: .Normal)
+        self.title.backgroundColor = self.buttonBackgroundColor
         self.title.titleLabel?.font = UIFont.systemFontOfSize(40)
         self.title.enabled = false
         self.title.layer.cornerRadius = 5

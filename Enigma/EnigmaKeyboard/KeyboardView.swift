@@ -86,7 +86,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     var keysPressedColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1.0)
     var shiftKeyPressedColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1.0)
     
-    var popupKey = PopupKey(title: "H")
+    var popupKey: PopupKey!
     
     
     //MARK: - initialization
@@ -100,6 +100,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         super.init(frame: CGRectZero)
         self.initilizedPageIndex = index
         if color == "Default" {
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         } else {
             self.changeColorsToSettings(color)
@@ -115,6 +116,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     func changeColorsToSettings(color: String) {
         switch color {
         case "White":
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Black":
             self.backgroundColor = UIColor(red: 0.22, green: 0.22, blue: 0.22, alpha: 1.0)
@@ -130,6 +132,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
             self.shiftKeyPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Blue":
             self.backgroundColor = UIColor(red: 0.161, green: 0.62, blue: 0.91, alpha: 1.0)
@@ -145,6 +148,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.075, green: 0.325, blue: 0.628, alpha: 1.0)
             self.shiftKeyPressedColor = UIColor(red: 0.075, green: 0.325, blue: 0.628, alpha: 1.0)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Pink":
             self.backgroundColor = UIColor(red: 0.953, green: 0.604, blue: 0.792, alpha: 1.0)
@@ -160,6 +164,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.827, green: 0.318, blue: 0.592, alpha: 1.0)
             self.shiftKeyPressedColor = UIColor(red: 0.827, green: 0.318, blue: 0.592, alpha: 1.0)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Green":
             self.backgroundColor = UIColor(red: 0.016, green: 0.792, blue: 0.353, alpha: 1.0)
@@ -175,8 +180,10 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.047, green: 0.482, blue: 0.235, alpha: 1.0)
             self.shiftKeyPressedColor = UIColor(red: 0.047, green: 0.482, blue: 0.235, alpha: 1.0)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         default:
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         }
     }
@@ -275,10 +282,10 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
                 frame.origin.y += -1 * (button.frame.height * 1.5 + 5.0)
                 frame.origin.x -= (frame.width * 1.5 / 5.5)
             }
-            self.popupKey.title.setTitle(title, forState: .Normal)
+            self.popupKey!.title.setTitle(title, forState: .Normal)
             var create = CGRectMake(frame.origin.x, frame.origin.y, frame.width * 1.5, frame.height * 1.5)
-            self.popupKey.frame = create
-            button.superview?.addSubview(self.popupKey)
+            self.popupKey!.frame = create
+            button.superview?.addSubview(self.popupKey!)
         }
     }
     
