@@ -32,7 +32,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		
 		UIView.setAnimationsEnabled(animated)
 		navigationItem.rightBarButtonItem?.title = editing ? "Save" : "Edit"
-		navigationItem.rightBarButtonItem?.style = editing ? .Done : .Plain;
+		navigationItem.rightBarButtonItem?.style = editing ? .Done : .Plain
 		UIView.setAnimationsEnabled(true)
 	}
 	
@@ -46,6 +46,12 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			name = profileName
 		}
 		fetchEncryptions()
+	}
+	
+	override func viewWillDisappear(animated: Bool) {
+		if editing == true {
+			// Unsaved changes are lost
+		}
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -96,9 +102,52 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		return max(1, encryptions.count)
 	}
 	
+	func validateProfile(errors: ([String]) -> Void) {
+		var errorList = [String]()
+		
+		if countElements(name) == 0 {
+			name = profile?.valueForKey("name") as String
+			errorList.append("name")
+		}
+		
+		for encryption in encryptions {
+			// TODO: validate
+		}
+		
+		errors(errorList)
+	}
+	
 	func saveProfile() {
 		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
+		
+		validateProfile({ (errors) -> Void in
+			var errorMessage: String
+			
+			if countElements(errors) == 1 {
+				errorMessage = "The \(errors[0]) field is invalid."
+			} else {
+				errorMessage = "The following fields are invalid:\n"
+				
+				for (i, error) in enumerate(errors) {
+					errorMessage += error
+					if i < (countElements(errors) - 2) {
+						errorMessage += ", "
+					} else if i < (countElements(errors) - 1) {
+						errorMessage += ", and "
+					} else {
+						errorMessage += "."
+					}
+				}
+			}
+			
+			if countElements(errors) > 0 {
+				var alert = UIAlertController(title: "Invalid Information", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+				alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+				self.presentViewController(alert, animated: true, completion: nil)
+				return
+			}
+		})
 		
 		if let existingProfile = profile {
 			existingProfile.setValue(name, forKey: "name")
@@ -175,6 +224,18 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			key1 = first.valueForKey("key1") as! String!
 		} else {
 			println("Could not fetch \(error), \(error!.userInfo)")
+		}
+	}
+	
+	// MARK: - Segues
+	
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		switch segue.identifier! {
+		case "showShare":
+			var shareViewController = segue.destinationViewController as ShareViewController
+			shareViewController.profile = profile
+		default:
+			println("Default segue")
 		}
 	}
 }

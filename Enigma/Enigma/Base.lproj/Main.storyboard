@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UMq-g1-Tal">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UMq-g1-Tal">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -81,14 +82,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHV-jw-hH9">
-                                <rect key="frame" x="279" y="289" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHV-jw-hH9">
+                                <rect key="frame" x="279" y="290" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e54-1S-90n" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="261" y="355" width="80" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e54-1S-90n" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="261" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="Z7e-kI-aus"/>
@@ -102,7 +103,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enigma" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c1I-E1-osZ">
-                                <rect key="frame" x="247" y="179" width="107" height="43"/>
+                                <rect key="frame" x="247" y="180" width="107" height="43"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="36"/>
                                 <color key="textColor" red="1" green="0.28627450980000002" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -239,7 +240,7 @@
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQd-5f-w9B" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQd-5f-w9B" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
                                     <rect key="frame" x="205" y="46" width="190" height="40"/>
                                     <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" title="Decrypt">
@@ -254,7 +255,7 @@
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
-                                        <segue destination="HhY-PJ-YGn" kind="show" id="rUb-hz-6bv"/>
+                                        <segue destination="Up7-P2-mvw" kind="presentation" identifier="showShare" id="HJ7-yn-L02"/>
                                     </connections>
                                 </button>
                                 <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ptS-ln-gIn" userLabel="Hairline">
@@ -311,61 +312,88 @@
             </objects>
             <point key="canvasLocation" x="948" y="934"/>
         </scene>
-        <!--Scan-->
-        <scene sceneID="clt-no-GNl">
-            <objects>
-                <viewController title="Scan" id="ahh-yq-G5z" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ZZ0-ae-ryn"/>
-                        <viewControllerLayoutGuide type="bottom" id="SIF-fu-MZq"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="UXq-Yr-YEi">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Scan" id="Hsk-FB-xcu"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dS8-6E-h3B" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2362" y="1653"/>
-        </scene>
         <!--Share-->
         <scene sceneID="ywR-Pp-W5t">
             <objects>
-                <viewController title="Share" id="Up7-P2-mvw" sceneMemberID="viewController">
+                <viewController title="Share" id="Up7-P2-mvw" customClass="ShareViewController" customModule="Enigma" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="G0v-vb-Zm1"/>
                         <viewControllerLayoutGuide type="bottom" id="6sE-Pw-Ync"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="tPD-xO-Kyf">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aGY-ZL-A4f">
+                                <rect key="frame" x="0.0" y="545" width="600" height="55"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFZ-wt-TRt" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                        <rect key="frame" x="514" y="8" width="78" height="40"/>
+                                        <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Done">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="done:" destination="Up7-P2-mvw" eventType="touchUpInside" id="0xa-Tq-Mmo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="b2r-KK-aAf"/>
+                                    <constraint firstAttribute="centerY" secondItem="yFZ-wt-TRt" secondAttribute="centerY" constant="-0.5" id="x97-t9-MbA"/>
+                                    <constraint firstItem="yFZ-wt-TRt" firstAttribute="trailing" secondItem="aGY-ZL-A4f" secondAttribute="trailingMargin" id="zxv-3H-VbQ"/>
+                                </constraints>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="t1z-5P-uZ6">
+                                <rect key="frame" x="75" y="75" width="450" height="450"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="t1z-5P-uZ6" secondAttribute="height" multiplier="1:1" id="ehG-xV-1AR"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="6sE-Pw-Ync" firstAttribute="top" relation="greaterThanOrEqual" secondItem="t1z-5P-uZ6" secondAttribute="bottom" constant="50" id="1c7-c8-AQh">
+                                <variation key="heightClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="aGY-ZL-A4f" firstAttribute="top" relation="greaterThanOrEqual" secondItem="t1z-5P-uZ6" secondAttribute="bottom" constant="25" id="Bqt-Bo-gsm">
+                                <variation key="heightClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="6sE-Pw-Ync" firstAttribute="top" secondItem="aGY-ZL-A4f" secondAttribute="bottom" id="CUL-08-wFR"/>
+                            <constraint firstAttribute="centerY" secondItem="t1z-5P-uZ6" secondAttribute="centerY" priority="750" id="H1h-ma-MPT"/>
+                            <constraint firstAttribute="trailing" secondItem="aGY-ZL-A4f" secondAttribute="trailing" id="PAR-Am-qS7"/>
+                            <constraint firstAttribute="centerX" secondItem="t1z-5P-uZ6" secondAttribute="centerX" id="YJo-ZP-hxm"/>
+                            <constraint firstItem="t1z-5P-uZ6" firstAttribute="width" secondItem="tPD-xO-Kyf" secondAttribute="width" multiplier="0.75" priority="750" id="bsz-Kz-RyC"/>
+                            <constraint firstItem="aGY-ZL-A4f" firstAttribute="leading" secondItem="tPD-xO-Kyf" secondAttribute="leading" id="eRQ-kZ-uts"/>
+                            <constraint firstItem="t1z-5P-uZ6" firstAttribute="top" relation="greaterThanOrEqual" secondItem="G0v-vb-Zm1" secondAttribute="bottom" constant="30" id="vZ5-5a-cMe">
+                                <variation key="heightClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="t1z-5P-uZ6" firstAttribute="height" relation="lessThanOrEqual" secondItem="tPD-xO-Kyf" secondAttribute="height" multiplier="0.75" priority="750" id="zGK-eX-CBa"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="vZ5-5a-cMe"/>
+                                <exclude reference="Bqt-Bo-gsm"/>
+                                <exclude reference="1c7-c8-AQh"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact">
+                            <mask key="constraints">
+                                <include reference="vZ5-5a-cMe"/>
+                                <include reference="Bqt-Bo-gsm"/>
+                                <exclude reference="1c7-c8-AQh"/>
+                            </mask>
+                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Share" id="UGY-sQ-M7N"/>
+                    <connections>
+                        <outlet property="qrCodeView" destination="t1z-5P-uZ6" id="iyC-5T-L02"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z8y-Ml-5w4" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2362" y="934"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="8go-E1-GE8">
-            <objects>
-                <tabBarController id="HhY-PJ-YGn" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="o6h-qn-ONI"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="0tf-xI-lLe">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="Up7-P2-mvw" kind="relationship" relationship="viewControllers" id="WB0-gC-a93"/>
-                        <segue destination="ahh-yq-G5z" kind="relationship" relationship="viewControllers" id="yRV-8H-bPT"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="i5O-vB-z7x" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1658" y="934"/>
         </scene>
@@ -474,14 +502,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lee-RN-8PZ">
-                                <rect key="frame" x="279" y="229" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lee-RN-8PZ">
+                                <rect key="frame" x="279" y="230" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tga-Df-6HX" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="304" y="355" width="80" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tga-Df-6HX" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="304" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Enable">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -491,8 +519,8 @@
                                     <action selector="enableSecurity:" destination="wyK-Jz-ums" eventType="touchUpInside" id="ywP-Zc-AYR"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="31B-to-dQe" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="216" y="355" width="80" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="31B-to-dQe" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="216" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Not now">
                                     <color key="titleColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -538,8 +566,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKl-3p-OkM" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="304" y="355" width="80" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKl-3p-OkM" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="304" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Done">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -549,8 +577,8 @@
                                     <action selector="next:" destination="SlG-XY-AAQ" eventType="touchUpInside" id="dXc-j2-48W"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qvq-HR-5RV" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
-                                <rect key="frame" x="216" y="355" width="80" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qvq-HR-5RV" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                <rect key="frame" x="216" y="360" width="80" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Back">
                                     <color key="titleColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -560,8 +588,8 @@
                                     <action selector="back:" destination="SlG-XY-AAQ" eventType="touchUpInside" id="wTF-tF-2KU"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SiZ-6w-xmX">
-                                <rect key="frame" x="279" y="229" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SiZ-6w-xmX">
+                                <rect key="frame" x="279" y="230" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -742,7 +770,7 @@ Q3JlYXRlZCBieToNQnJhZCBTbGF5dGVyEQ1EYW4gV2FrZWVtDUpha2UgU2luZ2VyA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eUf-pE-qob" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2416" y="1055"/>
+            <point key="canvasLocation" x="3066" y="225"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WsF-tq-VZm">
@@ -769,6 +797,6 @@ Q3JlYXRlZCBieToNQnJhZCBTbGF5dGVyEQ1EYW4gV2FrZWVtDUpha2UgU2luZ2VyA
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Aew-a5-O4E"/>
+        <segue reference="hjc-4W-bYD"/>
     </inferredMetricsTieBreakers>
 </document>
