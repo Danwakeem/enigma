@@ -55,7 +55,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	override func viewDidLayoutSubviews() {
-		var collectionViewLayout = collectionView?.collectionViewLayout as UICollectionViewFlowLayout
+		var collectionViewLayout = collectionView?.collectionViewLayout as! UICollectionViewFlowLayout
 		collectionViewLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
 		collectionViewLayout.itemSize = CGSizeMake(view.bounds.size.width - 40, 96)
 	}
@@ -65,7 +65,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as ProfileDetailCell
+		var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! ProfileDetailCell
 		
 		cell.layer.borderColor = UIColor(white: 204.0/255.0, alpha: 1.0).CGColor
 		cell.layer.borderWidth = 0.5
@@ -85,7 +85,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		var reusableView: UICollectionReusableView? = nil
 		
 		if kind == UICollectionElementKindSectionHeader {
-			var headerView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", forIndexPath: indexPath) as ProfileDetailHeaderView
+			var headerView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", forIndexPath: indexPath) as! ProfileDetailHeaderView
 			
 			// set up profile data
 			headerView.delegate = self
@@ -105,8 +105,8 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	func validateProfile(errors: ([String]) -> Void) {
 		var errorList = [String]()
 		
-		if countElements(name) == 0 {
-			name = profile?.valueForKey("name") as String
+		if count(name) == 0 {
+			name = profile?.valueForKey("name") as! String
 			errorList.append("name")
 		}
 		
@@ -118,22 +118,22 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	func saveProfile() {
-		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
 		validateProfile({ (errors) -> Void in
 			var errorMessage: String
 			
-			if countElements(errors) == 1 {
+			if count(errors) == 1 {
 				errorMessage = "The \(errors[0]) field is invalid."
 			} else {
 				errorMessage = "The following fields are invalid:\n"
 				
 				for (i, error) in enumerate(errors) {
 					errorMessage += error
-					if i < (countElements(errors) - 2) {
+					if i < (count(errors) - 2) {
 						errorMessage += ", "
-					} else if i < (countElements(errors) - 1) {
+					} else if i < (count(errors) - 1) {
 						errorMessage += ", and "
 					} else {
 						errorMessage += "."
@@ -141,7 +141,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 				}
 			}
 			
-			if countElements(errors) > 0 {
+			if count(errors) > 0 {
 				var alert = UIAlertController(title: "Invalid Information", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
 				alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
 				self.presentViewController(alert, animated: true, completion: nil)
@@ -207,21 +207,21 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			return
 		}
 		
-		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
 		let fetchRequest = NSFetchRequest(entityName: "Encryptions")
 		fetchRequest.predicate = NSPredicate(format: "ANY profiles == %@", profile!)
 		
 		var error: NSError?
-		let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as [NSManagedObject]?
+		let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as! [NSManagedObject]?
 		if let results = fetchedResults {
 			encryptions = results
 			
 			// TODO: This will be removed once the edit buffer is implimented
 			var first = encryptions[0]
-			cypher = first.valueForKey("encryptionType") as String!
-			key1 = first.valueForKey("key1") as String!
+			cypher = first.valueForKey("encryptionType") as! String!
+			key1 = first.valueForKey("key1") as! String!
 		} else {
 			println("Could not fetch \(error), \(error!.userInfo)")
 		}
@@ -232,7 +232,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		switch segue.identifier! {
 		case "showShare":
-			var shareViewController = segue.destinationViewController as ShareViewController
+			var shareViewController = segue.destinationViewController as! ShareViewController
 			shareViewController.profile = profile
 		default:
 			println("Default segue")

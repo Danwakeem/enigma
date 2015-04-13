@@ -56,7 +56,7 @@ class TutorialPageViewController: UIViewController, PasscodeViewDelegate {
 	
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "showPasscodeView" {
-			var passcodeView = segue.destinationViewController as PasscodeView
+			var passcodeView = segue.destinationViewController as! PasscodeView
 			passcodeView.delegate = self
 			passcodeView.setup = true
 		}

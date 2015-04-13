@@ -16,7 +16,8 @@ class ProfileSwipeViewController: UIViewController {
     let swipedNotification = "com.SlayterDev.swipedProfile"
     
     init(obj: NSManagedObject, color: UIColor, index: Int) {
-        super.init()
+        //super.init()
+        super.init(nibName: nil, bundle: nil)
         self.profileNameLabel = UILabel(frame: CGRectMake(0, 0, 320, 50))
         self.profileNameLabel.textAlignment = .Center
         self.profileObject = obj

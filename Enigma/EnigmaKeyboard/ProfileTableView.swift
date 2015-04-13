@@ -22,7 +22,7 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     
     var fetchedResultsController: NSFetchedResultsController!
     
-    required override init() {
+    required init() {
         super.init(frame: CGRectZero)
         if self.profileTable != nil {
             self.profileTable.reloadData()
@@ -40,7 +40,7 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     }
     
     func loadFromNib() {
-        let rootView = NSBundle(forClass: self.dynamicType).loadNibNamed("Profiles", owner: self, options: nil)[0] as UIView
+        let rootView = NSBundle(forClass: self.dynamicType).loadNibNamed("Profiles", owner: self, options: nil)[0] as! UIView
         
         self.addSubview(rootView)
         rootView.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -91,7 +91,7 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
+        let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
         return sectionInfo.numberOfObjects
     }
     
@@ -101,14 +101,14 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
         self.configureCell(cell, atIndexPath: indexPath)
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if let index: NSIndexPath = self.profileTable.indexPathForSelectedRow() {
-            self.selectedProfile = self.fetchedResultsController.objectAtIndexPath(index) as NSManagedObject
+            self.selectedProfile = self.fetchedResultsController.objectAtIndexPath(index) as! NSManagedObject
 
             NSNotificationCenter.defaultCenter().postNotificationName(self.notificationKey, object: self, userInfo:["Index" : index, "Profile" : self.selectedProfile])
 			
@@ -119,7 +119,7 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let context = self.fetchedResultsController.managedObjectContext
-            context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject)
+            context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
             
             var error: NSError? = nil
             if !context.save(&error) {
@@ -132,7 +132,7 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     }
     
     func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
-        let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject
+        let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject
         cell.textLabel?.text = object.valueForKey("name")!.description
     }
     

@@ -25,7 +25,7 @@ class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 		}
 		
 		// Create a new view controller and pass suitable data.
-		let pageViewController = storyboard.instantiateViewControllerWithIdentifier(identifiers[index]) as TutorialPageViewController
+		let pageViewController = storyboard.instantiateViewControllerWithIdentifier(identifiers[index]) as! TutorialPageViewController
 		pageViewController.dataObject = pageData[index]
 		return pageViewController
 	}
@@ -42,7 +42,7 @@ class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 	// MARK: - Page View Controller Data Source
 	
 	func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-		var index = self.indexOfViewController(viewController as TutorialPageViewController)
+		var index = self.indexOfViewController(viewController as! TutorialPageViewController)
 		if (index == 0) || (index == NSNotFound) {
 			return nil
 		}
@@ -52,7 +52,7 @@ class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 	}
 	
 	func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-		var index = self.indexOfViewController(viewController as TutorialPageViewController)
+		var index = self.indexOfViewController(viewController as! TutorialPageViewController)
 		if index == NSNotFound {
 			return nil
 		}
