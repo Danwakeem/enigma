@@ -343,6 +343,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             if self.upperCase {
                 //Undo upercase so the next word wont be capitalized.
                 self.upperCase = !self.upperCase
+                self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
             } else if self.firstLetter {
                 //Uncheck first letter so the next one wont be capitalized.
                 self.firstLetter = !self.firstLetter
@@ -399,6 +400,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     func lockCase(sender: AnyObject) {
         self.caseLock = !self.caseLock
+        if self.caseLock == false {
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+        }
     }
     
     func longPressBackSpace(sender: AnyObject) {
