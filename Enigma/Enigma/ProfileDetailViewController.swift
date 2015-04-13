@@ -105,8 +105,8 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	func validateProfile(errors: ([String]) -> Void) {
 		var errorList = [String]()
 		
-		if countElements(name) == 0 {
-			name = profile?.valueForKey("name") as String
+		if count(name) == 0 {
+			name = profile?.valueForKey("name") as! String
 			errorList.append("name")
 		}
 		
@@ -124,16 +124,16 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		validateProfile({ (errors) -> Void in
 			var errorMessage: String
 			
-			if countElements(errors) == 1 {
+			if count(errors) == 1 {
 				errorMessage = "The \(errors[0]) field is invalid."
 			} else {
 				errorMessage = "The following fields are invalid:\n"
 				
 				for (i, error) in enumerate(errors) {
 					errorMessage += error
-					if i < (countElements(errors) - 2) {
+					if i < (count(errors) - 2) {
 						errorMessage += ", "
-					} else if i < (countElements(errors) - 1) {
+					} else if i < (count(errors) - 1) {
 						errorMessage += ", and "
 					} else {
 						errorMessage += "."
@@ -141,7 +141,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 				}
 			}
 			
-			if countElements(errors) > 0 {
+			if count(errors) > 0 {
 				var alert = UIAlertController(title: "Invalid Information", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
 				alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
 				self.presentViewController(alert, animated: true, completion: nil)
@@ -232,7 +232,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		switch segue.identifier! {
 		case "showShare":
-			var shareViewController = segue.destinationViewController as ShareViewController
+			var shareViewController = segue.destinationViewController as! ShareViewController
 			shareViewController.profile = profile
 		default:
 			println("Default segue")
