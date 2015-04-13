@@ -50,6 +50,7 @@
 		05C2F8171ACFA0CC00C2097E /* ProfileFetchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C2F8161ACFA0CC00C2097E /* ProfileFetchModel.swift */; };
 		05E3CA461AC62741000EDE84 /* Profiles.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05E3CA451AC62741000EDE84 /* Profiles.xib */; };
 		05E3CA951AC70C53000EDE84 /* ProfileTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */; };
+		05E726621ADB91AC009BF808 /* PopupKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E726611ADB91AC009BF808 /* PopupKey.swift */; };
 		237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399571A86C5E500A21FE0 /* SplitViewController.swift */; };
 		2373995A1A86D28100A21FE0 /* TutorialPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399591A86D28100A21FE0 /* TutorialPageViewController.swift */; };
 		2373995C1A86D31700A21FE0 /* TutorialModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2373995B1A86D31700A21FE0 /* TutorialModelController.swift */; };
@@ -137,6 +138,7 @@
 		05E3CA451AC62741000EDE84 /* Profiles.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Profiles.xib; sourceTree = "<group>"; };
 		05E3CA931AC69F07000EDE84 /* EnigmaKeyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EnigmaKeyboard.entitlements; sourceTree = "<group>"; };
 		05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableView.swift; sourceTree = "<group>"; };
+		05E726611ADB91AC009BF808 /* PopupKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupKey.swift; sourceTree = "<group>"; };
 		237399571A86C5E500A21FE0 /* SplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		237399591A86D28100A21FE0 /* TutorialPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialPageViewController.swift; sourceTree = "<group>"; };
 		2373995B1A86D31700A21FE0 /* TutorialModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialModelController.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 			children = (
 				056C3F831AC8AEDB00F1103F /* KeyboardView.swift */,
 				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
+				05E726611ADB91AC009BF808 /* PopupKey.swift */,
 				05E3CA451AC62741000EDE84 /* Profiles.xib */,
 			);
 			name = Views;
@@ -519,6 +522,7 @@
 				052FB52A1AA810670049DF8A /* Enigma.xcdatamodeld in Sources */,
 				026B4DBC1AA7A528002DB3C6 /* Clear.c in Sources */,
 				02CA73891AA4B82900FBFDF0 /* Vigenere.c in Sources */,
+				05E726621ADB91AC009BF808 /* PopupKey.swift in Sources */,
 				05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */,
 				05C2F8171ACFA0CC00C2097E /* ProfileFetchModel.swift in Sources */,
 				056C3F841AC8AEDB00F1103F /* KeyboardView.swift in Sources */,

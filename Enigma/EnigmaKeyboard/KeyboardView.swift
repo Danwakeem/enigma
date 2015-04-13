@@ -86,6 +86,8 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     var keysPressedColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1.0)
     var shiftKeyPressedColor = UIColor(red: 0.941, green: 0.941, blue: 0.941, alpha: 1.0)
     
+    var popupKey = PopupKey(title: "H")
+    
     
     //MARK: - initialization
     
@@ -208,6 +210,10 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func buttonTapped(sender: AnyObject){
+        if let superView = self.popupKey.superview {
+            self.popupKey.removeFromSuperview()
+        }
+        
         if self.initilizedPageIndex != -1 {
             if self.profilePages.view.superview != nil {
                 self.showProfilePages.invalidate()
@@ -249,6 +255,39 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     func buttonPressed(sender: AnyObject) {
         var button = sender as! UIButton
         button.backgroundColor = self.keysPressedColor
+        self.keyPopup(button)
+    }
+    
+    func keyPopup(button: UIButton){
+        let title: String = button.titleForState(.Normal)!
+        if self.isPopupKey(title) {
+            var frame = button.frame
+            if button.superview == self.row1 {
+                frame.origin.y += -1 * (button.frame.height + 10.0)
+                if title == "P" || title == "0" || title == "=" {
+                    frame.origin.x -= frame.width / 2
+                } else if title == "Q" || title == "1" || title == "["  {
+                    frame.origin.x -= frame.width / 40
+                } else {
+                    frame.origin.x -= (frame.width * 1.5 / 6.5)
+                }
+            } else {
+                frame.origin.y += -1 * (button.frame.height * 1.5 + 5.0)
+                frame.origin.x -= (frame.width * 1.5 / 5.5)
+            }
+            self.popupKey.title.setTitle(title, forState: .Normal)
+            var create = CGRectMake(frame.origin.x, frame.origin.y, frame.width * 1.5, frame.height * 1.5)
+            self.popupKey.frame = create
+            button.superview?.addSubview(self.popupKey)
+        }
+    }
+    
+    func isPopupKey(title: String) -> Bool {
+        if title != "space" && title != "return" && title != "ABC" && title != "123" && title != "\u{232B}" && title != "👱"
+            && title != "+#=" && title != "\u{21E7}" && title != "\u{1f310}" {
+            return true
+        }
+        return false
     }
     
     func toggleColor(sender: AnyObject){
@@ -545,11 +584,11 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         button.layer.cornerRadius = 5
         button.setTitleColor(self.keysTextColor, forState: .Normal)
         button.titleLabel?.font = UIFont.systemFontOfSize(20)
-        
+
         let pressDown = UITapGestureRecognizer(target: self, action: "buttonPressed:")
         pressDown.numberOfTapsRequired = 1
         button.addTarget(self, action: "buttonPressed:", forControlEvents: .TouchDown)
-        
+
         let singleTap = UITapGestureRecognizer(target: self, action: "buttonTapped:")
         singleTap.numberOfTapsRequired = 1
         button.addTarget(self, action: "buttonTapped:", forControlEvents: .TouchUpInside)
