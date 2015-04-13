@@ -237,9 +237,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func lockCase(sender: AnyObject){
-        var button = sender as! UIButton
         self.delegate?.lockCase(sender)
-        button.backgroundColor = self.specialKeysButtonColor
     }
     
     func removeViews(){
@@ -264,7 +262,8 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         case "+#=":
             button.backgroundColor = self.specialKeysButtonColor
         case "\u{21E7}":
-            button.backgroundColor = self.specialKeysButtonColor
+            println("Shift")
+            //button.backgroundColor = self.specialKeysButtonColor
         default:
             button.backgroundColor = self.keysBackgroundColor
         }
