@@ -88,6 +88,8 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     var popupKey: PopupKey!
     
+    var device: String = ""
+    
     
     //MARK: - initialization
     
@@ -99,8 +101,9 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     init(index: Int, color: String){
         super.init(frame: CGRectZero)
         self.initilizedPageIndex = index
+        self.phoneModel()
         if color == "Default" {
-            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         } else {
             self.changeColorsToSettings(color)
@@ -111,12 +114,43 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //iPhone 6+ -- W: 414.0 H: 736.0
+    //iPhone 6  -- W: 375.0 H: 667.0
+    //iPhone 5  -- W: 320.0 H: 568.0
+    //iPhone 4  -- W: 320.0 H: 480.0
+    func phoneModel(){
+        let width = UIScreen.mainScreen().bounds.size.width
+        let height = UIScreen.mainScreen().bounds.size.height
+        switch width {
+        case 414.0:
+            self.device = "iPhone6+"
+        case 736.0:
+            self.device = "iPhone6+"
+        case 667.0:
+            self.device = "iPhone6"
+        case 375.0:
+            self.device = "iPhone6"
+        case 568.0:
+            self.device = "iPhone5"
+        case 480.0:
+            self.device = "iPhone4"
+        case 320.0:
+            if height == 568.0 {
+                self.device = "iPhone5"
+            } else {
+                self.device = "iPhone4"
+            }
+        default:
+            self.device = "iPhone6"
+        }
+    }
+    
     // MARK - Change keyboard color
     
     func changeColorsToSettings(color: String) {
         switch color {
         case "White":
-            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Black":
             self.backgroundColor = UIColor(red: 0.22, green: 0.22, blue: 0.22, alpha: 1.0)
@@ -132,7 +166,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
             self.shiftKeyPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
-            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Blue":
             self.backgroundColor = UIColor(red: 0.161, green: 0.62, blue: 0.91, alpha: 1.0)
@@ -148,7 +182,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.075, green: 0.325, blue: 0.628, alpha: 1.0)
             self.shiftKeyPressedColor = UIColor(red: 0.075, green: 0.325, blue: 0.628, alpha: 1.0)
-            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Pink":
             self.backgroundColor = UIColor(red: 0.953, green: 0.604, blue: 0.792, alpha: 1.0)
@@ -164,7 +198,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.827, green: 0.318, blue: 0.592, alpha: 1.0)
             self.shiftKeyPressedColor = UIColor(red: 0.827, green: 0.318, blue: 0.592, alpha: 1.0)
-            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         case "Green":
             self.backgroundColor = UIColor(red: 0.016, green: 0.792, blue: 0.353, alpha: 1.0)
@@ -180,10 +214,10 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.rawTextLabel.textColor = UIColor.whiteColor()
             self.keysPressedColor = UIColor(red: 0.047, green: 0.482, blue: 0.235, alpha: 1.0)
             self.shiftKeyPressedColor = UIColor(red: 0.047, green: 0.482, blue: 0.235, alpha: 1.0)
-            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         default:
-            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor)
+            self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         }
     }
@@ -269,23 +303,30 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         let title: String = button.titleForState(.Normal)!
         if self.isPopupKey(title) {
             var frame = button.frame
-            if button.superview == self.row1 {
-                frame.origin.y += -1 * (button.frame.height + 10.0)
-                if title == "P" || title == "0" || title == "=" {
-                    frame.origin.x -= frame.width / 2
-                } else if title == "Q" || title == "1" || title == "["  {
-                    frame.origin.x -= frame.width / 40
-                } else {
-                    frame.origin.x -= (frame.width * 1.5 / 6.5)
-                }
-            } else {
-                frame.origin.y += -1 * (button.frame.height * 1.5 + 5.0)
-                frame.origin.x -= (frame.width * 1.5 / 5.5)
-            }
-            self.popupKey!.title.setTitle(title, forState: .Normal)
-            var create = CGRectMake(frame.origin.x, frame.origin.y, frame.width * 1.5, frame.height * 1.5)
-            self.popupKey!.frame = create
+            self.popupKey!.label.text = title
+            self.popupKeyXOffset(frame)
+            self.popupKey!.frame.origin.y = frame.origin.y - self.popupKey!.height + 45
+            self.popupKey!.setNeedsDisplay()
             button.superview?.addSubview(self.popupKey!)
+        }
+    }
+    
+    func popupKeyXOffset(frame: CGRect){
+        //iPhone 6+ -- self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 52
+        //iPhone 6  -- self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 45
+        //iPhone 5  -- self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 38
+        //iPhone 4s -- self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 37
+        switch self.device {
+        case "iPhone6+":
+            self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 52
+        case "iPhone6":
+            self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 45
+        case "iPhone5":
+            self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 38
+        case "iPhone4":
+            self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 37
+        default:
+            self.popupKey!.frame.origin.x = frame.origin.x - self.popupKey!.width + 52
         }
     }
     
