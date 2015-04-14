@@ -16,18 +16,20 @@ class PopupKey: UIView {
     
     init(title: String){
         super.init(frame: CGRectZero)
-        self.backgroundColor = UIColor.clearColor()
+        //self.backgroundColor = UIColor.clearColor()
         self.title.setTitle(title, forState: .Normal)
-        self.setUpTitleButton()
+        //self.setUpTitleButton()
     }
 
     init(backgroundColor: UIColor, textColor: UIColor){
         super.init(frame: CGRectZero)
         self.backgroundColor = UIColor.clearColor()
+        self.drawRect(CGRectZero)
         self.buttonBackgroundColor = backgroundColor
         self.textColor = textColor
         self.title.setTitle("H", forState: .Normal)
         self.setUpTitleButton()
+        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -54,12 +56,31 @@ class PopupKey: UIView {
         self.addConstraints([top,bottom,right,left])
     }
 
-    /*
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func drawRect(rect: CGRect) {
         // Drawing code
+        var fillColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
+        var path = UIBezierPath()
+        path.moveToPoint(CGPointMake(39 / 4,309 / 4))
+        path.addLineToPoint(CGPointMake(39 / 4,187 / 4))
+        path.addCurveToPoint(CGPointMake(31 / 4,170 / 4), controlPoint1: CGPointMake(39 / 4,187 / 4), controlPoint2: CGPointMake(39 / 4,177 / 4))
+        path.addCurveToPoint(CGPointMake(7 / 4,149 / 4), controlPoint1: CGPointMake(22 / 4,163 / 4), controlPoint2: CGPointMake(7 / 4,149 / 4))
+        path.addCurveToPoint(CGPointMake(0 / 4,131 / 4), controlPoint1: CGPointMake(7 / 4,149 / 4), controlPoint2: CGPointMake(0 / 4,141 / 4))
+        path.addCurveToPoint(CGPointMake(0 / 4,25 / 4), controlPoint1: CGPointMake(0 / 4,121 / 4), controlPoint2: CGPointMake(0 / 4,25 / 4))
+        path.addCurveToPoint(CGPointMake(27 / 4,0 / 4), controlPoint1: CGPointMake(0 / 4,25 / 4), controlPoint2: CGPointMake(3 / 4,0 / 4))
+        path.addCurveToPoint(CGPointMake(158 / 4,0 / 4), controlPoint1: CGPointMake(50 / 4,0 / 4), controlPoint2: CGPointMake(158 / 4,0 / 4))
+        path.addCurveToPoint(CGPointMake(184 / 4,27 / 4), controlPoint1: CGPointMake(158 / 4,0 / 4), controlPoint2: CGPointMake(183 / 4,2 / 4))
+        path.addCurveToPoint(CGPointMake(184 / 4,132 / 4), controlPoint1: CGPointMake(184 / 4,52 / 4), controlPoint2: CGPointMake(184 / 4,132 / 4))
+        path.addCurveToPoint(CGPointMake(176 / 4,150 / 4), controlPoint1: CGPointMake(184 / 4,132 / 4), controlPoint2: CGPointMake(184 / 4,141 / 4))
+        path.addCurveToPoint(CGPointMake(155 / 4,168 / 4), controlPoint1: CGPointMake(168 / 4,158 / 4), controlPoint2: CGPointMake(155 / 4,168 / 4))
+        path.addCurveToPoint(CGPointMake(145 / 4,187 / 4), controlPoint1: CGPointMake(155 / 4,168 / 4), controlPoint2: CGPointMake(145 / 4,178 / 4))
+        path.addCurveToPoint(CGPointMake(144 / 4,308 / 4), controlPoint1: CGPointMake(145 / 4,196 / 4), controlPoint2: CGPointMake(144 / 4,308 / 4))
+        path.addCurveToPoint(CGPointMake(130 / 4,321 / 4), controlPoint1: CGPointMake(144 / 4,308 / 4), controlPoint2: CGPointMake(145 / 4,321 / 4))
+        path.addCurveToPoint(CGPointMake(53 / 4,321 / 4), controlPoint1: CGPointMake(115 / 4,321 / 4), controlPoint2: CGPointMake(53 / 4,321 / 4))
+        path.addCurveToPoint(CGPointMake(39 / 4,310 / 4), controlPoint1: CGPointMake(53 / 4,321 / 4), controlPoint2: CGPointMake(39 / 4,321 / 4))
+        path.addCurveToPoint(CGPointMake(39 / 4,309 / 4), controlPoint1: CGPointMake(39 / 4,299 / 4), controlPoint2: CGPointMake(39 / 4,309 / 4))
+        fillColor.setFill()
+        path.fill()
     }
-    */
-
 }

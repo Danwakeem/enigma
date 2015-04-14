@@ -264,26 +264,20 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 		playSound()
     }
     
-    /*
-    func changeShiftColor(){
-        if self.Keyboard.shiftKey.backgroundColor == self.Keyboard.shiftKeyPressedColor {
-            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.keysPressedColor
-        } else if self.Keyboard.shiftKey.backgroundColor == self.Keyboard.keysPressedColor {
-            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
-        }
-    }
-    */
-    
     func pressedBackSpace(title: String){
-        self.proxy.deleteBackward()
         //Getting rid of the last typed word with input field
         if !self.lastTypedWord.isEmpty {
+            if self.currentProfileName == "Clear" {
+                self.proxy.deleteBackward()
+            }
             //If last letter was uppercase then turn uppercase on for that ch
             var lastCh: String = self.lastTypedWord.lastPathComponent as String
             if lastCh.uppercaseString == lastCh {
                 self.upperCase = true
             }
             self.lastTypedWord = self.lastTypedWord.substringToIndex(self.lastTypedWord.endIndex.predecessor())
+        } else {
+            self.proxy.deleteBackward()
         }
         
         self.Keyboard.rawTextLabel.text = self.lastTypedWord
