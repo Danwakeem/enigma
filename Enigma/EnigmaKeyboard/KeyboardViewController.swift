@@ -55,9 +55,17 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         // Add custom view sizing constraints here
     }
     
+    //iPhone 6+ -- W: 414.0 H: 736.0
+    //iPhone 6  -- W: 375.0 H: 667.0
+    //iPhone 5  -- W: 320.0 H: 568.0
+    //iPhone 4  -- W: 320.0 H: 480.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.proxy = textDocumentProxy as! UITextDocumentProxy
+        
+        println("Screen Width: \(UIScreen.mainScreen().bounds.size.width)")
+        println("Screen Height: \(UIScreen.mainScreen().bounds.size.height)")
         
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
@@ -65,23 +73,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         self.loadEncryptionFromUserDefaults()
         
-        if 0 < self.fetchedResultsController.fetchedObjects?.count && self.keyboardColor != nil {
-            if self.keyboardColor == "Default" {
-                self.setDefaultKeyboardColor(self.initializedProfileIndex)
-            } else {
-                self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: self.keyboardColor)
-            }
-        } else if 0 < self.fetchedResultsController.fetchedObjects?.count {
-            self.setDefaultKeyboardColor(self.initializedProfileIndex)
-        } else if self.keyboardColor != nil {
-            if self.keyboardColor == "Default" {
-                self.setDefaultKeyboardColor(-1)
-            } else {
-                self.Keyboard = KeyboardView(index: -1, color: self.keyboardColor)
-            }
-        } else {
-            self.setDefaultKeyboardColor(-1)
-        }
+        self.initKeyboard()
         
         self.createKeyboard()
         
@@ -122,10 +114,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
+            self.Keyboard.popupEnabled = false
         } else {
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
+            self.Keyboard.popupEnabled = true
         }
     }
     
@@ -135,11 +129,13 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
+            self.Keyboard.popupEnabled = false
         } else {
             self.view.removeConstraint(self.height)
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
+            self.Keyboard.popupEnabled = true
         }
     }
     
@@ -212,6 +208,26 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         let bottom = NSLayoutConstraint(item: self.Keyboard, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0)
         
         self.view.addConstraints([left,right,top,bottom])
+    }
+    
+    func initKeyboard(){
+        if 0 < self.fetchedResultsController.fetchedObjects?.count && self.keyboardColor != nil {
+            if self.keyboardColor == "Default" {
+                self.setDefaultKeyboardColor(self.initializedProfileIndex)
+            } else {
+                self.Keyboard = KeyboardView(index: self.initializedProfileIndex, color: self.keyboardColor)
+            }
+        } else if 0 < self.fetchedResultsController.fetchedObjects?.count {
+            self.setDefaultKeyboardColor(self.initializedProfileIndex)
+        } else if self.keyboardColor != nil {
+            if self.keyboardColor == "Default" {
+                self.setDefaultKeyboardColor(-1)
+            } else {
+                self.Keyboard = KeyboardView(index: -1, color: self.keyboardColor)
+            }
+        } else {
+            self.setDefaultKeyboardColor(-1)
+        }
     }
     
     //MARK: - Input text operations

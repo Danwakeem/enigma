@@ -10,77 +10,221 @@ import UIKit
 
 class PopupKey: UIView {
     
-    var title = UIButton()
-    var buttonBackgroundColor: UIColor!
-    var textColor: UIColor!
+    var label = UILabel(frame: CGRectMake(16, 7, 30, 30))
+    var labelSize: CGFloat = 30
     
-    init(title: String){
-        super.init(frame: CGRectZero)
-        //self.backgroundColor = UIColor.clearColor()
-        self.title.setTitle(title, forState: .Normal)
-        //self.setUpTitleButton()
+    var textColor: UIColor = UIColor.darkTextColor()
+    var frameColor: UIColor = UIColor.whiteColor()
+    
+    var deviceScaler: CGFloat = 3.3
+    var device: String!
+    
+    var width: CGFloat = 0.0
+    var height: CGFloat = 0.0
+    
+    var duck = false
+    var leftUpper = false
+    var rightUpper = false
+    
+    init(){
+        super.init(frame: CGRectMake(0, 0, 200, 500))
+        label.text = "H"
+        label.textColor = UIColor.darkTextColor()
+        label.font = UIFont.systemFontOfSize(30)
+        label.textAlignment = .Center
+        self.addSubview(label)
+        backgroundColor = UIColor.clearColor()
     }
-
-    init(backgroundColor: UIColor, textColor: UIColor){
-        super.init(frame: CGRectZero)
-        self.backgroundColor = UIColor.clearColor()
-        self.drawRect(CGRectZero)
-        self.buttonBackgroundColor = backgroundColor
-        self.textColor = textColor
-        self.title.setTitle("H", forState: .Normal)
-        self.setUpTitleButton()
+    
+    init(backgroundColor: UIColor, textColor: UIColor, device: String) {
+        //iPhone 6+ -- self.deviceScaler = 2.8
+        //iPhone 6+ -- label.font = UIFont.systemFontOfSize(40)
+        //iPhone 6  -- self.deviceScaler = 3.3
+        //iPhone 5  -- self.deviceScaler = 3.8
+        //iPhone 4s -- self.deviceScaler = 3.9
+        self.device = device
+        switch device {
+        case "iPhone6+":
+            self.deviceScaler = 2.8
+            self.labelSize = 40
+        case "iPhone6":
+            self.deviceScaler = 3.3
+        case "iPhone5":
+            self.deviceScaler = 3.8
+        case "iPhone 4":
+            self.deviceScaler = 3.9
+        default:
+            self.deviceScaler = 3.3
+        }
         
+        width = 184 / self.deviceScaler
+        height = 321 / self.deviceScaler
+        super.init(frame: CGRectMake(0, 0, width, height))
+        
+        self.layer.shadowColor = UIColor.blackColor().CGColor
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowOffset = CGSizeMake(0, 3)
+        
+        self.frameColor = backgroundColor
+        self.textColor = textColor
+        label.text = "H"
+        label.textColor = UIColor.darkTextColor()
+        label.font = UIFont.systemFontOfSize(self.labelSize)
+        self.addSubview(label)
+        label.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.constraintsForLabel()
+        self.backgroundColor = UIColor.clearColor()
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setUpTitleButton() {
-        self.title.setTitleColor(self.textColor, forState: .Normal)
-        self.title.backgroundColor = self.buttonBackgroundColor
-        self.title.titleLabel?.font = UIFont.systemFontOfSize(40)
-        self.title.enabled = false
-        self.title.layer.cornerRadius = 5
-        self.title.layer.masksToBounds = false
-        self.title.layer.shadowColor = UIColor.blackColor().CGColor
-        self.title.layer.shadowOpacity = 0.2
-        self.title.layer.shadowRadius = 5
-        self.title.layer.shadowOffset = CGSizeMake(0, 3)
-        self.addSubview(self.title)
-        self.title.setTranslatesAutoresizingMaskIntoConstraints(false)
-        let top = NSLayoutConstraint(item: self.title, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 0)
-        let bottom = NSLayoutConstraint(item: self.title, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: 0)
-        let right = NSLayoutConstraint(item: self.title, attribute: .Right, relatedBy: .Equal, toItem: self, attribute: .Right, multiplier: 1.0, constant: 0)
-        let left = NSLayoutConstraint(item: self.title, attribute: .Left, relatedBy: .Equal, toItem: self, attribute: .Left, multiplier: 1.0, constant: 0)
-        self.addConstraints([top,bottom,right,left])
+    func constraintsForLabel() {
+        let x = NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 4)
+        let top = NSLayoutConstraint(item: label, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 10)
+        let height = NSLayoutConstraint(item: label, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: self.labelSize)
+        let width = NSLayoutConstraint(item: label, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: self.labelSize)
+        self.addConstraints([x,top,height,width])
     }
-
+    
+    func redoConstraintsForLabel(){
+        self.removeConstraints(self.constraints())
+        if self.duck {
+            let x = NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 5)
+            let top = NSLayoutConstraint(item: label, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 26)
+            let height = NSLayoutConstraint(item: label, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40)
+            let width = NSLayoutConstraint(item: label, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40)
+            self.addConstraints([x,top,height,width])
+        } else {
+            self.constraintsForLabel()
+        }
+    }
+    
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func drawRect(rect: CGRect) {
         // Drawing code
-        var fillColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
-        var path = UIBezierPath()
-        path.moveToPoint(CGPointMake(39 / 4,309 / 4))
-        path.addLineToPoint(CGPointMake(39 / 4,187 / 4))
-        path.addCurveToPoint(CGPointMake(31 / 4,170 / 4), controlPoint1: CGPointMake(39 / 4,187 / 4), controlPoint2: CGPointMake(39 / 4,177 / 4))
-        path.addCurveToPoint(CGPointMake(7 / 4,149 / 4), controlPoint1: CGPointMake(22 / 4,163 / 4), controlPoint2: CGPointMake(7 / 4,149 / 4))
-        path.addCurveToPoint(CGPointMake(0 / 4,131 / 4), controlPoint1: CGPointMake(7 / 4,149 / 4), controlPoint2: CGPointMake(0 / 4,141 / 4))
-        path.addCurveToPoint(CGPointMake(0 / 4,25 / 4), controlPoint1: CGPointMake(0 / 4,121 / 4), controlPoint2: CGPointMake(0 / 4,25 / 4))
-        path.addCurveToPoint(CGPointMake(27 / 4,0 / 4), controlPoint1: CGPointMake(0 / 4,25 / 4), controlPoint2: CGPointMake(3 / 4,0 / 4))
-        path.addCurveToPoint(CGPointMake(158 / 4,0 / 4), controlPoint1: CGPointMake(50 / 4,0 / 4), controlPoint2: CGPointMake(158 / 4,0 / 4))
-        path.addCurveToPoint(CGPointMake(184 / 4,27 / 4), controlPoint1: CGPointMake(158 / 4,0 / 4), controlPoint2: CGPointMake(183 / 4,2 / 4))
-        path.addCurveToPoint(CGPointMake(184 / 4,132 / 4), controlPoint1: CGPointMake(184 / 4,52 / 4), controlPoint2: CGPointMake(184 / 4,132 / 4))
-        path.addCurveToPoint(CGPointMake(176 / 4,150 / 4), controlPoint1: CGPointMake(184 / 4,132 / 4), controlPoint2: CGPointMake(184 / 4,141 / 4))
-        path.addCurveToPoint(CGPointMake(155 / 4,168 / 4), controlPoint1: CGPointMake(168 / 4,158 / 4), controlPoint2: CGPointMake(155 / 4,168 / 4))
-        path.addCurveToPoint(CGPointMake(145 / 4,187 / 4), controlPoint1: CGPointMake(155 / 4,168 / 4), controlPoint2: CGPointMake(145 / 4,178 / 4))
-        path.addCurveToPoint(CGPointMake(144 / 4,308 / 4), controlPoint1: CGPointMake(145 / 4,196 / 4), controlPoint2: CGPointMake(144 / 4,308 / 4))
-        path.addCurveToPoint(CGPointMake(130 / 4,321 / 4), controlPoint1: CGPointMake(144 / 4,308 / 4), controlPoint2: CGPointMake(145 / 4,321 / 4))
-        path.addCurveToPoint(CGPointMake(53 / 4,321 / 4), controlPoint1: CGPointMake(115 / 4,321 / 4), controlPoint2: CGPointMake(53 / 4,321 / 4))
-        path.addCurveToPoint(CGPointMake(39 / 4,310 / 4), controlPoint1: CGPointMake(53 / 4,321 / 4), controlPoint2: CGPointMake(39 / 4,321 / 4))
-        path.addCurveToPoint(CGPointMake(39 / 4,309 / 4), controlPoint1: CGPointMake(39 / 4,299 / 4), controlPoint2: CGPointMake(39 / 4,309 / 4))
-        fillColor.setFill()
-        path.fill()
+        self.label.textColor = self.textColor
+        var fillColor = self.frameColor
+        if self.duck && self.leftUpper {
+            var path = UIBezierPath()
+            path.moveToPoint(CGPointMake(0 / deviceScaler,311 / deviceScaler))
+            path.addLineToPoint(CGPointMake(0 / deviceScaler,86 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(25 / deviceScaler,65 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,86 / deviceScaler), controlPoint2: CGPointMake(2 / deviceScaler,65 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(158 / deviceScaler,65 / deviceScaler), controlPoint1: CGPointMake(47 / deviceScaler,65 / deviceScaler), controlPoint2: CGPointMake(158 / deviceScaler,65 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(186 / deviceScaler,85 / deviceScaler), controlPoint1: CGPointMake(158 / deviceScaler,65 / deviceScaler), controlPoint2: CGPointMake(186 / deviceScaler,67 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(186 / deviceScaler,170 / deviceScaler), controlPoint1: CGPointMake(186 / deviceScaler,102 / deviceScaler), controlPoint2: CGPointMake(186 / deviceScaler,170 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(182 / deviceScaler,181 / deviceScaler), controlPoint1: CGPointMake(186 / deviceScaler,170 / deviceScaler), controlPoint2: CGPointMake(186 / deviceScaler,177 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(117 / deviceScaler,232 / deviceScaler), controlPoint1: CGPointMake(178 / deviceScaler,185 / deviceScaler), controlPoint2: CGPointMake(117 / deviceScaler,232 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(108 / deviceScaler,248 / deviceScaler), controlPoint1: CGPointMake(117 / deviceScaler,232 / deviceScaler), controlPoint2: CGPointMake(108 / deviceScaler,237 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(108 / deviceScaler,311 / deviceScaler), controlPoint1: CGPointMake(108 / deviceScaler,259 / deviceScaler), controlPoint2: CGPointMake(108 / deviceScaler,311 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(95 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(108 / deviceScaler,311 / deviceScaler), controlPoint2: CGPointMake(106 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(12 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(83 / deviceScaler,321 / deviceScaler), controlPoint2: CGPointMake(12 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,312 / deviceScaler), controlPoint1: CGPointMake(12 / deviceScaler,321 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,320 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,311 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,305 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,311 / deviceScaler))
+            fillColor.setFill()
+            path.fill()
+        } else if self.duck && self.rightUpper {
+            var path = UIBezierPath()
+            path.moveToPoint(CGPointMake(184 / deviceScaler,311 / deviceScaler))
+            path.addLineToPoint(CGPointMake(184 / deviceScaler,86 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(159 / deviceScaler,65 / deviceScaler), controlPoint1: CGPointMake(184 / deviceScaler,86 / deviceScaler), controlPoint2: CGPointMake(182 / deviceScaler,65 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(27 / deviceScaler,65 / deviceScaler), controlPoint1: CGPointMake(137 / deviceScaler,65 / deviceScaler), controlPoint2: CGPointMake(27 / deviceScaler,65 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,85 / deviceScaler), controlPoint1: CGPointMake(27 / deviceScaler,65 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,67 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,170 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,102 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,170 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(3 / deviceScaler,181 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,170 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,177 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(68 / deviceScaler,232 / deviceScaler), controlPoint1: CGPointMake(8 / deviceScaler,185 / deviceScaler), controlPoint2: CGPointMake(68 / deviceScaler,232 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(77 / deviceScaler,248 / deviceScaler), controlPoint1: CGPointMake(68 / deviceScaler,232 / deviceScaler), controlPoint2: CGPointMake(77 / deviceScaler,237 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(77 / deviceScaler,311 / deviceScaler), controlPoint1: CGPointMake(77 / deviceScaler,259 / deviceScaler), controlPoint2: CGPointMake(77 / deviceScaler,311 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(90 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(77 / deviceScaler,311 / deviceScaler), controlPoint2: CGPointMake(78 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(172 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(101 / deviceScaler,321 / deviceScaler), controlPoint2: CGPointMake(172 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,312 / deviceScaler), controlPoint1: CGPointMake(172 / deviceScaler,321 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,320 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,311 / deviceScaler), controlPoint1: CGPointMake(184 / deviceScaler,305 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,311 / deviceScaler))
+            fillColor.setFill()
+            path.fill()
+        } else if self.duck {
+            var path = UIBezierPath()
+            path.moveToPoint(CGPointMake(40 / deviceScaler,312 / deviceScaler))
+            path.addLineToPoint(CGPointMake(40 / deviceScaler,214 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(31 / deviceScaler,200 / deviceScaler), controlPoint1: CGPointMake(40 / deviceScaler,214 / deviceScaler), controlPoint2: CGPointMake(40 / deviceScaler,206 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(8 / deviceScaler,184 / deviceScaler), controlPoint1: CGPointMake(23 / deviceScaler,195 / deviceScaler), controlPoint2: CGPointMake(8 / deviceScaler,184 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(1 / deviceScaler,170 / deviceScaler), controlPoint1: CGPointMake(8 / deviceScaler,184 / deviceScaler), controlPoint2: CGPointMake(1 / deviceScaler,177 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(1 / deviceScaler,84 / deviceScaler), controlPoint1: CGPointMake(1 / deviceScaler,162 / deviceScaler), controlPoint2: CGPointMake(1 / deviceScaler,84 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(27 / deviceScaler,65 / deviceScaler), controlPoint1: CGPointMake(1 / deviceScaler,84 / deviceScaler), controlPoint2: CGPointMake(4 / deviceScaler,65 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(158 / deviceScaler,65 / deviceScaler), controlPoint1: CGPointMake(51 / deviceScaler,64 / deviceScaler), controlPoint2: CGPointMake(158 / deviceScaler,65 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,86 / deviceScaler), controlPoint1: CGPointMake(158 / deviceScaler,65 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,66 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,86 / deviceScaler), controlPoint1: CGPointMake(158 / deviceScaler,65 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,66 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,170 / deviceScaler), controlPoint1: CGPointMake(184 / deviceScaler,106 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,170 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(176 / deviceScaler,184 / deviceScaler), controlPoint1: CGPointMake(184 / deviceScaler,170 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,178 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(155 / deviceScaler,199 / deviceScaler), controlPoint1: CGPointMake(168 / deviceScaler,191 / deviceScaler), controlPoint2: CGPointMake(155 / deviceScaler,199 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(145 / deviceScaler,214 / deviceScaler), controlPoint1: CGPointMake(155 / deviceScaler,199 / deviceScaler), controlPoint2: CGPointMake(145 / deviceScaler,207 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(145 / deviceScaler,311 / deviceScaler), controlPoint1: CGPointMake(145 / deviceScaler,221 / deviceScaler), controlPoint2: CGPointMake(145 / deviceScaler,311 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(131 / deviceScaler,322 / deviceScaler), controlPoint1: CGPointMake(145 / deviceScaler,311 / deviceScaler), controlPoint2: CGPointMake(146 / deviceScaler,322 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(53 / deviceScaler,322 / deviceScaler), controlPoint1: CGPointMake(116 / deviceScaler,322 / deviceScaler), controlPoint2: CGPointMake(53 / deviceScaler,322 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(53 / deviceScaler,322 / deviceScaler), controlPoint1: CGPointMake(116 / deviceScaler,322 / deviceScaler), controlPoint2: CGPointMake(53 / deviceScaler,322 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(40 / deviceScaler,313 / deviceScaler), controlPoint1: CGPointMake(53 / deviceScaler,322 / deviceScaler), controlPoint2: CGPointMake(40 / deviceScaler,322 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(40 / deviceScaler,312 / deviceScaler), controlPoint1: CGPointMake(40 / deviceScaler,304 / deviceScaler), controlPoint2: CGPointMake(40 / deviceScaler,312 / deviceScaler))
+            fillColor.setFill()
+            path.fill()
+        } else if self.leftUpper {
+            var path = UIBezierPath()
+            path.moveToPoint(CGPointMake(0 / deviceScaler,309 / deviceScaler))
+            path.addLineToPoint(CGPointMake(0 / deviceScaler,26 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(25 / deviceScaler,0 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,26 / deviceScaler), controlPoint2: CGPointMake(2 / deviceScaler,0 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(158 / deviceScaler,0 / deviceScaler), controlPoint1: CGPointMake(47 / deviceScaler,0 / deviceScaler), controlPoint2: CGPointMake(158 / deviceScaler,0 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(186 / deviceScaler,25 / deviceScaler), controlPoint1: CGPointMake(158 / deviceScaler,0 / deviceScaler), controlPoint2: CGPointMake(186 / deviceScaler,3 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(186 / deviceScaler,132 / deviceScaler), controlPoint1: CGPointMake(186 / deviceScaler,46 / deviceScaler), controlPoint2: CGPointMake(186 / deviceScaler,132 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(182 / deviceScaler,145 / deviceScaler), controlPoint1: CGPointMake(186 / deviceScaler,132 / deviceScaler), controlPoint2: CGPointMake(186 / deviceScaler,140 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(117 / deviceScaler,209 / deviceScaler), controlPoint1: CGPointMake(178 / deviceScaler,150 / deviceScaler), controlPoint2: CGPointMake(117 / deviceScaler,209 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(108 / deviceScaler,230 / deviceScaler), controlPoint1: CGPointMake(117 / deviceScaler,209 / deviceScaler), controlPoint2: CGPointMake(108 / deviceScaler,216 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(108 / deviceScaler,308 / deviceScaler), controlPoint1: CGPointMake(108 / deviceScaler,244 / deviceScaler), controlPoint2: CGPointMake(108 / deviceScaler,308 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(95 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(108 / deviceScaler,308 / deviceScaler), controlPoint2: CGPointMake(106 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(12 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(83 / deviceScaler / deviceScaler,321), controlPoint2: CGPointMake(12 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,310 / deviceScaler), controlPoint1: CGPointMake(12 / deviceScaler,321 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,319 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,309 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,301 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,309 / deviceScaler))
+            fillColor.setFill()
+            path.fill()
+        } else if self.rightUpper {
+            var path = UIBezierPath()
+            path.moveToPoint(CGPointMake(184 / deviceScaler,309 / deviceScaler))
+            path.addLineToPoint(CGPointMake(184 / deviceScaler,26 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(159 / deviceScaler,0 / deviceScaler), controlPoint1: CGPointMake(184 / deviceScaler,26 / deviceScaler), controlPoint2: CGPointMake(182 / deviceScaler,0 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(27 / deviceScaler,0 / deviceScaler), controlPoint1: CGPointMake(137 / deviceScaler,0 / deviceScaler), controlPoint2: CGPointMake(27 / deviceScaler,0 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,25 / deviceScaler), controlPoint1: CGPointMake(27 / deviceScaler,0 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,3 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,132 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,46 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,132 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(3 / deviceScaler,145 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,132 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,140 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(68 / deviceScaler,209 / deviceScaler), controlPoint1: CGPointMake(8 / deviceScaler,150 / deviceScaler), controlPoint2: CGPointMake(68 / deviceScaler,209 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(77 / deviceScaler,230 / deviceScaler), controlPoint1: CGPointMake(68 / deviceScaler,209 / deviceScaler), controlPoint2: CGPointMake(77 / deviceScaler,216 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(77 / deviceScaler,308 / deviceScaler), controlPoint1: CGPointMake(77 / deviceScaler,244 / deviceScaler), controlPoint2: CGPointMake(77 / deviceScaler,308 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(90 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(77 / deviceScaler,308 / deviceScaler), controlPoint2: CGPointMake(78 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(172 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(101 / deviceScaler,321 / deviceScaler), controlPoint2: CGPointMake(172 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,310 / deviceScaler), controlPoint1: CGPointMake(172 / deviceScaler,321 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,319 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,309 / deviceScaler), controlPoint1: CGPointMake(184 / deviceScaler,301 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,309 / deviceScaler))
+            fillColor.setFill()
+            path.fill()
+        }else {
+            var path = UIBezierPath()
+            path.moveToPoint(CGPointMake(39 / deviceScaler,309 / deviceScaler))
+            path.addLineToPoint(CGPointMake(39 / deviceScaler,187 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(31 / deviceScaler,170 / deviceScaler), controlPoint1: CGPointMake(39 / deviceScaler,187 / deviceScaler), controlPoint2: CGPointMake(39 / deviceScaler,177 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(7 / deviceScaler,149 / deviceScaler), controlPoint1: CGPointMake(22 / deviceScaler,163 / deviceScaler), controlPoint2: CGPointMake(7 / deviceScaler,149 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,131 / deviceScaler), controlPoint1: CGPointMake(7 / deviceScaler,149 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,141 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(0 / deviceScaler,25 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,121 / deviceScaler), controlPoint2: CGPointMake(0 / deviceScaler,25 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(27 / deviceScaler,0 / deviceScaler), controlPoint1: CGPointMake(0 / deviceScaler,25 / deviceScaler), controlPoint2: CGPointMake(3 / deviceScaler,0 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(158 / deviceScaler,0 / deviceScaler), controlPoint1: CGPointMake(50 / deviceScaler,0 / deviceScaler), controlPoint2: CGPointMake(158 / deviceScaler,0 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,27 / deviceScaler), controlPoint1: CGPointMake(158 / deviceScaler,0 / deviceScaler), controlPoint2: CGPointMake(183 / deviceScaler,2 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(184 / deviceScaler,132 / deviceScaler), controlPoint1: CGPointMake(184 / deviceScaler,52 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,132 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(176 / deviceScaler,150 / deviceScaler), controlPoint1: CGPointMake(184 / deviceScaler,132 / deviceScaler), controlPoint2: CGPointMake(184 / deviceScaler,141 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(155 / deviceScaler,168 / deviceScaler), controlPoint1: CGPointMake(168 / deviceScaler,158 / deviceScaler), controlPoint2: CGPointMake(155 / deviceScaler,168 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(145 / deviceScaler,187 / deviceScaler), controlPoint1: CGPointMake(155 / deviceScaler,168 / deviceScaler), controlPoint2: CGPointMake(145 / deviceScaler,178 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(144 / deviceScaler,308 / deviceScaler), controlPoint1: CGPointMake(145 / deviceScaler,196 / deviceScaler), controlPoint2: CGPointMake(144 / deviceScaler,308 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(130 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(144 / deviceScaler,308 / deviceScaler), controlPoint2: CGPointMake(145 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(53 / deviceScaler,321 / deviceScaler), controlPoint1: CGPointMake(115 / deviceScaler,321 / deviceScaler), controlPoint2: CGPointMake(53 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(39 / deviceScaler,310 / deviceScaler), controlPoint1: CGPointMake(53 / deviceScaler,321 / deviceScaler), controlPoint2:    CGPointMake(39 / deviceScaler,321 / deviceScaler))
+            path.addCurveToPoint(CGPointMake(39 / deviceScaler,309 / deviceScaler), controlPoint1: CGPointMake(39 / deviceScaler,299 / deviceScaler), controlPoint2: CGPointMake(39 / deviceScaler,309 / deviceScaler))
+            fillColor.setFill()
+            path.fill()
+        }
     }
 }
