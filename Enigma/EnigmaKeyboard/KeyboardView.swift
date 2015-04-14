@@ -89,6 +89,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     var popupKey: PopupKey!
     
     var device: String = ""
+    var popupEnabled: Bool = true
     
     
     //MARK: - initialization
@@ -251,10 +252,6 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func buttonTapped(sender: AnyObject){
-        if let superView = self.popupKey.superview {
-            self.popupKey.removeFromSuperview()
-        }
-        
         if self.initilizedPageIndex != -1 {
             if self.profilePages.view.superview != nil {
                 self.showProfilePages.invalidate()
@@ -296,7 +293,9 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     func buttonPressed(sender: AnyObject) {
         var button = sender as! UIButton
         button.backgroundColor = self.keysPressedColor
-        self.keyPopup(button)
+        if self.popupEnabled {
+            self.keyPopup(button)
+        }
     }
     
     func keyPopup(button: UIButton){
@@ -306,9 +305,40 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.popupKey!.label.text = title
             self.popupKeyXOffset(frame)
             self.popupKey!.frame.origin.y = frame.origin.y - self.popupKey!.height + 45
+            if self.device == "iPhone6+" && button.superview == self.row1 || button.superview == self.numberButtonTitles1 || button.superview == self.alternateKeyboardButtonTitles1 {
+                self.popupKey!.duck = true
+                if self.upperLeftButton(title) {
+                    self.popupKey!.leftUpper = true
+                    self.popupKey!.frame.origin.x += 11
+                } else if self.upperRightButton(title) {
+                    self.popupKey!.rightUpper = true
+                    self.popupKey!.frame.origin.x -= 14
+                }
+            } else if self.upperLeftButton(title) {
+                self.popupKey!.leftUpper = true
+                self.popupKey!.frame.origin.x += 10
+            } else if self.upperRightButton(title) {
+                self.popupKey!.rightUpper = true
+                self.popupKey!.frame.origin.x -= 12
+            }
+            self.popupKey!.redoConstraintsForLabel()
             self.popupKey!.setNeedsDisplay()
             button.superview?.addSubview(self.popupKey!)
         }
+    }
+    
+    func upperLeftButton(title: String) -> Bool {
+        if title == "Q" || title == "1" || title == "[" {
+            return true
+        }
+        return false
+    }
+    
+    func upperRightButton(title: String) -> Bool {
+        if title == "P" || title == "0" || title == "=" {
+            return true
+        }
+        return false
     }
     
     func popupKeyXOffset(frame: CGRect){
@@ -339,6 +369,12 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     }
     
     func toggleColor(sender: AnyObject){
+        if let superView = self.popupKey.superview {
+            self.popupKey.duck = false
+            self.popupKey.rightUpper = false
+            self.popupKey.leftUpper = false
+            self.popupKey.removeFromSuperview()
+        }
         let button = sender as! UIButton
         var title: String = button.titleForState(.Normal)!
         switch (title) {
@@ -669,7 +705,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             button.setTitleColor(self.keysTextColor, forState: .Normal)
             button.layer.opacity = 0.5
             button.backgroundColor = self.specialKeysButtonColor
-        } else if title == "123" || title == "return" || title == "\u{1f310}" || title == "+#="{
+        } else if title == "123" || title == "return" || title == "\u{1f310}" || title == "+#=" || title == "ABC" {
             button.titleLabel?.font = UIFont.systemFontOfSize(15)
             button.setTitleColor(self.keysTextColor, forState: .Normal)
             button.layer.opacity = 0.5

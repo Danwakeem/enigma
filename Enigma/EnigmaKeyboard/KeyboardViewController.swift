@@ -114,10 +114,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
+            self.Keyboard.popupEnabled = false
         } else {
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
+            self.Keyboard.popupEnabled = true
         }
     }
     
@@ -127,11 +129,13 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
+            self.Keyboard.popupEnabled = false
         } else {
             self.view.removeConstraint(self.height)
             let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
+            self.Keyboard.popupEnabled = true
         }
     }
     

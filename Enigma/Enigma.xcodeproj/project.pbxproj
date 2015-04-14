@@ -303,8 +303,8 @@
 			isa = PBXGroup;
 			children = (
 				056C3F831AC8AEDB00F1103F /* KeyboardView.swift */,
-				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
 				05E726611ADB91AC009BF808 /* PopupKey.swift */,
+				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
 				05E3CA451AC62741000EDE84 /* Profiles.xib */,
 			);
 			name = Views;
