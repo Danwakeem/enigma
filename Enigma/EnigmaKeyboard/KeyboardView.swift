@@ -306,7 +306,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.popupKey!.label.text = title
             self.popupKeyXOffset(frame)
             self.popupKey!.frame.origin.y = frame.origin.y - self.popupKey!.height + 45
-            if self.device == "iPhone6+" && button.superview == self.row1 || button.superview == self.numberButtonTitles1 || button.superview == self.alternateKeyboardButtonTitles1 {
+            if self.iPhone6PlusTopRow(button) {
                 self.popupKey!.duck = true
                 if self.upperLeftButton(title) {
                     self.popupKey!.leftUpper = true
@@ -321,6 +321,11 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             } else if self.upperRightButton(title) {
                 self.popupKey!.rightUpper = true
                 self.popupKey!.frame.origin.x -= 12
+            } else if self.specialKeyPopup(title) {
+                self.popupKey!.specialWideKey = true
+                self.popupKey!.frame.origin.x -= 2
+                self.popupKeyYOffset(frame)
+                self.popupKey.changeFrame(self.popupKey.frame.origin.x, y: self.popupKey.frame.origin.y)
             }
             self.popupKey!.redoConstraintsForLabel()
             self.popupKey!.setNeedsDisplay()
@@ -328,15 +333,29 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         }
     }
     
+    func iPhone6PlusTopRow(button: UIButton) -> Bool {
+        if self.device == "iPhone6+" && button.superview == self.row1 || button.superview == self.numberButtonTitles1 || button.superview == self.alternateKeyboardButtonTitles1 {
+            return true
+        }
+        return false
+    }
+    
     func upperLeftButton(title: String) -> Bool {
-        if title == "Q" || title == "1" || title == "[" {
+        if title == "Q" || title == "1" || title == "["  || title == "-" || title == "_" {
             return true
         }
         return false
     }
     
     func upperRightButton(title: String) -> Bool {
-        if title == "P" || title == "0" || title == "=" {
+        if title == "P" || title == "0" || title == "=" || title == "\"" || title == "•" {
+            return true
+        }
+        return false
+    }
+    
+    func specialKeyPopup(title: String) -> Bool {
+        if title == "." || title == "," || title == "?" || title == "!" || title ==  "'" {
             return true
         }
         return false
@@ -361,6 +380,21 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         }
     }
     
+    func popupKeyYOffset(frame: CGRect) {
+        switch self.device {
+        case "iPhone6+":
+            self.popupKey!.frame.origin.y -= 35 as CGFloat
+        case "iPhone6":
+            self.popupKey!.frame.origin.y -= 30 as CGFloat
+        case "iPhone5":
+            self.popupKey!.frame.origin.y -= 25 as CGFloat
+        case "iPhone4":
+            self.popupKey!.frame.origin.y -= 24 as CGFloat
+        default:
+            self.popupKey!.frame.origin.y -= 30 as CGFloat
+        }
+    }
+    
     func isPopupKey(title: String) -> Bool {
         if title != "space" && title != "return" && title != "ABC" && title != "123" && title != "\u{232B}" && title != "👱"
             && title != "+#=" && title != "\u{21E7}" && title != "\u{1f310}" {
@@ -374,6 +408,8 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.popupKey.duck = false
             self.popupKey.rightUpper = false
             self.popupKey.leftUpper = false
+            self.popupKey.specialWideKey = false
+            self.popupKey.frame = CGRectMake(0, 0, self.popupKey.width, self.popupKey.height)
             self.popupKey.removeFromSuperview()
         }
         let button = sender as! UIButton
@@ -910,7 +946,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     func addConstraintsToInputView(inputView: UIView, rowViews: [UIView]){
         
         for (index, rowView) in enumerate(rowViews) {
-            if index == 2 {
+            if index == 2  && rowView.subviews.count != 10 {
                 var rightSideConstraint = NSLayoutConstraint(item: rowView, attribute: .Right, relatedBy: .Equal, toItem: inputView, attribute: .Right, multiplier: 1.0, constant: -15)
                 var leftConstraint = NSLayoutConstraint(item: rowView, attribute: .Left, relatedBy: .Equal, toItem: inputView, attribute: .Left, multiplier: 1.0, constant: 15)
                 inputView.addConstraints([leftConstraint, rightSideConstraint])
