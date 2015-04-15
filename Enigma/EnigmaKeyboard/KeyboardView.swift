@@ -144,6 +144,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         default:
             self.device = "iPhone6"
         }
+        println("Device type: \(self.device)")
     }
     
     // MARK - Change keyboard color
