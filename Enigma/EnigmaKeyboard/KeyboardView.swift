@@ -142,7 +142,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
                 self.device = "iPhone4"
             }
         default:
-            self.device = "iPhone6"
+            self.device = "iPad"
         }
         println("Device type: \(self.device)")
     }
@@ -294,7 +294,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     func buttonPressed(sender: AnyObject) {
         var button = sender as! UIButton
         button.backgroundColor = self.keysPressedColor
-        if self.popupEnabled {
+        if self.popupEnabled  && self.device != "iPad" {
             self.keyPopup(button)
         }
     }
