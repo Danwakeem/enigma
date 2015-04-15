@@ -51,7 +51,7 @@ class PopupKey: UIView {
             self.deviceScaler = 3.3
         case "iPhone5":
             self.deviceScaler = 3.8
-        case "iPhone 4":
+        case "iPhone4":
             self.deviceScaler = 3.9
         default:
             self.deviceScaler = 3.3
@@ -70,6 +70,7 @@ class PopupKey: UIView {
         label.text = "H"
         label.textColor = UIColor.darkTextColor()
         label.font = UIFont.systemFontOfSize(self.labelSize)
+        label.textAlignment = .Center
         self.addSubview(label)
         label.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.constraintsForLabel()
@@ -81,7 +82,7 @@ class PopupKey: UIView {
     }
     
     func constraintsForLabel() {
-        let x = NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 4)
+        let x = NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0)
         let top = NSLayoutConstraint(item: label, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 10)
         let height = NSLayoutConstraint(item: label, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: self.labelSize)
         let width = NSLayoutConstraint(item: label, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: self.labelSize)
@@ -91,8 +92,9 @@ class PopupKey: UIView {
     func redoConstraintsForLabel(){
         self.removeConstraints(self.constraints())
         if self.duck {
-            let x = NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 5)
-            let top = NSLayoutConstraint(item: label, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 26)
+            let x = NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0)
+            //let x = NSLayoutConstraint(item: label, attribute: .Left, relatedBy: .Equal, toItem: self, attribute: .Left, multiplier: 1.0, constant: 13)
+            let top = NSLayoutConstraint(item: label, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 28)
             let height = NSLayoutConstraint(item: label, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40)
             let width = NSLayoutConstraint(item: label, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40)
             self.addConstraints([x,top,height,width])
