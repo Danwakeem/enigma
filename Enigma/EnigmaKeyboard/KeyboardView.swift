@@ -423,7 +423,6 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             button.backgroundColor = self.specialKeysButtonColor
         case "\u{21E7}":
             println("Shift")
-            //button.backgroundColor = self.specialKeysButtonColor
         default:
             button.backgroundColor = self.keysBackgroundColor
         }

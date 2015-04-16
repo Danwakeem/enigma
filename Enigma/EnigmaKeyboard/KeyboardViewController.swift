@@ -12,7 +12,7 @@ import AudioToolbox
 
 class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerDelegate, KeyboardViewDelegate {
     
-    var upperCase: Bool = false
+    var upperCase: Bool = true
     var caseLock: Bool = false
     var firstLetter: Bool = true
     var lastTypedWord: String = ""
@@ -62,7 +62,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.proxy = textDocumentProxy as! UITextDocumentProxy
+        self.proxy = self.textDocumentProxy as! UITextDocumentProxy
         
         println("Screen Width: \(UIScreen.mainScreen().bounds.size.width)")
         println("Screen Height: \(UIScreen.mainScreen().bounds.size.height)")
@@ -121,6 +121,37 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.view.addConstraint(keyboardHeight)
             self.Keyboard.popupEnabled = true
         }
+        
+        //NOTE - Disable upper case if the
+        if self.proxy.hasText() {
+            if let inputText = self.proxy.documentContextBeforeInput {
+                var index = inputText.endIndex.predecessor()
+                if isPunctuation(inputText[index]) {
+                    self.Keyboard.shiftKey.backgroundColor = self.Keyboard.shiftKeyPressedColor
+                } else {
+                    if count(inputText) >= 2 {
+                        if isPunctuation(inputText[index.predecessor()]) {
+                            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.shiftKeyPressedColor
+                        } else {
+                            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+                            self.upperCase = !self.upperCase
+                        }
+                    } else {
+                        self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+                        self.upperCase = !self.upperCase
+                    }
+                }
+            }
+        } else {
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.shiftKeyPressedColor
+        }
+    }
+    
+    func isPunctuation(ch: Character) -> Bool {
+        if ch == "." || ch == "?" || ch == "!" {
+            return true
+        }
+        return false
     }
     
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
@@ -255,6 +286,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 self.advanceToNextInputMode()
             case "\u{21E7}" :
                 self.upperCase = !self.upperCase
+                if !self.upperCase {
+                    self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+                }
             case "123" :
                 println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
@@ -280,6 +314,13 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 		playSound()
     }
     
+    func changeToUpperCase() {
+        if !self.proxy.hasText() {
+            self.upperCase = !self.upperCase
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.shiftKeyPressedColor
+        }
+    }
+    
     func pressedBackSpace(title: String){
         //Getting rid of the last typed word with input field
         if !self.lastTypedWord.isEmpty {
@@ -297,7 +338,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         
         self.Keyboard.rawTextLabel.text = self.lastTypedWord
-        //self.rawTextLabel.text = self.lastTypedWord
+        
+        self.changeToUpperCase()
 		
 		playSound()
     }
@@ -352,7 +394,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
         
     func insertText(title: String){
-        if self.upperCase || self.caseLock || self.firstLetter {
+        if self.upperCase || self.caseLock && title != " " {
             self.setRawTextlabelText(title)
             self.clearTextInsert(title)
             self.lastTypedWord += title
@@ -360,13 +402,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 //Undo upercase so the next word wont be capitalized.
                 self.upperCase = !self.upperCase
                 self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
-            } else if self.firstLetter {
-                //Uncheck first letter so the next one wont be capitalized.
-                self.firstLetter = !self.firstLetter
-            } else {
-                if self.currentProfileName == "Clear" {
-                    
-                }
             }
         } else {
             //Adding a letter to the input and saving each letter so we know what the user just typed in
@@ -432,6 +467,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 			holdDeleteTimer.invalidate()
 		}
 		preTimer.invalidate()
+        self.changeToUpperCase()
 	}
 	
 	func deleteChar() {
