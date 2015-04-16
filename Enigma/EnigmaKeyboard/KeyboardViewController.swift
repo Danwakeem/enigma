@@ -48,6 +48,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
 	var defaults: NSUserDefaults!
     
+    var neverCaps: Bool = false
+    var alwaysCaps: Bool = false
+    
     @IBOutlet var nextKeyboardButton: UIButton!
     
     override func updateViewConstraints() {
@@ -145,6 +148,17 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         } else {
             self.Keyboard.shiftKey.backgroundColor = self.Keyboard.shiftKeyPressedColor
         }
+        
+        if self.proxy.autocapitalizationType == UITextAutocapitalizationType.None {
+            println("Auto Cap is None!!!")
+            self.neverCaps = true
+            self.upperCase = false
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+        } else if self.proxy.autocapitalizationType == UITextAutocapitalizationType.AllCharacters {
+            self.alwaysCaps = true
+            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.shiftKeyPressedColor
+        }
+        
     }
     
     func isPunctuation(ch: Character) -> Bool {
@@ -285,9 +299,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             case "\u{1f310}" :
                 self.advanceToNextInputMode()
             case "\u{21E7}" :
-                self.upperCase = !self.upperCase
-                if !self.upperCase {
-                    self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+                if !self.alwaysCaps {
+                    self.upperCase = !self.upperCase
+                    if !self.upperCase {
+                        self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
+                    }
                 }
             case "123" :
                 println("Current Index = \(self.Keyboard.initilizedPageIndex)")
@@ -301,6 +317,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
+                if self.upperCase {
+                    self.changeToUpperCase()
+                }
             case "👱":
                 self.toggleProfileTable()
             default :
@@ -315,10 +334,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func changeToUpperCase() {
-        if !self.proxy.hasText() {
-            self.upperCase = !self.upperCase
-            self.Keyboard.shiftKey.backgroundColor = self.Keyboard.shiftKeyPressedColor
-        }
+        self.upperCase = true
+        self.Keyboard.shiftKey.backgroundColor = self.Keyboard.shiftKeyPressedColor
     }
     
     func pressedBackSpace(title: String){
@@ -339,7 +356,17 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         self.Keyboard.rawTextLabel.text = self.lastTypedWord
         
-        self.changeToUpperCase()
+        /*
+        if !self.proxy.hasText() {
+            if self.neverCaps != true {
+                self.changeToUpperCase()
+            }
+        }
+        */
+        
+        if !self.proxy.hasText() {
+            self.changeToUpperCase()
+        }
 		
 		playSound()
     }
@@ -360,6 +387,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.proxy.deleteBackward()
             self.proxy.insertText(". ")
             self.lastTypedWord = " "
+            self.upperCase = true
 			allowQuickPeriod = false
         } else if self.currentProfileName == "Clear" {
             self.proxy.insertText(" ")
@@ -389,25 +417,37 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 			
 			quickPeriodTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("stopQuickPeriod"), userInfo: nil, repeats: false)
         }
+        
+        if self.proxy.autocapitalizationType == .Words {
+            self.changeToUpperCase()
+        }
 		
 		playSound()
     }
         
     func insertText(title: String){
-        if self.upperCase || self.caseLock && title != " " {
-            self.setRawTextlabelText(title)
+        if self.upperCase || self.caseLock || self.alwaysCaps && title != " " {
             self.clearTextInsert(title)
-            self.lastTypedWord += title
-            if self.upperCase {
+            if self.currentProfileName != "Clear" {
+                self.setRawTextlabelText(title)
+                self.lastTypedWord += title
+            }
+            if self.upperCase && !self.alwaysCaps {
                 //Undo upercase so the next word wont be capitalized.
                 self.upperCase = !self.upperCase
                 self.Keyboard.shiftKey.backgroundColor = self.Keyboard.specialKeysButtonColor
             }
         } else {
             //Adding a letter to the input and saving each letter so we know what the user just typed in
-            self.setRawTextlabelText(title.lowercaseString)
             self.clearTextInsert(title.lowercaseString)
-            self.lastTypedWord += title.lowercaseString
+            if self.currentProfileName != "Clear" {
+                self.setRawTextlabelText(title.lowercaseString)
+                self.lastTypedWord += title.lowercaseString
+            }
+        }
+        
+        if self.proxy.autocapitalizationType == UITextAutocapitalizationType.Sentences && self.isPunctuation(title[title.startIndex]) {
+            self.changeToUpperCase()
         }
     }
     
@@ -467,7 +507,17 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 			holdDeleteTimer.invalidate()
 		}
 		preTimer.invalidate()
-        self.changeToUpperCase()
+        /*
+        if !self.proxy.hasText() {
+            if self.neverCaps != true {
+                self.changeToUpperCase()
+            }
+        }
+        */
+        
+        if !self.proxy.hasText() {
+            self.changeToUpperCase()
+        }
 	}
 	
 	func deleteChar() {
