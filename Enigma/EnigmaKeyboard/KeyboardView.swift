@@ -241,6 +241,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         self.rawTextLabel.textColor = UIColor.whiteColor()
         self.keysPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
         self.shiftKeyPressedColor = UIColor(red: 0.047, green: 0.047, blue: 0.047, alpha: 1.0)
+        self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
     }
     
     //MARK: - Delegate methods
