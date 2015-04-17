@@ -309,10 +309,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.numberButtonTitles1,Keyboard.numberButtonTitles2,Keyboard.numberButtonTitles3,Keyboard.numberButtonTitles4])
+                self.Keyboard.isAlternateKeyboard = true
             case "+#=":
                 println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
                 self.Keyboard.createKeyboard([Keyboard.alternateKeyboardButtonTitles1,Keyboard.alternateKeyboardButtonTitles2,Keyboard.alternateKeyboardButtonTitles3,Keyboard.numberButtonTitles4])
+                self.Keyboard.isAlternateKeyboard = true
             case "ABC" :
                 println("Current Index = \(self.Keyboard.initilizedPageIndex)")
                 self.Keyboard.removeViews()
@@ -327,9 +329,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 					self.lastTypedWord = ""
 				}
                 self.insertText(title)
+                if self.Keyboard.isAlternateKeyboard {
+                    self.Keyboard.canSwitchToAlphaKeyboard = true
+                }
             }
         }
-		
+        
 		playSound()
     }
     
@@ -355,14 +360,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         
         self.Keyboard.rawTextLabel.text = self.lastTypedWord
-        
-        /*
-        if !self.proxy.hasText() {
-            if self.neverCaps != true {
-                self.changeToUpperCase()
-            }
-        }
-        */
         
         if !self.proxy.hasText() {
             self.changeToUpperCase()
@@ -419,6 +416,14 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         }
         
         if self.proxy.autocapitalizationType == .Words {
+            self.changeToUpperCase()
+        }
+        
+        if self.Keyboard.isAlternateKeyboard && self.Keyboard.canSwitchToAlphaKeyboard {
+            self.Keyboard.removeViews()
+            self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
+            self.Keyboard.isAlternateKeyboard = false
+            self.Keyboard.canSwitchToAlphaKeyboard = false
             self.changeToUpperCase()
         }
 		

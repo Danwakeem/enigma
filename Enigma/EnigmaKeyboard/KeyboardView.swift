@@ -46,6 +46,9 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     var decryptionView: UIView!
     var rowHeight: CGFloat!
     
+    var isAlternateKeyboard = false
+    var canSwitchToAlphaKeyboard = false
+    
     var profileSwipeRow: UIView!
     var profilePages: UIPageViewController!
     var initilizedPageIndex: Int!
