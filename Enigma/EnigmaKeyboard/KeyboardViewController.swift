@@ -23,7 +23,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     let notificationKey = "com.SlayterDev.selectedProfile"
     
     var currentProfile: NSManagedObject?
-    var currentEncryptionMethods: Dictionary<String,[AnyObject]> = ["Clear": ["0", "0"]]
+    var currentEncryptionMethods = [["Clear": ["0", "0"]]] as [Dictionary<String,[AnyObject]>]
+    //var clearTextdictionary: Dictionary<String,[AnyObject]> = ["Clear": ["0", "0"]]
     var currentProfileName: String = "default"
     var currentObjectId: NSURL!
     var initializedProfileIndex: Int = -1
@@ -374,7 +375,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 	}
 	
     func pressedSpace(title: String){
-        
         self.Keyboard.rawTextLabel.text = ""
         //self.rawTextLabel.text = ""
         
@@ -390,20 +390,20 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.proxy.insertText(" ")
         } else {
             //Encryption test :)
-            var encryptedString: String!
+            var encryptedString: String = self.lastTypedWord
             
-            for (key,value) in self.currentEncryptionMethods {
-                var eType: EncryptionType = self.encryptionTypes[key]!
-                var key1: String = value[0] as! String
-                var key2: Int32!
-                var key2String: String = value[1] as! String
-                if let k2 = key2String.toInt() {
-                    key2 = Int32(k2)
+            for encryption in self.currentEncryptionMethods {
+                for (key,value) in encryption as Dictionary<String,[AnyObject]> {
+                    var eType: EncryptionType = self.encryptionTypes[key]!
+                    var key1: String = value[0] as! String
+                    var key2: Int32!
+                    var key2String: String = value[1] as! String
+                    if let k2 = key2String.toInt() {
+                        key2 = Int32(k2)
+                    }
+                    encryptedString = EncrytionFramework.encrypt(encryptedString, using: eType, withKey: key1, andKey: key2)
                 }
-                encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: eType, withKey: key1, andKey: key2)
-                //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Vigenere, withKey: "lemon", andKey: 0)
             }
-            //var encryptedString = EncrytionFramework.encrypt(self.lastTypedWord, using: Caesar, withKey: "13", andKey: 0)
 			
 			if self.lastTypedWord != " " {
 				allowQuickPeriod = true
@@ -474,21 +474,23 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         let pasteBoard = UIPasteboard.generalPasteboard()
         if let text = pasteBoard.string {
             self.Keyboard.decryptedTextLabel.text = self.decryptText(text)
-            //self.decryptedTextLabel.text = self.decryptText(text)
         }
     }
     
     func decryptText(text: String) -> String{
         var returnString: String = text
-        for (key,value) in self.currentEncryptionMethods {
-            var eType: EncryptionType = self.encryptionTypes[key]!
-            var key1: String = value[0] as! String
-            var key2: Int32!
-            var key2String: String = value[1] as! String
-            if let k2 = key2String.toInt() {
-                key2 = Int32(k2)
+        
+        for encryption in self.currentEncryptionMethods {
+            for (key,value) in encryption as Dictionary<String,[AnyObject]> {
+                var eType: EncryptionType = self.encryptionTypes[key]!
+                var key1: String = value[0] as! String
+                var key2: Int32!
+                var key2String: String = value[1] as! String
+                if let k2 = key2String.toInt() {
+                    key2 = Int32(k2)
+                }
+                returnString = EncrytionFramework.encrypt(self.lastTypedWord, using: eType, withKey: key1, andKey: key2)
             }
-            returnString = EncrytionFramework.decrypt(returnString, using: eType, withKey: key1, andKey: key2)
         }
         
         return returnString
@@ -512,13 +514,6 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
 			holdDeleteTimer.invalidate()
 		}
 		preTimer.invalidate()
-        /*
-        if !self.proxy.hasText() {
-            if self.neverCaps != true {
-                self.changeToUpperCase()
-            }
-        }
-        */
         
         if !self.proxy.hasText() {
             self.changeToUpperCase()
@@ -631,7 +626,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         var encryptionDictionary = Dictionary<String,[AnyObject]>()
         encryptionDictionary = ["Clear": ["0","0"]]
         self.currentProfileName = "Clear"
-        self.currentEncryptionMethods = encryptionDictionary
+        self.currentEncryptionMethods = [encryptionDictionary]
         self.currentObjectId = nil
         self.currentProfile = nil
     }
@@ -663,11 +658,12 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         var profile: NSManagedObject!
         profile = currentProfile
         if let encryptions: NSOrderedSet = profile?.mutableOrderedSetValueForKeyPath("encryption") {
-            var newEncryptionMethods = Dictionary<String,[AnyObject]>()
+            var encryptionMethods = Array<Dictionary<String,[AnyObject]>>()
             
             //NOTE 2.0 - Hey since we are using swift 1.2 we can now use NSOrderedSet as a sequence type now we don't have to use the dumb
             //           completion handler thing. NICE!
             for e in encryptions {
+                var newEncryptionDictionary = Dictionary<String,[AnyObject]>()
                 var encryptMethod = e.valueForKeyPath("encryptionType") as! String!
                 var key1 = e.valueForKeyPath("key1") as! String!
                 var key2 = "0"
@@ -677,25 +673,11 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                     }
                 }
                 var keys = [key1,key2]
-                newEncryptionMethods = [encryptMethod: keys]
+                newEncryptionDictionary[encryptMethod] = keys
+                encryptionMethods.append(newEncryptionDictionary)
             }
-            self.currentEncryptionMethods = newEncryptionMethods
-            
-            /*
-            //NOTE - This was how NSOrderedSets were handled before swift 1.2 was released. Going to keep this here for refference just in case.
-            encryptions.enumerateObjectsUsingBlock { (e, index, stop) -> Void in
-                var encryptMethod = e.valueForKeyPath("encryptionType") as! String!
-                var key1 = e.valueForKeyPath("key1") as! String!
-                var key2 = "0"
-                if let k2: String = e.valueForKeyPath("key2") as? String {
-                    if k2 != "" {
-                        key2 = k2
-                    }
-                }
-                var keys = [key1,key2]
-                newEncryptionMethods = [encryptMethod: keys]
-            }
-            */
+            self.currentEncryptionMethods = encryptionMethods
+            //self.currentEncryptionMethods = newEncryptionMethods
         }
     }
     
