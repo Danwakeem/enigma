@@ -26,11 +26,12 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	
 	@IBAction func toggleEdit(sender: AnyObject) {
 		setEditing(!editing, animated: true)
-		self.addButton.hidden = !editing
 	}
 	
 	override func setEditing(editing: Bool, animated: Bool) {
 		super.setEditing(editing, animated: animated)
+		
+		self.addButton.hidden = !editing
 		
 		if editing == false {
 			saveProfile()
@@ -143,8 +144,17 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			errorList.append("name")
 		}
 		
-		for encryption in encryptions {
-			// TODO: validate
+		for encryption in encryptionList {
+			let key = encryption.valueForKey("key1") as! String
+			println(key)
+			if key == "" {
+				errorList.append(encryption.valueForKey("encryptionType") as! String)
+			}
+			
+			let type = EncrytionFramework.encryptionTypeForString(encryption["encryptionType"] as! String)
+			if EncrytionFramework.validateKeyWithKey(encryption["key1"] as! String, type: type, andKeyNumber: 1) == false {
+				errorList.append(encryption["encryptionType"] as! String)
+			}
 		}
 		
 		errors(errorList)
@@ -153,6 +163,38 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	func saveProfile() {
 		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
+		
+		
+		validateProfile({ (errors) -> Void in
+			var errorMessage: String
+			
+			if count(errors) == 1 {
+				errorMessage = "The \(errors[0]) field is invalid."
+			} else {
+				errorMessage = "The following fields are invalid:\n"
+				
+				for (i, error) in enumerate(errors) {
+					errorMessage += error
+					if i < (count(errors) - 2) {
+						errorMessage += ", "
+					} else if i < (count(errors) - 1) {
+						errorMessage += ", and "
+					} else {
+						errorMessage += "."
+					}
+				}
+			}
+			
+			if count(errors) > 0 {
+				var alert = UIAlertController(title: "Invalid Information", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+				alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+				self.presentViewController(alert, animated: true, completion: nil)
+				
+				self.setEditing(true, animated: false)
+				
+				return
+			}
+		})
 		
 		let newSet = NSMutableOrderedSet()
 		for var i = 0; i < encryptionList.count; i++ {
@@ -178,58 +220,6 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			newProfile.setValue(self.name, forKey: "name")
 			newProfile.setValue(newSet, forKey: "encryption")
 		}
-		
-		/*validateProfile({ (errors) -> Void in
-			var errorMessage: String
-			
-			if count(errors) == 1 {
-				errorMessage = "The \(errors[0]) field is invalid."
-			} else {
-				errorMessage = "The following fields are invalid:\n"
-				
-				for (i, error) in enumerate(errors) {
-					errorMessage += error
-					if i < (count(errors) - 2) {
-						errorMessage += ", "
-					} else if i < (count(errors) - 1) {
-						errorMessage += ", and "
-					} else {
-						errorMessage += "."
-					}
-				}
-			}
-			
-			if count(errors) > 0 {
-				var alert = UIAlertController(title: "Invalid Information", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
-				alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-				self.presentViewController(alert, animated: true, completion: nil)
-				return
-			}
-		})
-		
-		if let existingProfile = profile {
-			existingProfile.setValue(name, forKey: "name")
-			
-			for encryption in encryptions {
-				encryption.setValue(cypher, forKey: "encryptionType")
-				encryption.setValue(key1, forKey: "key1")
-			}
-		} else {
-			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
-			let newProfile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-			let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
-			let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
-			
-			newProfile.setValue("", forKey: "name")
-			newProfile.setValue(NSDate(), forKey: "timestamp")
-			
-			encryption.setValue(cypher, forKey: "encryptionType")
-			encryption.setValue(key1, forKey: "key1")
-			encryption.setValue("", forKey: "key2")
-			encryption.setValue(newProfile, forKey: "profiles")
-			
-			profile = newProfile
-		}*/
 		
 		var error: NSError?
 		if !managedContext.save(&error) {

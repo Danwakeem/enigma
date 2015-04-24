@@ -37,6 +37,6 @@ class ProfileDetailHeaderView: UICollectionReusableView, UITextFieldDelegate {
 	}
 	
 	func textFieldDidEndEditing(textField: UITextField) {
-		
+		delegate.profileNameChanged(textField.text)
 	}
 }

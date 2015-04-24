@@ -41,7 +41,7 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 	}
 	
 	func textFieldDidEndEditing(textField: UITextField) {
-		
+		delegate.cypherChanged(self, key: "key1", value: keyField.text)
 	}
 	
 	@IBAction func changeEncryptionMethod(sender: AnyObject) {
