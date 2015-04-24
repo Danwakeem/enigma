@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ProfileDetailCellDelegate {
-	func cypherChanged(cell: ProfileDetailCell ,key: String, value: String)
+	func cypherChanged(cell: ProfileDetailCell, key: String, value: String)
 }
 
 class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
@@ -23,7 +23,6 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 		"SimpleSub",
 		"Caesar",
 		"Affine",
-		"Clear",
 		"Vigenere"
 	]
 	

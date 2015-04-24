@@ -20,8 +20,11 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	var cypher: String = "Cypher"
 	var key1: String = ""
 	
+	var addButton: UIButton!
+	
 	@IBAction func toggleEdit(sender: AnyObject) {
 		setEditing(!editing, animated: true)
+		self.addButton.hidden = !editing
 	}
 	
 	override func setEditing(editing: Bool, animated: Bool) {
@@ -59,8 +62,12 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
 		btn.layer.cornerRadius = 27.5
 		btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
+		btn.contentVerticalAlignment = .Center
 		self.view.addSubview(btn)
 		self.view.bringSubviewToFront(btn)
+		
+		self.addButton = btn
+		self.addButton.hidden = !editing
 		
 	}
 	
@@ -281,7 +288,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	
 	func addEncryption(sender: AnyObject) {
 		let emptyCypher = NSMutableDictionary()
-		emptyCypher.setValue("Caesar", forKey: "encryptionType")
+		emptyCypher.setValue("SimpleSub", forKey: "encryptionType")
 		emptyCypher.setValue("", forKey: "key1")
 		encryptionList.append(emptyCypher)
 		self.collectionView?.reloadData()

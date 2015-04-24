@@ -21,7 +21,15 @@ class ProfileDetailHeaderView: UICollectionReusableView, UITextFieldDelegate {
 		super.init(coder: aDecoder)
 	}
 	
-	func textFieldDidEndEditing(textField: UITextField) {
+	func textFieldShouldReturn(textField: UITextField) -> Bool {
 		delegate.profileNameChanged(textField.text)
+		
+		textField.resignFirstResponder()
+		
+		return true
+	}
+	
+	func textFieldDidEndEditing(textField: UITextField) {
+		
 	}
 }
