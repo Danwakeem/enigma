@@ -204,7 +204,22 @@
 	return strProf;
 }
 
++(EncryptionType) encryptionTypeForString:(NSString *)type {
+	if ([type isEqualToString:@"SimpleSub"])
+		return SimpleSub;
+	else if ([type isEqualToString:@"Caesar"])
+		return Caesar;
+	else if ([type isEqualToString:@"Vigenere"])
+		return Vigenere;
+	else if ([type isEqualToString:@"Affine"])
+		return Affine;
+	
+	return Clear;
+}
+
 +(BOOL) validateKeyWithKey:(NSString *)key type:(EncryptionType)type andKeyNumber:(int)keyNum {
+	NSLog(@"Validating with %@, %d", key, type);
+	
 	NSCharacterSet *chars;
 	NSArray *affineKeyA = @[@1, @3, @5, @7, @9, @11, @15, @17, @19, @21, @23, @25];
 	switch (type) {
@@ -233,6 +248,7 @@
 			}
 			break;
 		default:
+			NSLog(@"No encryption type found");
 			break;
 	}
 	

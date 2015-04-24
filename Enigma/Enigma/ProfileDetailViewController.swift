@@ -11,12 +11,18 @@ import CoreData
 
 class ProfileDetailViewController: UICollectionViewController, ProfileDetailHeaderViewDelegate, ProfileDetailCellDelegate {
 	var profile: NSManagedObject? = nil
-	var encryptions = [NSManagedObject]()
+	var encryptions = NSOrderedSet()
+	
+	var encryptionList = [NSMutableDictionary]()
 	
 	// TODO: Impliment an edit buffer so that multiple encryptions can be handled
 	var name: String = ""
 	var cypher: String = "Cypher"
 	var key1: String = ""
+	
+	var addButton: UIButton!
+	
+	var selectedCell: NSIndexPath!
 	
 	@IBAction func toggleEdit(sender: AnyObject) {
 		setEditing(!editing, animated: true)
@@ -24,6 +30,8 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	
 	override func setEditing(editing: Bool, animated: Bool) {
 		super.setEditing(editing, animated: animated)
+		
+		self.addButton.hidden = !editing
 		
 		if editing == false {
 			saveProfile()
@@ -46,12 +54,38 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			name = profileName
 		}
 		fetchEncryptions()
+		self.collectionView?.reloadData()
+		
+		let bounds = UIScreen.mainScreen().bounds
+		
+		let btn = UIButton()
+		btn.frame = CGRectMake(bounds.width - 75, bounds.height - 135, 55, 55)
+		btn.setTitle("+", forState: .Normal)
+		btn.titleLabel?.font = UIFont.systemFontOfSize(28)
+		btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
+		btn.layer.cornerRadius = 27.5
+		btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
+		btn.contentVerticalAlignment = .Center
+		self.view.addSubview(btn)
+		self.view.bringSubviewToFront(btn)
+		
+		self.addButton = btn
+		self.addButton.hidden = !editing
+		
+	}
+	
+	override func viewWillAppear(animated: Bool) {
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardDidShowNotification, object: nil)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
 		if editing == true {
 			// Unsaved changes are lost
 		}
+		
+		NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+		NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -61,7 +95,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return 1
+		return encryptionList.count
 	}
 	
 	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -70,12 +104,12 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		cell.layer.borderColor = UIColor(white: 204.0/255.0, alpha: 1.0).CGColor
 		cell.layer.borderWidth = 0.5
 		
-		//var encryption = encryptions[indexPath.row]
+		var encryption = encryptionList[indexPath.row]
 		
 		cell.delegate = self
-		cell.cypherButton.setTitle(cypher, forState: .Normal)
+		cell.cypherButton.setTitle((encryption["encryptionType"] as! String), forState: UIControlState.Normal)
 		cell.cypherButton.enabled = editing
-		cell.keyField.text = key1
+		cell.keyField.text = encryption["key1"] as! String
 		cell.keyField.enabled = editing
 		
 		return cell
@@ -99,7 +133,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-		return max(1, encryptions.count)
+		return 1
 	}
 	
 	func validateProfile(errors: ([String]) -> Void) {
@@ -110,8 +144,17 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			errorList.append("name")
 		}
 		
-		for encryption in encryptions {
-			// TODO: validate
+		for encryption in encryptionList {
+			let key = encryption.valueForKey("key1") as! String
+			println(key)
+			if key == "" {
+				errorList.append(encryption.valueForKey("encryptionType") as! String)
+			}
+			
+			let type = EncrytionFramework.encryptionTypeForString(encryption["encryptionType"] as! String)
+			if EncrytionFramework.validateKeyWithKey(encryption["key1"] as! String, type: type, andKeyNumber: 1) == false {
+				errorList.append(encryption["encryptionType"] as! String)
+			}
 		}
 		
 		errors(errorList)
@@ -120,6 +163,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	func saveProfile() {
 		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
+		
 		
 		validateProfile({ (errors) -> Void in
 			var errorMessage: String
@@ -145,32 +189,36 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 				var alert = UIAlertController(title: "Invalid Information", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
 				alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
 				self.presentViewController(alert, animated: true, completion: nil)
+				
+				self.setEditing(true, animated: false)
+				
 				return
 			}
 		})
 		
-		if let existingProfile = profile {
-			existingProfile.setValue(name, forKey: "name")
-			
-			for encryption in encryptions {
-				encryption.setValue(cypher, forKey: "encryptionType")
-				encryption.setValue(key1, forKey: "key1")
-			}
-		} else {
-			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
-			let newProfile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+		let newSet = NSMutableOrderedSet()
+		for var i = 0; i < encryptionList.count; i++ {
 			let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
 			let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
 			
-			newProfile.setValue("", forKey: "name")
-			newProfile.setValue(NSDate(), forKey: "timestamp")
+			let dict = encryptionList[i]
 			
-			encryption.setValue(cypher, forKey: "encryptionType")
-			encryption.setValue(key1, forKey: "key1")
-			encryption.setValue("", forKey: "key2")
-			encryption.setValue(newProfile, forKey: "profiles")
+			encryption.setValue(dict["encryptionType"], forKey: "encryptionType")
+			encryption.setValue(dict["key1"], forKey: "key1")
 			
-			profile = newProfile
+			newSet.addObject(encryption)
+			
+		}
+		
+		if let existingProfile = profile {
+			profile?.setValue(newSet, forKey: "encryption")
+			profile?.setValue(self.name, forKey: "name")
+		} else {
+			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
+			let newProfile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+			
+			newProfile.setValue(self.name, forKey: "name")
+			newProfile.setValue(newSet, forKey: "encryption")
 		}
 		
 		var error: NSError?
@@ -189,17 +237,28 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		}
 	}
 	
-	func cypherChanged(key: String, value: String) {
-		if key == "key1" {
-			self.key1 = value
-		} else {
-			self.cypher = value
-			collectionView?.reloadData()
-		}
+	func cypherChanged(cell: ProfileDetailCell, key: String, value: String) {
+		println("Cypher changed: \(key), \(value)")
+		
+		var index = self.collectionView?.indexPathForCell(cell)
+		let dict = encryptionList[index!.row]
+		
+		
+		dict.setValue(value, forKey: key)
+		collectionView?.reloadData()
 		
 		if editing == false {
 			setEditing(false, animated: true)
 		}
+	}
+	
+	func focusOnView(cell: ProfileDetailCell) {
+		let index = self.collectionView?.indexPathForCell(cell)
+		self.selectedCell = index
+	}
+	
+	func nameSelected() {
+		self.selectedCell = nil
 	}
 	
 	func fetchEncryptions() {
@@ -216,15 +275,32 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		var error: NSError?
 		let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as! [NSManagedObject]?
 		if let results = fetchedResults {
-			encryptions = results
+			encryptions = profile!.mutableOrderedSetValueForKey("encryption")
 			
 			// TODO: This will be removed once the edit buffer is implimented
-			var first = encryptions[0]
+			/*var first = encryptions[0] as! NSManagedObject
 			cypher = first.valueForKey("encryptionType") as! String!
-			key1 = first.valueForKey("key1") as! String!
+			key1 = first.valueForKey("key1") as! String!*/
+			
+			for var i = 0; i < encryptions.count; i++ {
+				let dict = NSMutableDictionary()
+				let encr = encryptions[i] as! NSManagedObject
+				dict.setValue(encr.valueForKey("encryptionType"), forKey: "encryptionType")
+				dict.setValue(encr.valueForKey("key1"), forKey: "key1")
+				encryptionList.append(dict)
+			}
+			
 		} else {
 			println("Could not fetch \(error), \(error!.userInfo)")
 		}
+	}
+	
+	func addEncryption(sender: AnyObject) {
+		let emptyCypher = NSMutableDictionary()
+		emptyCypher.setValue("SimpleSub", forKey: "encryptionType")
+		emptyCypher.setValue("", forKey: "key1")
+		encryptionList.append(emptyCypher)
+		self.collectionView?.reloadData()
 	}
 	
 	// MARK: - Segues
@@ -237,5 +313,26 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		default:
 			println("Default segue")
 		}
+	}
+	
+	// MARK: - Keyboard Notifications
+	
+	func keyboardWillShow(aNotification: NSNotification) {
+		let info = aNotification.userInfo!
+		let kbRect: CGRect = (info[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+		let kbSize = kbRect.size as CGSize
+		
+		let newEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0)
+		self.collectionView?.contentInset = newEdgeInsets
+		
+		if let cellIndex = self.selectedCell {
+			self.collectionView?.scrollToItemAtIndexPath(cellIndex, atScrollPosition: .CenteredVertically, animated: true)
+		}
+	}
+	
+	func keyboardWillHide(aNotification: NSNotification) {
+		let insets = UIEdgeInsetsZero
+		self.collectionView?.contentInset = insets
+		self.collectionView?.scrollIndicatorInsets = insets
 	}
 }

@@ -29,5 +29,6 @@ typedef enum {
 +(NSString *) decrypt:(NSString *)message Using:(EncryptionType)encrytionType withKey:(NSString *)key1 andKey:(int)key2;
 +(NSString *) stringFromProfile:(NSManagedObject *)profile;
 +(BOOL) validateKeyWithKey:(NSString *)key type:(EncryptionType)type andKeyNumber:(int)keyNum;
++(EncryptionType) encryptionTypeForString:(NSString *)type;
 
 @end
