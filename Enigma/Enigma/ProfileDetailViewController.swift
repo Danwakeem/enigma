@@ -31,7 +31,9 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	override func setEditing(editing: Bool, animated: Bool) {
 		super.setEditing(editing, animated: animated)
 		
-		self.addButton.hidden = !editing
+        if self.addButton != nil {
+            self.addButton.hidden = !editing
+        }
 		
 		if editing == false {
 			saveProfile()
