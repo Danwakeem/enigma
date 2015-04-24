@@ -677,25 +677,10 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                     }
                 }
                 var keys = [key1,key2]
-                newEncryptionMethods = [encryptMethod: keys]
+                newEncryptionMethods[encryptMethod] = keys
+                //newEncryptionMethods = [encryptMethod: keys]
             }
             self.currentEncryptionMethods = newEncryptionMethods
-            
-            /*
-            //NOTE - This was how NSOrderedSets were handled before swift 1.2 was released. Going to keep this here for refference just in case.
-            encryptions.enumerateObjectsUsingBlock { (e, index, stop) -> Void in
-                var encryptMethod = e.valueForKeyPath("encryptionType") as! String!
-                var key1 = e.valueForKeyPath("key1") as! String!
-                var key2 = "0"
-                if let k2: String = e.valueForKeyPath("key2") as? String {
-                    if k2 != "" {
-                        key2 = k2
-                    }
-                }
-                var keys = [key1,key2]
-                newEncryptionMethods = [encryptMethod: keys]
-            }
-            */
         }
     }
     
