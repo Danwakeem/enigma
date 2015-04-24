@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ProfileDetailCellDelegate {
-	func cypherChanged(key: String, value: String)
+	func cypherChanged(cell: ProfileDetailCell ,key: String, value: String)
 }
 
 class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
@@ -27,13 +27,20 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 		"Vigenere"
 	]
 	
+	func textFieldShouldReturn(textField: UITextField) -> Bool {
+		delegate.cypherChanged(self, key: "key1", value: keyField.text)
+		textField.resignFirstResponder()
+		
+		return true
+	}
+	
 	func textFieldDidEndEditing(textField: UITextField) {
-		delegate.cypherChanged("key1", value: keyField.text)
+		
 	}
 	
 	@IBAction func changeEncryptionMethod(sender: AnyObject) {
 		method++
 		method %= encryptionMethods.count
-		delegate.cypherChanged("encryptionMethod", value: encryptionMethods[method])
+		delegate.cypherChanged(self, key: "encryptionType", value: encryptionMethods[method])
 	}
 }
