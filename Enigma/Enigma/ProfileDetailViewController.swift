@@ -22,6 +22,8 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	
 	var addButton: UIButton!
 	
+	var selectedCell: NSIndexPath!
+	
 	@IBAction func toggleEdit(sender: AnyObject) {
 		setEditing(!editing, animated: true)
 		self.addButton.hidden = !editing
@@ -71,10 +73,18 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		
 	}
 	
+	override func viewWillAppear(animated: Bool) {
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardDidShowNotification, object: nil)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+	}
+	
 	override func viewWillDisappear(animated: Bool) {
 		if editing == true {
 			// Unsaved changes are lost
 		}
+		
+		NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+		NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -252,6 +262,15 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		}
 	}
 	
+	func focusOnView(cell: ProfileDetailCell) {
+		let index = self.collectionView?.indexPathForCell(cell)
+		self.selectedCell = index
+	}
+	
+	func nameSelected() {
+		self.selectedCell = nil
+	}
+	
 	func fetchEncryptions() {
 		if profile == nil {
 			return
@@ -304,5 +323,26 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		default:
 			println("Default segue")
 		}
+	}
+	
+	// MARK: - Keyboard Notifications
+	
+	func keyboardWillShow(aNotification: NSNotification) {
+		let info = aNotification.userInfo!
+		let kbRect: CGRect = (info[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+		let kbSize = kbRect.size as CGSize
+		
+		let newEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0)
+		self.collectionView?.contentInset = newEdgeInsets
+		
+		if let cellIndex = self.selectedCell {
+			self.collectionView?.scrollToItemAtIndexPath(cellIndex, atScrollPosition: .CenteredVertically, animated: true)
+		}
+	}
+	
+	func keyboardWillHide(aNotification: NSNotification) {
+		let insets = UIEdgeInsetsZero
+		self.collectionView?.contentInset = insets
+		self.collectionView?.scrollIndicatorInsets = insets
 	}
 }

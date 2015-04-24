@@ -10,6 +10,7 @@ import UIKit
 
 protocol ProfileDetailHeaderViewDelegate {
 	func profileNameChanged(name: String)
+	func nameSelected()
 }
 
 class ProfileDetailHeaderView: UICollectionReusableView, UITextFieldDelegate {
@@ -19,6 +20,12 @@ class ProfileDetailHeaderView: UICollectionReusableView, UITextFieldDelegate {
 	
 	required init(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
+	}
+	
+	func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+		delegate.nameSelected()
+		
+		return true
 	}
 	
 	func textFieldShouldReturn(textField: UITextField) -> Bool {

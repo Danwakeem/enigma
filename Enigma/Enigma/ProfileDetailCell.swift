@@ -10,6 +10,7 @@ import UIKit
 
 protocol ProfileDetailCellDelegate {
 	func cypherChanged(cell: ProfileDetailCell, key: String, value: String)
+	func focusOnView(cell: ProfileDetailCell)
 }
 
 class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
@@ -25,6 +26,12 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 		"Affine",
 		"Vigenere"
 	]
+	
+	func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+		delegate.focusOnView(self)
+		
+		return true
+	}
 	
 	func textFieldShouldReturn(textField: UITextField) -> Bool {
 		delegate.cypherChanged(self, key: "key1", value: keyField.text)
