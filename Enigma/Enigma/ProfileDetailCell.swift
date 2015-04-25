@@ -11,11 +11,13 @@ import UIKit
 protocol ProfileDetailCellDelegate {
 	func cypherChanged(cell: ProfileDetailCell, key: String, value: String)
 	func focusOnView(cell: ProfileDetailCell)
+	func deleteEncryptionType(cell: ProfileDetailCell)
 }
 
 class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 	@IBOutlet weak var cypherButton: UIButton!
 	@IBOutlet weak var keyField: UITextField!
+	@IBOutlet weak var deleteButton: UIButton!
 	
 	var delegate: ProfileDetailCellDelegate! = nil
 	var method = 0
@@ -48,5 +50,10 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 		method++
 		method %= encryptionMethods.count
 		delegate.cypherChanged(self, key: "encryptionType", value: encryptionMethods[method])
+	}
+	
+	@IBAction func deleteMe(sender: AnyObject) {
+		println("Delete encryption method")
+		delegate.deleteEncryptionType(self)
 	}
 }

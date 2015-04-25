@@ -25,6 +25,16 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	var selectedCell: NSIndexPath!
 	
 	@IBAction func toggleEdit(sender: AnyObject) {
+		if count(name) == 0 {
+			UIAlertView(title: "Error", message: "Profile must have a name!", delegate: nil, cancelButtonTitle: "Ok")
+			return
+		}
+		
+		if encryptionList.count == 0 {
+			UIAlertView(title: "Error", message: "You must have at least one encryption type!", delegate: nil, cancelButtonTitle: "Ok").show()
+			return
+		}
+
 		setEditing(!editing, animated: true)
 	}
 	
@@ -111,6 +121,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		cell.delegate = self
 		cell.cypherButton.setTitle((encryption["encryptionType"] as! String), forState: UIControlState.Normal)
 		cell.cypherButton.enabled = editing
+		cell.deleteButton.hidden = !editing
 		cell.keyField.text = encryption["key1"] as! String
 		cell.keyField.enabled = editing
 		
@@ -142,7 +153,9 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		var errorList = [String]()
 		
 		if count(name) == 0 {
-			name = profile?.valueForKey("name") as! String
+			if let nameVal = profile?.valueForKey("name") as? String {
+				name = profile?.valueForKey("name") as! String
+			}
 			errorList.append("name")
 		}
 		
@@ -162,11 +175,11 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		errors(errorList)
 	}
 	
-	func saveProfile() {
+	func saveProfile() -> Void {
 		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
-		
+		var didError = false
 		validateProfile({ (errors) -> Void in
 			var errorMessage: String
 			
@@ -192,11 +205,21 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 				alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
 				self.presentViewController(alert, animated: true, completion: nil)
 				
-				self.setEditing(true, animated: false)
+				self.setEditing(true, animated: true)
 				
-				return
+				didError = true
 			}
 		})
+		
+		if didError == true {
+			self.setEditing(true, animated: false)
+			self.navigationItem.rightBarButtonItem?.title = "Save"
+			self.navigationItem.rightBarButtonItem?.style = .Done
+			println("WTTTTTFFFFFFFFFFFFF")
+			return
+		}
+		
+		println("Still saving")
 		
 		let newSet = NSMutableOrderedSet()
 		for var i = 0; i < encryptionList.count; i++ {
@@ -252,6 +275,13 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		if editing == false {
 			setEditing(false, animated: true)
 		}
+	}
+	
+	func deleteEncryptionType(cell: ProfileDetailCell) {
+		let index = self.collectionView?.indexPathForCell(cell)?.row
+		
+		encryptionList.removeAtIndex(index!)
+		self.collectionView?.reloadData()
 	}
 	
 	func focusOnView(cell: ProfileDetailCell) {
