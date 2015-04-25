@@ -480,9 +480,10 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     
     func decryptText(text: String) -> String{
         var returnString: String = text
-        
-        for encryption in self.currentEncryptionMethods {
-            for (key,value) in encryption as Dictionary<String,[AnyObject]> {
+		
+		for var i = self.currentEncryptionMethods.count-1; i >= 0; i-- {
+			let encryption = self.currentEncryptionMethods[i]
+			for (key,value) in encryption as Dictionary<String,[AnyObject]> {
                 var eType: EncryptionType = self.encryptionTypes[key]!
                 var key1: String = value[0] as! String
                 var key2: Int32!
@@ -492,7 +493,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 }
                 returnString = EncrytionFramework.decrypt(returnString, using: eType, withKey: key1, andKey: key2)
             }
-        }
+		}
         
         return returnString
     }
