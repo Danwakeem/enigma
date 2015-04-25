@@ -478,7 +478,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     func decryptText(text: String) -> String{
-        var returnString: String = text
+        var returnString: String = self.lastTypedWord
         
         for encryption in self.currentEncryptionMethods {
             for (key,value) in encryption as Dictionary<String,[AnyObject]> {
@@ -489,7 +489,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 if let k2 = key2String.toInt() {
                     key2 = Int32(k2)
                 }
-                returnString = EncrytionFramework.encrypt(self.lastTypedWord, using: eType, withKey: key1, andKey: key2)
+                returnString = EncrytionFramework.encrypt(returnString, using: eType, withKey: key1, andKey: key2)
             }
         }
         
