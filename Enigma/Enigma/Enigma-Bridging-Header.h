@@ -3,3 +3,5 @@
 //
 
 #import "EncrytionFramework.h"
+#import "FLAnimatedImageView.h"
+#import "FLAnimatedImage.h"

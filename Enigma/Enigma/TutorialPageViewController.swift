@@ -18,7 +18,9 @@ class TutorialPageViewController: UIViewController, PasscodeViewDelegate {
 	
 	@IBOutlet weak var backButton: BlockButton!
 	@IBOutlet weak var nextButton: BlockButton!
-	
+    
+    @IBOutlet weak var tutorialGif: FLAnimatedImageView!
+    
 	var delegate: TutorialPageViewControllerDelegate! = nil
 	var dataObject: AnyObject?
 	
@@ -34,7 +36,25 @@ class TutorialPageViewController: UIViewController, PasscodeViewDelegate {
 		super.viewWillAppear(animated)
 		
 		dataLabel!.text = dataObject != nil ? dataObject!.description : ""
+        
+        if let gif = tutorialGif {
+            loadGif()
+        }
 	}
+    
+    func loadGif(){
+        let gifData: NSData!
+        if self.dataLabel.text == "Creating A Profile" {
+            gifData = NSData(contentsOfFile: NSBundle.mainBundle().pathForResource("ProfileTut", ofType: "gif")!)
+        } else {
+            gifData = NSData(contentsOfFile: NSBundle.mainBundle().pathForResource("KeyboardTut", ofType: "gif")!)
+        }
+        var gif = FLAnimatedImage(animatedGIFData: gifData!)
+        tutorialGif.animatedImage = gif
+        tutorialGif.layer.borderColor = UIColor.lightGrayColor().CGColor
+        tutorialGif.layer.borderWidth = 1.0
+        self.view.addSubview(tutorialGif)
+    }
 	
 	@IBAction func next(sender: AnyObject) {
 		delegate!.pageRequestedForController(self, direction: .Forward)

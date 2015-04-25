@@ -38,6 +38,10 @@
 		052FB5291AA810610049DF8A /* Enigma.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		052FB52A1AA810670049DF8A /* Enigma.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		056C3F841AC8AEDB00F1103F /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056C3F831AC8AEDB00F1103F /* KeyboardView.swift */; };
+		0572AA801AEB615800B788CA /* KeyboardTut.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0572AA7E1AEB615800B788CA /* KeyboardTut.gif */; };
+		0572AA811AEB615800B788CA /* ProfileTut.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0572AA7F1AEB615800B788CA /* ProfileTut.gif */; };
+		0572AA8D1AEB6FA300B788CA /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0572AA8A1AEB6FA300B788CA /* FLAnimatedImage.m */; };
+		0572AA8E1AEB6FA300B788CA /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0572AA8C1AEB6FA300B788CA /* FLAnimatedImageView.m */; };
 		057B4D461AD33FA200F0FECA /* LucidaGrande.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 057B4D451AD33FA200F0FECA /* LucidaGrande.ttf */; };
 		057B4D4A1AD3432D00F0FECA /* Quivira.otf in Resources */ = {isa = PBXBuildFile; fileRef = 057B4D491AD3432D00F0FECA /* Quivira.otf */; };
 		0587D6811ACA7AFE00B02109 /* KeyboardButtons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0587D6801ACA7AFE00B02109 /* KeyboardButtons.xcassets */; };
@@ -129,6 +133,12 @@
 		05211C4F1A72D16E00660739 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		052FB5271AA810560049DF8A /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		056C3F831AC8AEDB00F1103F /* KeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
+		0572AA7E1AEB615800B788CA /* KeyboardTut.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = KeyboardTut.gif; sourceTree = "<group>"; };
+		0572AA7F1AEB615800B788CA /* ProfileTut.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ProfileTut.gif; sourceTree = "<group>"; };
+		0572AA891AEB6FA300B788CA /* FLAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
+		0572AA8A1AEB6FA300B788CA /* FLAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImage.m; sourceTree = "<group>"; };
+		0572AA8B1AEB6FA300B788CA /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
+		0572AA8C1AEB6FA300B788CA /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
 		057B4D451AD33FA200F0FECA /* LucidaGrande.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LucidaGrande.ttf; sourceTree = "<group>"; };
 		057B4D491AD3432D00F0FECA /* Quivira.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Quivira.otf; sourceTree = "<group>"; };
 		0587D6801ACA7AFE00B02109 /* KeyboardButtons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = KeyboardButtons.xcassets; sourceTree = "<group>"; };
@@ -244,6 +254,9 @@
 				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
 				0292270D1A71D9D900A7DD81 /* Main.storyboard */,
 				029227101A71D9D900A7DD81 /* Images.xcassets */,
+				0572AA821AEB6A8A00B788CA /* Flipboard Library */,
+				0572AA7E1AEB615800B788CA /* KeyboardTut.gif */,
+				0572AA7F1AEB615800B788CA /* ProfileTut.gif */,
 				029227121A71D9D900A7DD81 /* LaunchScreen.xib */,
 				029227071A71D9D900A7DD81 /* Supporting Files */,
 			);
@@ -327,6 +340,17 @@
 				052FB5271AA810560049DF8A /* CoreDataStack.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		0572AA821AEB6A8A00B788CA /* Flipboard Library */ = {
+			isa = PBXGroup;
+			children = (
+				0572AA891AEB6FA300B788CA /* FLAnimatedImage.h */,
+				0572AA8A1AEB6FA300B788CA /* FLAnimatedImage.m */,
+				0572AA8B1AEB6FA300B788CA /* FLAnimatedImageView.h */,
+				0572AA8C1AEB6FA300B788CA /* FLAnimatedImageView.m */,
+			);
+			name = "Flipboard Library";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -445,8 +469,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0292270F1A71D9D900A7DD81 /* Main.storyboard in Resources */,
+				0572AA801AEB615800B788CA /* KeyboardTut.gif in Resources */,
 				029227141A71D9D900A7DD81 /* LaunchScreen.xib in Resources */,
 				029227111A71D9D900A7DD81 /* Images.xcassets in Resources */,
+				0572AA811AEB615800B788CA /* ProfileTut.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +504,7 @@
 			files = (
 				021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */,
 				23ECC2D81A840A71000EB3CC /* TutorialViewController.swift in Sources */,
+				0572AA8D1AEB6FA300B788CA /* FLAnimatedImage.m in Sources */,
 				021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */,
 				02E38F311ACEDB10002B77E6 /* AboutViewController.swift in Sources */,
 				02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */,
@@ -486,6 +513,7 @@
 				026B4DBB1AA7A4B5002DB3C6 /* Clear.c in Sources */,
 				02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */,
 				238DCD2E1A93E30E00E4D75B /* ProfileDetailCell.swift in Sources */,
+				0572AA8E1AEB6FA300B788CA /* FLAnimatedImageView.m in Sources */,
 				021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */,
 				237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */,
 				2389E12A1AD9D9D40063796B /* ShareViewController.swift in Sources */,
