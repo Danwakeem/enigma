@@ -473,6 +473,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func decryptPasteboard(){
         let pasteBoard = UIPasteboard.generalPasteboard()
         if let text = pasteBoard.string {
+            self.Keyboard.decryptedTextLabel.text = "Hello"
             self.Keyboard.decryptedTextLabel.text = self.decryptText(text)
         }
     }
@@ -489,7 +490,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 if let k2 = key2String.toInt() {
                     key2 = Int32(k2)
                 }
-                returnString = EncrytionFramework.encrypt(self.lastTypedWord, using: eType, withKey: key1, andKey: key2)
+                returnString = EncrytionFramework.decrypt(returnString, using: eType, withKey: key1, andKey: key2)
             }
         }
         
