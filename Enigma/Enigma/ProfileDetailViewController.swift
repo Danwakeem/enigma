@@ -9,11 +9,15 @@
 import UIKit
 import CoreData
 
-class ProfileDetailViewController: UICollectionViewController, ProfileDetailHeaderViewDelegate, ProfileDetailCellDelegate {
+class ProfileDetailViewController: UICollectionViewController, ProfileDetailHeaderViewDelegate, ProfileDetailCellDelegate, EncryptDecryptPopupViewDelegate {
 	var profile: NSManagedObject? = nil
 	var encryptions = NSOrderedSet()
 	
 	var encryptionList = [NSMutableDictionary]()
+    
+    var encryptDecryptPopup: EncryptDecryptPopupView?
+    
+    var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere, "Cypher": Clear]
 	
 	// TODO: Impliment an edit buffer so that multiple encryptions can be handled
 	var name: String = ""
@@ -148,6 +152,67 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
 		return 1
 	}
+    
+    func encryptPopup(sender: AnyObject) {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        encryptDecryptPopup = sb.instantiateViewControllerWithIdentifier("EncryptDecryptPopupView") as? EncryptDecryptPopupView
+        encryptDecryptPopup?.delegate = self
+        encryptDecryptPopup?.popupType = .Encrypt
+        encryptDecryptPopup?.modalTransitionStyle = .CoverVertical
+        encryptDecryptPopup?.modalPresentationStyle = .OverFullScreen
+        encryptDecryptPopup?.preferredContentSize = CGSize(width:self.view.frame.width * CGFloat(1 / 100.0), height:self.view.frame.height * CGFloat(1 / 100.0))
+        presentViewController(encryptDecryptPopup!, animated: true, completion: {})
+    }
+    
+    func decryptPopup(sender: AnyObject) {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        encryptDecryptPopup = sb.instantiateViewControllerWithIdentifier("EncryptDecryptPopupView") as? EncryptDecryptPopupView
+        encryptDecryptPopup?.delegate = self
+        encryptDecryptPopup?.popupType = .Decrypt
+        encryptDecryptPopup?.modalTransitionStyle = .CoverVertical
+        encryptDecryptPopup?.modalPresentationStyle = .OverFullScreen
+        encryptDecryptPopup?.preferredContentSize = CGSize(width:self.view.frame.width * CGFloat(1 / 100.0), height:self.view.frame.height * CGFloat(1 / 100.0))
+        presentViewController(encryptDecryptPopup!, animated: true, completion: {})
+        
+    }
+    
+    func closePop(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: {})
+    }
+    
+    func decryptText(text: String) {
+        var decryptString: String = text
+        for encryption in encryptions.reversedOrderedSet {
+            let enManaged = encryption as! NSManagedObject
+            let eType: String = enManaged.valueForKeyPath("encryptionType") as! String!
+            let key1: String = enManaged.valueForKeyPath("key1") as! String!
+            var key2: Int = 0
+            if let k2: String = enManaged.valueForKeyPath("key2") as? String {
+                if k2 != "" {
+                    key2 = k2.toInt()!
+                }
+            }
+            decryptString = EncrytionFramework.decrypt(decryptString, using: encryptionTypes[eType]!, withKey: key1, andKey: Int32(key2))
+        }
+        encryptDecryptPopup?.showDecryptedString(decryptString)
+    }
+    
+    func encryptString(lastTypedWord: String) {
+        var encryptedString: String = lastTypedWord
+        for encryption in encryptions {
+            let enManaged = encryption as! NSManagedObject
+            let eType: String = enManaged.valueForKeyPath("encryptionType") as! String!
+            let key1: String = enManaged.valueForKeyPath("key1") as! String!
+            var key2: Int = 0
+            if let k2: String = enManaged.valueForKeyPath("key2") as? String {
+                if k2 != "" {
+                    key2 = k2.toInt()!
+                }
+            }
+            encryptedString = EncrytionFramework.encrypt(encryptedString, using: encryptionTypes[eType]!, withKey: key1, andKey: Int32(key2))
+        }
+        encryptDecryptPopup?.addEncryptedString(encryptedString)
+    }
 	
 	func validateProfile(errors: ([String]) -> Void) {
 		var errorList = [String]()
@@ -234,6 +299,8 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			newSet.addObject(encryption)
 			
 		}
+        
+        encryptions = newSet
 		
 		if let existingProfile = profile {
 			profile?.setValue(newSet, forKey: "encryption")
