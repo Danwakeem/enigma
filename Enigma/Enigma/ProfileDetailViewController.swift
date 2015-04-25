@@ -120,6 +120,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		
 		cell.delegate = self
 		cell.cypherButton.setTitle((encryption["encryptionType"] as! String), forState: UIControlState.Normal)
+		cell.helpLabel.text = EncrytionFramework.helpStringForEncryptionType(encryption["encryptionType"] as! String)
 		cell.cypherButton.enabled = editing
 		cell.deleteButton.hidden = !editing
 		cell.keyField.text = encryption["key1"] as! String

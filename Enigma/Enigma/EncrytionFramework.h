@@ -30,5 +30,6 @@ typedef enum {
 +(NSString *) stringFromProfile:(NSManagedObject *)profile;
 +(BOOL) validateKeyWithKey:(NSString *)key type:(EncryptionType)type andKeyNumber:(int)keyNum;
 +(EncryptionType) encryptionTypeForString:(NSString *)type;
++(NSString *) helpStringForEncryptionType:(NSString *)type;
 
 @end

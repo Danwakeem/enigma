@@ -18,6 +18,7 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 	@IBOutlet weak var cypherButton: UIButton!
 	@IBOutlet weak var keyField: UITextField!
 	@IBOutlet weak var deleteButton: UIButton!
+	@IBOutlet weak var helpLabel: UILabel!
 	
 	var delegate: ProfileDetailCellDelegate! = nil
 	var method = 0
@@ -25,7 +26,6 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 	var encryptionMethods = [
 		"SimpleSub",
 		"Caesar",
-		"Affine",
 		"Vigenere"
 	]
 	
@@ -49,6 +49,9 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 	@IBAction func changeEncryptionMethod(sender: AnyObject) {
 		method++
 		method %= encryptionMethods.count
+		
+		self.helpLabel.text = EncrytionFramework.helpStringForEncryptionType(encryptionMethods[method])
+		
 		delegate.cypherChanged(self, key: "encryptionType", value: encryptionMethods[method])
 	}
 	

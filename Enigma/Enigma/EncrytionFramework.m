@@ -256,6 +256,15 @@
 	return YES;
 }
 
++(NSString *) helpStringForEncryptionType:(NSString *)type {
+	if ([type isEqualToString:@"SimpleSub"] || [type isEqualToString:@"Vigenere"])
+		return @"Enter a word/phrase with no numbers or symbols";
+	else if ([type isEqualToString:@"Caesar"])
+		return @"Enter a number";
+	
+	return @"";
+}
+
 +(void) testValidation {
 	// SIMPLE SUB
 	if (![self validateKeyWithKey:@"h3110" type:SimpleSub andKeyNumber:0])
