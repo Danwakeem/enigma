@@ -245,6 +245,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			
 			newProfile.setValue(self.name, forKey: "name")
 			newProfile.setValue(newSet, forKey: "encryption")
+			profile = newProfile
 		}
 		
 		var error: NSError?
