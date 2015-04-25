@@ -121,6 +121,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		cell.delegate = self
 		cell.cypherButton.setTitle((encryption["encryptionType"] as! String), forState: UIControlState.Normal)
 		cell.cypherButton.enabled = editing
+		cell.deleteButton.hidden = !editing
 		cell.keyField.text = encryption["key1"] as! String
 		cell.keyField.enabled = editing
 		
@@ -274,6 +275,13 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		if editing == false {
 			setEditing(false, animated: true)
 		}
+	}
+	
+	func deleteEncryptionType(cell: ProfileDetailCell) {
+		let index = self.collectionView?.indexPathForCell(cell)?.row
+		
+		encryptionList.removeAtIndex(index!)
+		self.collectionView?.reloadData()
 	}
 	
 	func focusOnView(cell: ProfileDetailCell) {
