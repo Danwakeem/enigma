@@ -481,7 +481,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     func decryptText(text: String) -> String{
         var returnString: String = text
         
-        for encryption in self.currentEncryptionMethods {
+        for encryption in self.currentEncryptionMethods.reverse() {
             for (key,value) in encryption as Dictionary<String,[AnyObject]> {
                 var eType: EncryptionType = self.encryptionTypes[key]!
                 var key1: String = value[0] as! String

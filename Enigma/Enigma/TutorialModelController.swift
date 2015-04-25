@@ -10,12 +10,12 @@ import UIKit
 
 class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 	var pageData = NSArray()
-	var identifiers = [ "TutorialPageViewController_Start", "TutorialPageViewController_Choice", "TutorialPageViewController_Final" ]
+	var identifiers = [ "TutorialPageViewController_Start", "TutorialPageViewController_Choice", "TutorialPageViewController_ProfileTut", "TutorialPageViewController_KeyboardTut", "TutorialPageViewController_Final" ]
 	
 	override init() {
 		super.init()
 		
-		pageData = [ "Welcome!", "Enable Passcode/TouchID?", "Enable Full Access." ]
+		pageData = [ "Welcome!", "Enable Passcode/TouchID?", "Creating A Profile", "Using The Keyboard", "Enable Full Access." ]
 	}
 	
 	func viewControllerAtIndex(index: Int, storyboard: UIStoryboard) -> TutorialPageViewController? {
