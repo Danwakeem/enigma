@@ -9,9 +9,11 @@
 import UIKit
 import CoreData
 
-class ProfileTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
+class ProfileTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, AMScanViewControllerDelegate {
 	
 	var profiles = [NSManagedObject]()
+	
+	var allowScaning = false
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
@@ -23,6 +25,69 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 		super.viewDidLoad()
 		
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "profileUpdated:", name: "ProfileUpdated", object: nil)
+		
+		let btn = UIBarButtonItem(barButtonSystemItem: .Camera, target: self, action: "showScanner")
+		if let rightBtn = self.navigationItem.rightBarButtonItem {
+			let btnsArray = [btn, rightBtn]
+			self.navigationItem.rightBarButtonItems = btnsArray
+		}
+		
+	}
+	
+	func showScanner() {
+		let vc = AMScanViewController()
+		vc.delegate = self
+		self.presentViewController(vc, animated: true, completion: {
+			self.allowScaning = true
+		})
+	}
+	
+	func scanViewController(aCtler: AMScanViewController!, didSuccessfullyScan aScannedValue: String!) {
+		if self.allowScaning {
+			self.allowScaning = false
+			self.dismissViewControllerAnimated(true, completion: nil)
+			importFromQRCode(aScannedValue)
+		}
+	}
+	
+	func importFromQRCode(profile: String) {
+		println("Scanned: \(profile)")
+		let profileArray = split(profile) {$0 == ","}
+		
+		if profileArray.count > 2 {
+			let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+			let managedContext = appDelegate.managedObjectContext!
+			
+			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
+			let newProfile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+			
+			newProfile.setValue(profileArray[0], forKey: "name")
+			
+			let numEncryptions = profileArray[1].toInt()
+			let newSet = NSMutableOrderedSet()
+			for var i = 0; i < numEncryptions; i++ {
+				let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
+				let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
+				
+				let encrTypeIndex = (1 + i) * 2
+				let encrKeyIndex = ((1 + i) * 2) + 1
+				encryption.setValue(profileArray[encrTypeIndex], forKey: "encryptionType")
+				encryption.setValue(profileArray[encrKeyIndex], forKey: "key1")
+				
+				newSet.addObject(encryption)
+			}
+			
+			newProfile.setValue(newSet, forKey: "encryption")
+			
+			var error: NSError?
+			if !managedContext.save(&error) {
+				println("Could not save \(error), \(error?.userInfo)")
+			}
+			
+			NSNotificationCenter.defaultCenter().postNotificationName("ProfileUpdated", object: newProfile)
+		} else {
+			UIAlertView(title: "Error", message: "Could not import profile.", delegate: nil, cancelButtonTitle: "Ok").show()
+		}
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -36,38 +101,14 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 		case "showDetail":
 			if let indexPath = self.tableView.indexPathForSelectedRow() {
 				let profile = profiles[indexPath.row]
-				let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
+				let controller = (segue.destinationViewController as! UINavigationController).topViewController as! ProfileDetailViewController
 				
 				controller.profile = profile
 			}
 		//case "showSettings":
 		case "addProfile":
-			let controller = (segue.destinationViewController as UINavigationController).topViewController as ProfileDetailViewController
-			
-			let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-			let managedContext = appDelegate.managedObjectContext!
-			
-			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
-			let profile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-			let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
-			let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
-			
-			profile.setValue("", forKey: "name")
-			profile.setValue(NSDate(), forKey: "timestamp")
-			
-			encryption.setValue("Caesar", forKey: "encryptionType")
-			encryption.setValue("13", forKey: "key1")
-			encryption.setValue("", forKey: "key2")
-			encryption.setValue(profile, forKey: "profiles")
-			
-			var error: NSError?
-			if !managedContext.save(&error) {
-				println("Could not save \(error), \(error?.userInfo)")
-			}
-			
-			profiles.append(profile)
-			controller.profile = profile
-			
+			let controller = (segue.destinationViewController as! UINavigationController).topViewController as! ProfileDetailViewController
+			controller.profile = nil
 			controller.setEditing(true, animated: false)
 		default:
 			println("Default segue")
@@ -81,10 +122,10 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+		let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
 		
 		let profile = profiles[indexPath.row]
-		cell.textLabel?.text = profile.valueForKey("name") as String?
+		cell.textLabel?.text = profile.valueForKey("name") as! String?
 		
 		return cell
 	}
@@ -97,7 +138,7 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	
 	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 		if(editingStyle == .Delete ) {
-			let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+			let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 			let managedContext = appDelegate.managedObjectContext!
 			let profileToDelete = profiles[indexPath.row]
 			
@@ -120,7 +161,7 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	}
 	
 	func fetchProfiles() {
-		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
 		let fetchRequest = NSFetchRequest(entityName: "Profiles")
@@ -128,7 +169,7 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 		fetchRequest.sortDescriptors = [sortDescriptor]
 		
 		var error: NSError?
-		let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as [NSManagedObject]?
+		let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as! [NSManagedObject]?
 		if let results = fetchedResults {
 			profiles = results
 		} else {

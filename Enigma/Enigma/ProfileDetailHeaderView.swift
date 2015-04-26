@@ -10,14 +10,42 @@ import UIKit
 
 protocol ProfileDetailHeaderViewDelegate {
 	func profileNameChanged(name: String)
+	func nameSelected()
+    func encryptPopup(AnyObject)
+    func decryptPopup(AnyObject)
 }
 
 class ProfileDetailHeaderView: UICollectionReusableView, UITextFieldDelegate {
 	@IBOutlet weak var profileNameField: UITextField!
-	
 	var delegate: ProfileDetailHeaderViewDelegate! = nil
+	
+	required init(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+	}
+	
+	func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+		delegate.nameSelected()
+		
+		return true
+	}
+	
+	func textFieldShouldReturn(textField: UITextField) -> Bool {
+		delegate.profileNameChanged(textField.text)
+		
+		textField.resignFirstResponder()
+		
+		return true
+	}
 	
 	func textFieldDidEndEditing(textField: UITextField) {
 		delegate.profileNameChanged(textField.text)
 	}
+    
+    @IBAction func encryptPopup(sender: AnyObject) {
+        delegate.encryptPopup(sender)
+    }
+    
+    @IBAction func decryptPopup(sender: AnyObject) {
+        delegate.decryptPopup(sender)
+    }
 }

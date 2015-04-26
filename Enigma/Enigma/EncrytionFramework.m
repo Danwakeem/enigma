@@ -42,6 +42,8 @@
 	
 	newString = [self decrypt:newString Using:Vigenere withKey:@"lemon" andKey:0];
 	NSLog(@"Decrypted to %@", newString);
+	
+	[self testValidation];
 }
 
 +(NSString*) removeEmojiFromString:(NSString *)string {
@@ -178,5 +180,125 @@
 	
 	return asciiNSString;
 }
+
++(NSString *) stringFromProfile:(NSManagedObject *)profile {
+	NSMutableString *strProf = [NSMutableString string];
+	
+	[strProf appendString:[NSString stringWithFormat:@"%@,", [profile valueForKey:@"name"]]];
+	
+	NSOrderedSet *encryptions = [profile mutableOrderedSetValueForKey:@"encryption"];
+	[strProf appendString:[NSString stringWithFormat:@"%lu", (unsigned long)encryptions.count]];
+	
+	for (NSManagedObject *e in encryptions) {
+		NSString *method = [e valueForKey:@"encryptionType"];
+		NSString *key1 = [e valueForKey:@"key1"];
+		NSString *key2 = [e valueForKey:@"key2"];
+						  
+		[strProf appendString:[NSString stringWithFormat:@",%@,%@", method, key1]];
+		if (key2 && ![key2 isEqualToString:@""])
+			[strProf appendString:[NSString stringWithFormat:@",%@", key2]];
+	}
+	
+	NSLog(@"Profile as string: %@", strProf);
+	
+	return strProf;
+}
+
++(EncryptionType) encryptionTypeForString:(NSString *)type {
+	if ([type isEqualToString:@"SimpleSub"])
+		return SimpleSub;
+	else if ([type isEqualToString:@"Caesar"])
+		return Caesar;
+	else if ([type isEqualToString:@"Vigenere"])
+		return Vigenere;
+	else if ([type isEqualToString:@"Affine"])
+		return Affine;
+	
+	return Clear;
+}
+
++(BOOL) validateKeyWithKey:(NSString *)key type:(EncryptionType)type andKeyNumber:(int)keyNum {
+	NSLog(@"Validating with %@, %d", key, type);
+	
+	NSMutableCharacterSet *chars;
+	NSArray *affineKeyA = @[@1, @3, @5, @7, @9, @11, @15, @17, @19, @21, @23, @25];
+	switch (type) {
+		case SimpleSub:
+		case Vigenere:
+			chars = [NSMutableCharacterSet letterCharacterSet];
+			[chars formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
+			chars = [[chars invertedSet] mutableCopy];
+			if ([key rangeOfCharacterFromSet:chars].length)
+				return NO;
+			break;
+		case Caesar:
+			chars = [[[NSCharacterSet decimalDigitCharacterSet] invertedSet] mutableCopy];
+			if ([key rangeOfCharacterFromSet:chars].length)
+				return NO;
+			break;
+		case Affine:
+			chars = [[[NSCharacterSet decimalDigitCharacterSet] invertedSet] mutableCopy];
+			if ([key rangeOfCharacterFromSet:chars].length)
+				return NO;
+			
+			if (keyNum == 1) {
+				if (![affineKeyA containsObject:[NSNumber numberWithInt:key.intValue]])
+					return NO;
+			} else {
+				if (key.intValue > 25 || key.intValue <= 0)
+					return NO;
+			}
+			break;
+		default:
+			NSLog(@"No encryption type found");
+			break;
+	}
+	
+	
+	return YES;
+}
+
++(NSString *) helpStringForEncryptionType:(NSString *)type {
+	if ([type isEqualToString:@"SimpleSub"] || [type isEqualToString:@"Vigenere"])
+		return @"Enter a word/phrase with no numbers or symbols";
+	else if ([type isEqualToString:@"Caesar"])
+		return @"Enter a number";
+	
+	return @"";
+}
+
++(void) testValidation {
+	// SIMPLE SUB
+	if (![self validateKeyWithKey:@"h3110" type:SimpleSub andKeyNumber:0])
+		NSLog(@"SimpleSub failed correctly");
+	
+	if ([self validateKeyWithKey:@"lemon" type:SimpleSub andKeyNumber:0])
+		NSLog(@"SimpleSub passed correctly");
+	
+	if (![self validateKeyWithKey:@"h3110" type:Vigenere andKeyNumber:0])
+		NSLog(@"Vigenere failed correctly");
+	
+	if ([self validateKeyWithKey:@"lemon" type:Vigenere andKeyNumber:0])
+		NSLog(@"Vigenere passed correctly");
+	
+	if (![self validateKeyWithKey:@"h3110" type:Caesar andKeyNumber:0])
+		NSLog(@"Caesar failed correctly");
+	
+	if ([self validateKeyWithKey:@"13" type:Caesar andKeyNumber:0])
+		NSLog(@"Caesar passed correctly");
+	
+	if (![self validateKeyWithKey:@"2" type:Affine andKeyNumber:1])
+		NSLog(@"Affine 1 failed correctly");
+	
+	if ([self validateKeyWithKey:@"5" type:Affine andKeyNumber:1])
+		NSLog(@"Affine 1 passed correctly");
+	
+	if (![self validateKeyWithKey:@"27" type:Affine andKeyNumber:2])
+		NSLog(@"Affine 2 failed correctly");
+	
+	if (![self validateKeyWithKey:@"13" type:SimpleSub andKeyNumber:2])
+		NSLog(@"Affine 2 passed correctly");
+}
+
 
 @end

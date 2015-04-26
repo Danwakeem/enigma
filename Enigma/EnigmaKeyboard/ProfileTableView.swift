@@ -14,11 +14,15 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     
     @IBOutlet weak var profileTable: UITableView!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var clearText: UIButton!
+    
     
     var selectedProfile: NSManagedObject!
     let notificationKey = "com.SlayterDev.selectedProfile"
     
-    required override init() {
+    var fetchedResultsController: NSFetchedResultsController!
+    
+    required init() {
         super.init(frame: CGRectZero)
         if self.profileTable != nil {
             self.profileTable.reloadData()
@@ -26,8 +30,17 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
         self.loadFromNib()
     }
     
+    init(fetchedResultsController: NSFetchedResultsController) {
+        super.init(frame: CGRectZero)
+        self.fetchedResultsController = fetchedResultsController
+        if self.profileTable != nil {
+            self.profileTable.reloadData()
+        }
+        self.loadFromNib()
+    }
+    
     func loadFromNib() {
-        let rootView = NSBundle(forClass: self.dynamicType).loadNibNamed("Profiles", owner: self, options: nil)[0] as UIView
+        let rootView = NSBundle(forClass: self.dynamicType).loadNibNamed("Profiles", owner: self, options: nil)[0] as! UIView
         
         self.addSubview(rootView)
         rootView.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -78,7 +91,7 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
+        let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
         return sectionInfo.numberOfObjects
     }
     
@@ -88,22 +101,25 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
         self.configureCell(cell, atIndexPath: indexPath)
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let index = self.profileTable.indexPathForSelectedRow() {
-            self.selectedProfile = self.fetchedResultsController.objectAtIndexPath(index) as NSManagedObject
-            NSNotificationCenter.defaultCenter().postNotificationName(self.notificationKey, object: self)
+        if let index: NSIndexPath = self.profileTable.indexPathForSelectedRow() {
+            self.selectedProfile = self.fetchedResultsController.objectAtIndexPath(index) as! NSManagedObject
+
+            NSNotificationCenter.defaultCenter().postNotificationName(self.notificationKey, object: self, userInfo:["Index" : index, "Profile" : self.selectedProfile])
+			
+			self.profileTable.deselectRowAtIndexPath(indexPath, animated: true)
         }
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let context = self.fetchedResultsController.managedObjectContext
-            context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject)
+            context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
             
             var error: NSError? = nil
             if !context.save(&error) {
@@ -116,47 +132,11 @@ class ProfileTableView: UIView, UITableViewDataSource, UITableViewDelegate, NSFe
     }
     
     func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
-        let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as NSManagedObject
+        let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject
         cell.textLabel?.text = object.valueForKey("name")!.description
     }
     
     // MARK: - Fetched results controller
-    
-    var fetchedResultsController: NSFetchedResultsController {
-        if _fetchedResultsController != nil {
-            return _fetchedResultsController!
-        }
-        
-        let fetchRequest = NSFetchRequest()
-        // Edit the entity name as appropriate.
-        let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: self.managedObjectContext!)
-        fetchRequest.entity = entity
-        
-        //We may want to limit the size of the request
-        //fetchRequest.fetchBatchSize = 20
-        
-        // If we want to sort the results of the query this is how we could do it.
-        let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: true)
-        let sortDescriptors = [sortDescriptor]
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        // Edit the section name key path and cache name if appropriate.
-        // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: nil)
-        aFetchedResultsController.delegate = self
-        _fetchedResultsController = aFetchedResultsController
-        
-        var error: NSError? = nil
-        if !_fetchedResultsController!.performFetch(&error) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            //println("Unresolved error \(error), \(error.userInfo)")
-            abort()
-        }
-        
-        return _fetchedResultsController!
-    }
-    var _fetchedResultsController: NSFetchedResultsController? = nil
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.profileTable.beginUpdates()

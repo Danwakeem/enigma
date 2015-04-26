@@ -160,18 +160,18 @@ class PasscodeView: UIViewController {
 	}
 	
 	func btnClicked(sender: AnyObject) {
-		let btn = sender as UIButton
+		let btn = sender as! UIButton
 		btn.backgroundColor = UIColor.init(CGColor: btn.layer.borderColor)
 		btn.setTitleColor(btn.backgroundColor, forState: .Normal)
 	}
 	
 	func btnReleased(sender: AnyObject) {
-		let btn = sender as UIButton
+		let btn = sender as! UIButton
 		btn.backgroundColor = UIColor.clearColor()
 		btn.setTitleColor(UIColor.blackColor(), forState: .Normal)
 		
 		if (dotCnt < 4) {
-			let dot = dots[dotCnt] as UIView
+			let dot = dots[dotCnt] as! UIView
 			dot.backgroundColor = UIColor.init(CGColor: dot.layer.borderColor)
 			dotCnt++
 			
@@ -209,7 +209,7 @@ class PasscodeView: UIViewController {
 		for var i = 0; i < 4; i++ {
 			// clear the dots
 			dotCnt--
-			let dot = dots[dotCnt] as UIView
+			let dot = dots[dotCnt] as! UIView
 			dot.backgroundColor = UIColor.clearColor()
 		}
 		passcode = ""
@@ -222,7 +222,7 @@ class PasscodeView: UIViewController {
 		for var i = 0; i < 4; i++ {
 			// clear the dots
 			dotCnt--
-			let dot = dots[dotCnt] as UIView
+			let dot = dots[dotCnt] as! UIView
 			dot.backgroundColor = UIColor.clearColor()
 		}
 		passcode = ""
@@ -249,7 +249,7 @@ class PasscodeView: UIViewController {
 	func deleteTapped(sender: AnyObject) {
 		if dotCnt > 0 {
 			dotCnt--
-			let dot = dots[dotCnt] as UIView
+			let dot = dots[dotCnt] as! UIView
 			dot.backgroundColor = UIColor.clearColor()
 			
 			passcode = passcode.substringToIndex(passcode.endIndex.predecessor())

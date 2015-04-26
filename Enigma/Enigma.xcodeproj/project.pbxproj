@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0208AF7E1AD6FF0D00A977FD /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
+		0208AF7F1AD6FF0D00A977FD /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DB91AA7A4B5002DB3C6 /* Clear.c */; };
+		0208AF801AD6FF0D00A977FD /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
+		0208AF811AD6FF0D00A977FD /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
+		0208AF821AD6FF0D00A977FD /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
+		0208AF831AD6FF0D00A977FD /* Vigenere.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */; };
 		021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
 		021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
 		021AE2EF1A7D76FD00DF13F0 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
@@ -15,6 +21,8 @@
 		026B4DBB1AA7A4B5002DB3C6 /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DB91AA7A4B5002DB3C6 /* Clear.c */; };
 		026B4DBC1AA7A528002DB3C6 /* Clear.c in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DB91AA7A4B5002DB3C6 /* Clear.c */; };
 		026B4DBF1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
+		0285437B1AEC41BF0014EB93 /* QRScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0285437A1AEC41BF0014EB93 /* QRScanViewController.m */; };
+		0285437D1AEC41D60014EB93 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0285437C1AEC41D60014EB93 /* AVFoundation.framework */; };
 		0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029227091A71D9D900A7DD81 /* AppDelegate.swift */; };
 		0292270F1A71D9D900A7DD81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0292270D1A71D9D900A7DD81 /* Main.storyboard */; };
 		029227111A71D9D900A7DD81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 029227101A71D9D900A7DD81 /* Images.xcassets */; };
@@ -22,7 +30,8 @@
 		029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */; };
 		02CA73881AA4B2EB00FBFDF0 /* Vigenere.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */; };
 		02CA73891AA4B82900FBFDF0 /* Vigenere.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */; };
-		02F6B87E1ACA1EB400ABA8AD /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6B87D1ACA1EB400ABA8AD /* Arrow.png */; };
+		02E38F2D1ACDEBFD002B77E6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E38F2C1ACDEBFD002B77E6 /* AudioToolbox.framework */; };
+		02E38F311ACEDB10002B77E6 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E38F301ACEDB10002B77E6 /* AboutViewController.swift */; };
 		02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AD1A854136009C76E6 /* PasscodeView.swift */; };
 		02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FF51AF1A854176009C76E6 /* PasscodeButton.swift */; };
 		05211C501A72D16E00660739 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05211C4F1A72D16E00660739 /* KeyboardViewController.swift */; };
@@ -31,16 +40,29 @@
 		052FB5291AA810610049DF8A /* Enigma.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		052FB52A1AA810670049DF8A /* Enigma.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		056C3F841AC8AEDB00F1103F /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056C3F831AC8AEDB00F1103F /* KeyboardView.swift */; };
+		0572AA801AEB615800B788CA /* KeyboardTut.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0572AA7E1AEB615800B788CA /* KeyboardTut.gif */; };
+		0572AA811AEB615800B788CA /* ProfileTut.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0572AA7F1AEB615800B788CA /* ProfileTut.gif */; };
+		0572AA8D1AEB6FA300B788CA /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0572AA8A1AEB6FA300B788CA /* FLAnimatedImage.m */; };
+		0572AA8E1AEB6FA300B788CA /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0572AA8C1AEB6FA300B788CA /* FLAnimatedImageView.m */; };
+		0572AA911AEC09C000B788CA /* EncryptDecryptPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0572AA901AEC09C000B788CA /* EncryptDecryptPopupView.swift */; };
+		057B4D461AD33FA200F0FECA /* LucidaGrande.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 057B4D451AD33FA200F0FECA /* LucidaGrande.ttf */; };
+		057B4D4A1AD3432D00F0FECA /* Quivira.otf in Resources */ = {isa = PBXBuildFile; fileRef = 057B4D491AD3432D00F0FECA /* Quivira.otf */; };
+		0587D6811ACA7AFE00B02109 /* KeyboardButtons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0587D6801ACA7AFE00B02109 /* KeyboardButtons.xcassets */; };
 		05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2E71A7D6F9700DF13F0 /* EncrytionFramework.m */; };
 		05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2EA1A7D708E00DF13F0 /* Ceasar.c */; };
 		05AA7D611A840BE000C1B763 /* Affine.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2ED1A7D76FD00DF13F0 /* Affine.c */; };
 		05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 021AE2F01A7D7B9F00DF13F0 /* SimpleSub.c */; };
+		05C2F8111ACF9E4C00C2097E /* ProfileSwipeModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C2F8101ACF9E4C00C2097E /* ProfileSwipeModelController.swift */; };
+		05C2F8151ACF9FAB00C2097E /* ProfileSwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C2F8141ACF9FAB00C2097E /* ProfileSwipeViewController.swift */; };
+		05C2F8171ACFA0CC00C2097E /* ProfileFetchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C2F8161ACFA0CC00C2097E /* ProfileFetchModel.swift */; };
 		05E3CA461AC62741000EDE84 /* Profiles.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05E3CA451AC62741000EDE84 /* Profiles.xib */; };
 		05E3CA951AC70C53000EDE84 /* ProfileTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */; };
+		05E726621ADB91AC009BF808 /* PopupKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E726611ADB91AC009BF808 /* PopupKey.swift */; };
 		237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399571A86C5E500A21FE0 /* SplitViewController.swift */; };
 		2373995A1A86D28100A21FE0 /* TutorialPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237399591A86D28100A21FE0 /* TutorialPageViewController.swift */; };
 		2373995C1A86D31700A21FE0 /* TutorialModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2373995B1A86D31700A21FE0 /* TutorialModelController.swift */; };
 		2373995E1A89549100A21FE0 /* BlockButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2373995D1A89549100A21FE0 /* BlockButton.swift */; };
+		2389E12A1AD9D9D40063796B /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2389E1291AD9D9D40063796B /* ShareViewController.swift */; };
 		238DCD2C1A93DE2000E4D75B /* ProfileDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238DCD2B1A93DE2000E4D75B /* ProfileDetailHeaderView.swift */; };
 		238DCD2E1A93E30E00E4D75B /* ProfileDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238DCD2D1A93E30E00E4D75B /* ProfileDetailCell.swift */; };
 		23ECC2D81A840A71000EB3CC /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ECC2D71A840A71000EB3CC /* TutorialViewController.swift */; };
@@ -94,6 +116,9 @@
 		026B4DB91AA7A4B5002DB3C6 /* Clear.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Clear.c; sourceTree = "<group>"; };
 		026B4DBA1AA7A4B5002DB3C6 /* Clear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clear.h; sourceTree = "<group>"; };
 		026B4DBE1AA7A5E1002DB3C6 /* Enigma.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Enigma.xcdatamodel; sourceTree = "<group>"; };
+		028543791AEC41BF0014EB93 /* QRScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRScanViewController.h; sourceTree = "<group>"; };
+		0285437A1AEC41BF0014EB93 /* QRScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRScanViewController.m; sourceTree = "<group>"; };
+		0285437C1AEC41D60014EB93 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		029227041A71D9D900A7DD81 /* Enigma.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Enigma.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		029227081A71D9D900A7DD81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		029227091A71D9D900A7DD81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -105,7 +130,8 @@
 		0292271F1A71D9D900A7DD81 /* EnigmaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnigmaTests.swift; sourceTree = "<group>"; };
 		02CA73861AA4B2EB00FBFDF0 /* Vigenere.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Vigenere.c; sourceTree = "<group>"; };
 		02CA73871AA4B2EB00FBFDF0 /* Vigenere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vigenere.h; sourceTree = "<group>"; };
-		02F6B87D1ACA1EB400ABA8AD /* Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Arrow.png; sourceTree = "<group>"; };
+		02E38F2C1ACDEBFD002B77E6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		02E38F301ACEDB10002B77E6 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		02FF51AD1A854136009C76E6 /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
 		02FF51AF1A854176009C76E6 /* PasscodeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeButton.swift; sourceTree = "<group>"; };
 		05211C4B1A72D16E00660739 /* EnigmaKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EnigmaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,13 +139,28 @@
 		05211C4F1A72D16E00660739 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		052FB5271AA810560049DF8A /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		056C3F831AC8AEDB00F1103F /* KeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
+		0572AA7E1AEB615800B788CA /* KeyboardTut.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = KeyboardTut.gif; sourceTree = "<group>"; };
+		0572AA7F1AEB615800B788CA /* ProfileTut.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ProfileTut.gif; sourceTree = "<group>"; };
+		0572AA891AEB6FA300B788CA /* FLAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
+		0572AA8A1AEB6FA300B788CA /* FLAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImage.m; sourceTree = "<group>"; };
+		0572AA8B1AEB6FA300B788CA /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
+		0572AA8C1AEB6FA300B788CA /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
+		0572AA901AEC09C000B788CA /* EncryptDecryptPopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptDecryptPopupView.swift; sourceTree = "<group>"; };
+		057B4D451AD33FA200F0FECA /* LucidaGrande.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LucidaGrande.ttf; sourceTree = "<group>"; };
+		057B4D491AD3432D00F0FECA /* Quivira.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Quivira.otf; sourceTree = "<group>"; };
+		0587D6801ACA7AFE00B02109 /* KeyboardButtons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = KeyboardButtons.xcassets; sourceTree = "<group>"; };
+		05C2F8101ACF9E4C00C2097E /* ProfileSwipeModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSwipeModelController.swift; sourceTree = "<group>"; };
+		05C2F8141ACF9FAB00C2097E /* ProfileSwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSwipeViewController.swift; sourceTree = "<group>"; };
+		05C2F8161ACFA0CC00C2097E /* ProfileFetchModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileFetchModel.swift; sourceTree = "<group>"; };
 		05E3CA451AC62741000EDE84 /* Profiles.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Profiles.xib; sourceTree = "<group>"; };
 		05E3CA931AC69F07000EDE84 /* EnigmaKeyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EnigmaKeyboard.entitlements; sourceTree = "<group>"; };
 		05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableView.swift; sourceTree = "<group>"; };
+		05E726611ADB91AC009BF808 /* PopupKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupKey.swift; sourceTree = "<group>"; };
 		237399571A86C5E500A21FE0 /* SplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		237399591A86D28100A21FE0 /* TutorialPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialPageViewController.swift; sourceTree = "<group>"; };
 		2373995B1A86D31700A21FE0 /* TutorialModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialModelController.swift; sourceTree = "<group>"; };
 		2373995D1A89549100A21FE0 /* BlockButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockButton.swift; sourceTree = "<group>"; };
+		2389E1291AD9D9D40063796B /* ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		238DCD2B1A93DE2000E4D75B /* ProfileDetailHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileDetailHeaderView.swift; sourceTree = "<group>"; };
 		238DCD2D1A93E30E00E4D75B /* ProfileDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileDetailCell.swift; sourceTree = "<group>"; };
 		23ECC2D71A840A71000EB3CC /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
@@ -134,6 +175,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0285437D1AEC41D60014EB93 /* AVFoundation.framework in Frameworks */,
 				02605E3A1A86728400D3BF81 /* LocalAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -149,6 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02E38F2D1ACDEBFD002B77E6 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,9 +217,20 @@
 			name = EncryptionFramework;
 			sourceTree = "<group>";
 		};
+		028543781AEC41890014EB93 /* QR Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				028543791AEC41BF0014EB93 /* QRScanViewController.h */,
+				0285437A1AEC41BF0014EB93 /* QRScanViewController.m */,
+			);
+			name = "QR Scanner";
+			sourceTree = "<group>";
+		};
 		029226FB1A71D9D900A7DD81 = {
 			isa = PBXGroup;
 			children = (
+				0285437C1AEC41D60014EB93 /* AVFoundation.framework */,
+				02E38F2C1ACDEBFD002B77E6 /* AudioToolbox.framework */,
 				029227061A71D9D900A7DD81 /* Enigma */,
 				0292271C1A71D9D900A7DD81 /* EnigmaTests */,
 				05211C4C1A72D16E00660739 /* EnigmaKeyboard */,
@@ -197,6 +251,7 @@
 		029227061A71D9D900A7DD81 /* Enigma */ = {
 			isa = PBXGroup;
 			children = (
+				028543781AEC41890014EB93 /* QR Scanner */,
 				23F4FC3B1AA798A400284F16 /* Enigma.entitlements */,
 				026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */,
 				029227091A71D9D900A7DD81 /* AppDelegate.swift */,
@@ -205,6 +260,7 @@
 				23ECC30D1A842DD0000EB3CC /* ProfileDetailViewController.swift */,
 				238DCD2B1A93DE2000E4D75B /* ProfileDetailHeaderView.swift */,
 				238DCD2D1A93E30E00E4D75B /* ProfileDetailCell.swift */,
+				2389E1291AD9D9D40063796B /* ShareViewController.swift */,
 				23ECC2D71A840A71000EB3CC /* TutorialViewController.swift */,
 				237399591A86D28100A21FE0 /* TutorialPageViewController.swift */,
 				2373995B1A86D31700A21FE0 /* TutorialModelController.swift */,
@@ -212,10 +268,15 @@
 				02FF51AD1A854136009C76E6 /* PasscodeView.swift */,
 				02FF51AF1A854176009C76E6 /* PasscodeButton.swift */,
 				23F4FC401AA79AC400284F16 /* SettingsViewController.swift */,
+				02E38F301ACEDB10002B77E6 /* AboutViewController.swift */,
+				0572AA901AEC09C000B788CA /* EncryptDecryptPopupView.swift */,
 				021AE2E91A7D706400DF13F0 /* EncryptionFramework */,
+				0572AA821AEB6A8A00B788CA /* Flipboard Library */,
 				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
 				0292270D1A71D9D900A7DD81 /* Main.storyboard */,
 				029227101A71D9D900A7DD81 /* Images.xcassets */,
+				0572AA7E1AEB615800B788CA /* KeyboardTut.gif */,
+				0572AA7F1AEB615800B788CA /* ProfileTut.gif */,
 				029227121A71D9D900A7DD81 /* LaunchScreen.xib */,
 				029227071A71D9D900A7DD81 /* Supporting Files */,
 			);
@@ -251,14 +312,14 @@
 		05211C4C1A72D16E00660739 /* EnigmaKeyboard */ = {
 			isa = PBXGroup;
 			children = (
-				02F6B87D1ACA1EB400ABA8AD /* Arrow.png */,
 				05E3CA931AC69F07000EDE84 /* EnigmaKeyboard.entitlements */,
-				05211C4F1A72D16E00660739 /* KeyboardViewController.swift */,
-				056C3F831AC8AEDB00F1103F /* KeyboardView.swift */,
-				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
-				052FB5271AA810560049DF8A /* CoreDataStack.swift */,
-				05E3CA451AC62741000EDE84 /* Profiles.xib */,
+				0587D6801ACA7AFE00B02109 /* KeyboardButtons.xcassets */,
+				052E3A781AD0523800C97CE0 /* View Controllers */,
+				052E3A791AD0525600C97CE0 /* Models */,
+				052E3A771AD0521200C97CE0 /* Views */,
 				05211C4D1A72D16E00660739 /* Supporting Files */,
+				057B4D451AD33FA200F0FECA /* LucidaGrande.ttf */,
+				057B4D491AD3432D00F0FECA /* Quivira.otf */,
 			);
 			path = EnigmaKeyboard;
 			sourceTree = "<group>";
@@ -269,6 +330,47 @@
 				05211C4E1A72D16E00660739 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		052E3A771AD0521200C97CE0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				056C3F831AC8AEDB00F1103F /* KeyboardView.swift */,
+				05E726611ADB91AC009BF808 /* PopupKey.swift */,
+				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
+				05E3CA451AC62741000EDE84 /* Profiles.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		052E3A781AD0523800C97CE0 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				05211C4F1A72D16E00660739 /* KeyboardViewController.swift */,
+				05C2F8141ACF9FAB00C2097E /* ProfileSwipeViewController.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		052E3A791AD0525600C97CE0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				05C2F8101ACF9E4C00C2097E /* ProfileSwipeModelController.swift */,
+				05C2F8161ACFA0CC00C2097E /* ProfileFetchModel.swift */,
+				052FB5271AA810560049DF8A /* CoreDataStack.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		0572AA821AEB6A8A00B788CA /* Flipboard Library */ = {
+			isa = PBXGroup;
+			children = (
+				0572AA891AEB6FA300B788CA /* FLAnimatedImage.h */,
+				0572AA8A1AEB6FA300B788CA /* FLAnimatedImage.m */,
+				0572AA8B1AEB6FA300B788CA /* FLAnimatedImageView.h */,
+				0572AA8C1AEB6FA300B788CA /* FLAnimatedImageView.m */,
+			);
+			name = "Flipboard Library";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -387,8 +489,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0292270F1A71D9D900A7DD81 /* Main.storyboard in Resources */,
+				0572AA801AEB615800B788CA /* KeyboardTut.gif in Resources */,
 				029227141A71D9D900A7DD81 /* LaunchScreen.xib in Resources */,
 				029227111A71D9D900A7DD81 /* Images.xcassets in Resources */,
+				0572AA811AEB615800B788CA /* ProfileTut.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,9 +507,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0587D6811ACA7AFE00B02109 /* KeyboardButtons.xcassets in Resources */,
 				05E3CA461AC62741000EDE84 /* Profiles.xib in Resources */,
 				052FB5291AA810610049DF8A /* Enigma.xcdatamodeld in Resources */,
-				02F6B87E1ACA1EB400ABA8AD /* Arrow.png in Resources */,
+				057B4D461AD33FA200F0FECA /* LucidaGrande.ttf in Resources */,
+				057B4D4A1AD3432D00F0FECA /* Quivira.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,15 +524,21 @@
 			files = (
 				021AE2EC1A7D708E00DF13F0 /* Ceasar.c in Sources */,
 				23ECC2D81A840A71000EB3CC /* TutorialViewController.swift in Sources */,
+				0572AA8D1AEB6FA300B788CA /* FLAnimatedImage.m in Sources */,
 				021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */,
+				02E38F311ACEDB10002B77E6 /* AboutViewController.swift in Sources */,
 				02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */,
+				0572AA911AEC09C000B788CA /* EncryptDecryptPopupView.swift in Sources */,
 				0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */,
 				02CA73881AA4B2EB00FBFDF0 /* Vigenere.c in Sources */,
 				026B4DBB1AA7A4B5002DB3C6 /* Clear.c in Sources */,
 				02FF51B01A854176009C76E6 /* PasscodeButton.swift in Sources */,
 				238DCD2E1A93E30E00E4D75B /* ProfileDetailCell.swift in Sources */,
+				0572AA8E1AEB6FA300B788CA /* FLAnimatedImageView.m in Sources */,
+				0285437B1AEC41BF0014EB93 /* QRScanViewController.m in Sources */,
 				021AE2F21A7D7B9F00DF13F0 /* SimpleSub.c in Sources */,
 				237399581A86C5E500A21FE0 /* SplitViewController.swift in Sources */,
+				2389E12A1AD9D9D40063796B /* ShareViewController.swift in Sources */,
 				2373995C1A86D31700A21FE0 /* TutorialModelController.swift in Sources */,
 				026B4DBF1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld in Sources */,
 				2373995A1A86D28100A21FE0 /* TutorialPageViewController.swift in Sources */,
@@ -443,6 +555,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0208AF7E1AD6FF0D00A977FD /* EncrytionFramework.m in Sources */,
+				0208AF7F1AD6FF0D00A977FD /* Clear.c in Sources */,
+				0208AF801AD6FF0D00A977FD /* Ceasar.c in Sources */,
+				0208AF811AD6FF0D00A977FD /* Affine.c in Sources */,
+				0208AF821AD6FF0D00A977FD /* SimpleSub.c in Sources */,
+				0208AF831AD6FF0D00A977FD /* Vigenere.c in Sources */,
 				029227201A71D9D900A7DD81 /* EnigmaTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,9 +572,13 @@
 				052FB52A1AA810670049DF8A /* Enigma.xcdatamodeld in Sources */,
 				026B4DBC1AA7A528002DB3C6 /* Clear.c in Sources */,
 				02CA73891AA4B82900FBFDF0 /* Vigenere.c in Sources */,
+				05E726621ADB91AC009BF808 /* PopupKey.swift in Sources */,
 				05AA7D5E1A840BE000C1B763 /* EncrytionFramework.m in Sources */,
+				05C2F8171ACFA0CC00C2097E /* ProfileFetchModel.swift in Sources */,
 				056C3F841AC8AEDB00F1103F /* KeyboardView.swift in Sources */,
 				05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */,
+				05C2F8151ACF9FAB00C2097E /* ProfileSwipeViewController.swift in Sources */,
+				05C2F8111ACF9E4C00C2097E /* ProfileSwipeModelController.swift in Sources */,
 				05AA7D611A840BE000C1B763 /* Affine.c in Sources */,
 				05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */,
 				05E3CA951AC70C53000EDE84 /* ProfileTableView.swift in Sources */,

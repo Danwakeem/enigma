@@ -31,7 +31,7 @@ void createKey(char *key, char *buffer) {
 			continue;
 		}
 		
-		buffer[j] = key[i];
+		buffer[j] = tolower(key[i]);
 		i++;
 		j++;
 	}
@@ -59,7 +59,7 @@ char *SimpleSub_encrypt(char *key, char *message) {
 	
 	char newKey[27];
 	createKey(key, newKey);
-	
+		
 	int i;
 	for (i = 0; i < strlen(message); i++) {
 		if (tolower(message[i]) >= 'a' && tolower(message[i]) <= 'z') {

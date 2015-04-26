@@ -10,12 +10,12 @@ import UIKit
 
 class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 	var pageData = NSArray()
-	var identifiers = [ "TutorialPageViewController_Start", "TutorialPageViewController_Choice", "TutorialPageViewController_Final" ]
+	var identifiers = [ "TutorialPageViewController_Start", "TutorialPageViewController_Choice", "TutorialPageViewController_ProfileTut", "TutorialPageViewController_KeyboardTut", "TutorialPageViewController_Final" ]
 	
 	override init() {
 		super.init()
 		
-		pageData = [ "Welcome!", "Enable Passcode/TouchID?", "Enable Full Access." ]
+		pageData = [ "Welcome!", "Enable Passcode/TouchID?", "Creating A Profile", "Using The Keyboard", "Go to \"Settings\" >\n\"General\" > \"Keyboard\" > \"Keyboards\" >\n\"Add New Keyboard\" and tap \"Enigma\".\n Be sure to enable full access." ]
 	}
 	
 	func viewControllerAtIndex(index: Int, storyboard: UIStoryboard) -> TutorialPageViewController? {
@@ -25,7 +25,7 @@ class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 		}
 		
 		// Create a new view controller and pass suitable data.
-		let pageViewController = storyboard.instantiateViewControllerWithIdentifier(identifiers[index]) as TutorialPageViewController
+		let pageViewController = storyboard.instantiateViewControllerWithIdentifier(identifiers[index]) as! TutorialPageViewController
 		pageViewController.dataObject = pageData[index]
 		return pageViewController
 	}
@@ -42,7 +42,7 @@ class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 	// MARK: - Page View Controller Data Source
 	
 	func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-		var index = self.indexOfViewController(viewController as TutorialPageViewController)
+		var index = self.indexOfViewController(viewController as! TutorialPageViewController)
 		if (index == 0) || (index == NSNotFound) {
 			return nil
 		}
@@ -52,7 +52,7 @@ class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 	}
 	
 	func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
-		var index = self.indexOfViewController(viewController as TutorialPageViewController)
+		var index = self.indexOfViewController(viewController as! TutorialPageViewController)
 		if index == NSNotFound {
 			return nil
 		}

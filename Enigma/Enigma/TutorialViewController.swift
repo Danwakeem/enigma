@@ -26,7 +26,7 @@ class TutorialViewController: UIViewController, UIPageViewControllerDelegate, Tu
 		let startingViewController: TutorialPageViewController = modelController.viewControllerAtIndex(0, storyboard: self.storyboard!)!
 		startingViewController.delegate = self
 		let viewControllers: NSArray = [startingViewController]
-		pageViewController!.setViewControllers(viewControllers, direction: .Forward, animated: false, completion: {done in })
+		pageViewController!.setViewControllers(viewControllers as [AnyObject], direction: .Forward, animated: false, completion: {done in })
 		pageViewController!.dataSource = self.modelController
 		pageControl.numberOfPages = modelController.pageData.count
 		
@@ -43,7 +43,7 @@ class TutorialViewController: UIViewController, UIPageViewControllerDelegate, Tu
 	// MARK: - UIPageViewControllerDelegate
 	
 	func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
-		var currentViewController: TutorialPageViewController = pageViewController.viewControllers[0] as TutorialPageViewController;
+		var currentViewController: TutorialPageViewController = pageViewController.viewControllers[0] as! TutorialPageViewController;
 		currentViewController.delegate = self
 		pageControl.currentPage = modelController.indexOfViewController(currentViewController)
 	}
@@ -56,15 +56,15 @@ class TutorialViewController: UIViewController, UIPageViewControllerDelegate, Tu
 		// determine the page to change to
 		switch direction {
 		case .Forward:
-			nextViewController = modelController.pageViewController(pageViewController!, viewControllerAfterViewController: controller) as TutorialPageViewController?
+			nextViewController = modelController.pageViewController(pageViewController!, viewControllerAfterViewController: controller) as! TutorialPageViewController?
 		case .Reverse:
-			nextViewController = modelController.pageViewController(pageViewController!, viewControllerBeforeViewController: controller) as TutorialPageViewController?
+			nextViewController = modelController.pageViewController(pageViewController!, viewControllerBeforeViewController: controller) as! TutorialPageViewController?
 		}
 		
 		// go to the page, or end the tutorial if no more pages exist
 		if nextViewController != nil {
 			var viewControllers: NSArray = [nextViewController!]
-			pageViewController!.setViewControllers(viewControllers, direction: direction, animated: true) {
+			pageViewController!.setViewControllers(viewControllers as [AnyObject], direction: direction, animated: true) {
 				done in
 				self.pageViewController(self.pageViewController!, didFinishAnimating: done, previousViewControllers: [controller], transitionCompleted: true)
 			}
