@@ -76,6 +76,11 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		
 		let btn = UIButton()
 		btn.frame = CGRectMake(bounds.width - 75, bounds.height - 135, 55, 55)
+		
+		if UI_USER_INTERFACE_IDIOM() == .Pad {
+			btn.frame = CGRectMake(self.view.center.x - 500, self.view.center.y + 240, 55, 55)
+		}
+		
 		btn.setTitle("+", forState: .Normal)
 		btn.titleLabel?.font = UIFont.systemFontOfSize(28)
 		btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
