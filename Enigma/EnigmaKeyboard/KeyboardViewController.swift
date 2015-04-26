@@ -59,17 +59,9 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         // Add custom view sizing constraints here
     }
     
-    //iPhone 6+ -- W: 414.0 H: 736.0
-    //iPhone 6  -- W: 375.0 H: 667.0
-    //iPhone 5  -- W: 320.0 H: 568.0
-    //iPhone 4  -- W: 320.0 H: 480.0
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.proxy = self.textDocumentProxy as! UITextDocumentProxy
-        
-        println("Screen Width: \(UIScreen.mainScreen().bounds.size.width)")
-        println("Screen Height: \(UIScreen.mainScreen().bounds.size.height)")
         
 		// load defaults
 		defaults = NSUserDefaults(suiteName: "group.com.enigma")
@@ -115,12 +107,22 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
         
         //NOTE - Old method of detecting screen orientation was depricated so I came up with this solution.
         if UIScreen.mainScreen().bounds.size.width > UIScreen.mainScreen().bounds.size.height {
-            let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
+            var keyboardHeight: NSLayoutConstraint!
+            if self.Keyboard.device == "iPad" {
+                keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 425)
+            } else {
+                keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
+            }
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
             self.Keyboard.popupEnabled = false
         } else {
-            let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
+            var keyboardHeight: NSLayoutConstraint!
+            if self.Keyboard.device == "iPad" {
+                keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 350)
+            } else {
+                keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
+            }
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
             self.Keyboard.popupEnabled = true
@@ -172,16 +174,25 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         if UIInterfaceOrientationIsLandscape(toInterfaceOrientation) as Bool == true {
             self.view.removeConstraint(self.height)
-            let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
+            var keyboardHeight: NSLayoutConstraint!
+            if self.Keyboard.device == "iPad" {
+                keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 425)
+            } else {
+                keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 175)
+            }
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
             self.Keyboard.popupEnabled = false
         } else {
-            self.view.removeConstraint(self.height)
-            let keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
+            var keyboardHeight: NSLayoutConstraint!
+            if self.Keyboard.device == "iPad" {
+                keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 350)
+            } else {
+                keyboardHeight = NSLayoutConstraint(item: view, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 275)
+                self.Keyboard.popupEnabled = true
+            }
             self.height = keyboardHeight
             self.view.addConstraint(keyboardHeight)
-            self.Keyboard.popupEnabled = true
         }
     }
     
