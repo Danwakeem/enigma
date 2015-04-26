@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14E7f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UMq-g1-Tal">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UMq-g1-Tal">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -462,13 +462,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k5w-Av-OL1">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="-4" y="0.0" width="608" height="600"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="se1-xR-GR9">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="608" height="600"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="baP-Xg-E8L">
-                                            <rect key="frame" x="562" y="27" width="30" height="47"/>
+                                            <rect key="frame" x="570" y="27" width="30" height="47"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="30"/>
                                             <state key="normal" title="X">
                                                 <color key="titleColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -479,11 +479,11 @@
                                             </connections>
                                         </button>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Text goes here..." translatesAutoresizingMaskIntoConstraints="NO" id="WB3-1p-3k9">
-                                            <rect key="frame" x="46" y="76" width="509" height="524"/>
+                                            <rect key="frame" x="46" y="76" width="517" height="524"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="tintColor" red="0.98431372549999996" green="0.17254901959999999" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
                                         </textView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Double tap for decryption" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HjP-Lv-VWz">
                                             <rect key="frame" x="46" y="50" width="151" height="18"/>
@@ -510,8 +510,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="k5w-Av-OL1" firstAttribute="leading" secondItem="75X-Bj-Dfu" secondAttribute="leadingMargin" constant="-16" id="Hx8-aS-7on"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="k5w-Av-OL1" secondAttribute="trailing" constant="-16" id="PzA-ya-u3q"/>
+                            <constraint firstItem="k5w-Av-OL1" firstAttribute="leading" secondItem="75X-Bj-Dfu" secondAttribute="leadingMargin" constant="-20" id="Hx8-aS-7on"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="k5w-Av-OL1" secondAttribute="trailing" constant="-20" id="PzA-ya-u3q"/>
                             <constraint firstItem="k5w-Av-OL1" firstAttribute="top" secondItem="75X-Bj-Dfu" secondAttribute="topMargin" id="eKc-kq-4Nb"/>
                             <constraint firstItem="XnC-ZO-cts" firstAttribute="top" secondItem="k5w-Av-OL1" secondAttribute="bottom" id="tNl-Oe-tTJ"/>
                         </constraints>
