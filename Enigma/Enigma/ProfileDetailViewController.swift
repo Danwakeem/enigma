@@ -295,7 +295,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			let dict = encryptionList[i]
 			
 			encryption.setValue(dict["encryptionType"], forKey: "encryptionType")
-			encryption.setValue(dict["key1"], forKey: "key1")
+			encryption.setValue((dict["key1"] as! String).stringByReplacingOccurrencesOfString(" ", withString: ""), forKey: "key1")
 			
 			newSet.addObject(encryption)
 			
