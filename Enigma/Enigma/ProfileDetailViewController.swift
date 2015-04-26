@@ -198,8 +198,6 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
         } else {
             key1Buffer += string
         }
-        
-        println(key1Buffer)
     }
     
     func closePop(sender: AnyObject) {
