@@ -15,7 +15,7 @@ class TutorialModelController: NSObject, UIPageViewControllerDataSource {
 	override init() {
 		super.init()
 		
-		pageData = [ "Welcome!", "Enable Passcode/TouchID?", "Creating A Profile", "Using The Keyboard", "Enable Full Access." ]
+		pageData = [ "Welcome!", "Enable Passcode/TouchID?", "Creating A Profile", "Using The Keyboard", "Go to \"Settings\" >\n\"General\" > \"Keyboard\" > \"Keyboards\" >\n\"Add New Keyboard\" and tap \"Enigma\".\n Be sure to enable full access." ]
 	}
 	
 	func viewControllerAtIndex(index: Int, storyboard: UIStoryboard) -> TutorialPageViewController? {
