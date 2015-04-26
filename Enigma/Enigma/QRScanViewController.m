@@ -28,7 +28,7 @@
 	return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated;
+- (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	if(![self isCameraAvailable]) {
@@ -36,7 +36,7 @@
 	}
 }
 
-- (void) viewDidAppear:(BOOL)animated;
+- (void) viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
 }
@@ -44,9 +44,14 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	[self setNeedsStatusBarAppearanceUpdate];
 	if([self isCameraAvailable]) {
 		[self setupScanner];
 	}
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+	return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning
@@ -67,7 +72,7 @@
 #pragma mark -
 #pragma mark NoCamAvailable
 
-- (void) setupNoCameraView;
+- (void) setupNoCameraView
 {
 	UILabel *labelNoCam = [[UILabel alloc] init];
 	labelNoCam.text = @"No Camera available";
@@ -77,17 +82,17 @@
 	labelNoCam.center = self.view.center;
 }
 
-- (NSUInteger)supportedInterfaceOrientations;
+- (NSUInteger)supportedInterfaceOrientations
 {
 	return UIInterfaceOrientationMaskPortrait;
 }
 
-- (BOOL)shouldAutorotate;
+- (BOOL)shouldAutorotate
 {
 	return NO;//(UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]));
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation;
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 	if([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft) {
 		AVCaptureConnection *con = self.preview.connection;
@@ -101,7 +106,7 @@
 #pragma mark -
 #pragma mark AVFoundationSetup
 
-- (void) setupScanner;
+- (void) setupScanner
 {
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -128,31 +133,46 @@
 		
 		[self.view.layer insertSublayer:self.preview atIndex:0];
 		
+		UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+		[button setTitle:@"Cancel" forState:UIControlStateNormal];
+		[button addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
+		button.frame = CGRectMake(8.0, [UIScreen mainScreen].bounds.size.height - 48.0, [UIScreen mainScreen].bounds.size.width - 16.0, 40.0);
+		button.layer.cornerRadius = 6.0;
+		button.layer.masksToBounds = true;
+		button.backgroundColor = [UIColor colorWithRed:52.0/255.0 green:170.0/255.0 blue:220.0/255.0 alpha:1.0];
+		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+		[self.view addSubview:button];
+
 		[self.session startRunning];
 	});
+}
+
+- (void)cancel
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
 #pragma mark Helper Methods
 
-- (BOOL) isCameraAvailable;
+- (BOOL) isCameraAvailable
 {
 	NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
 	return [videoDevices count] > 0;
 }
 
-- (void)startScanning;
+- (void)startScanning
 {
 	[self.session startRunning];
  
 }
 
-- (void) stopScanning;
+- (void) stopScanning
 {
 	[self.session stopRunning];
 }
 
-- (void) setTorch:(BOOL) aStatus;
+- (void) setTorch:(BOOL) aStatus
 {
 	AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
 	[device lockForConfiguration:nil];
@@ -166,7 +186,7 @@
 	[device unlockForConfiguration];
 }
 
-- (void) focus:(CGPoint) aPoint;
+- (void) focus:(CGPoint) aPoint
 {
 	AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
 	if([device isFocusPointOfInterestSupported] &&
