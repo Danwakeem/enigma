@@ -23,6 +23,8 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	var name: String = ""
 	var cypher: String = "Cypher"
 	var key1: String = ""
+    
+    var key1Buffer = ""
 	
 	var addButton: UIButton!
 	
@@ -152,6 +154,8 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			reusableView = headerView
 		}
 		
+        key1Buffer = ""
+        
 		return reusableView!
 	}
 	
@@ -180,6 +184,22 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
         encryptDecryptPopup?.preferredContentSize = CGSize(width:self.view.frame.width * CGFloat(1 / 100.0), height:self.view.frame.height * CGFloat(1 / 100.0))
         presentViewController(encryptDecryptPopup!, animated: true, completion: {})
         
+    }
+    
+    func sendTextToDelegate(string: String) {
+        let  char = string.cStringUsingEncoding(NSUTF8StringEncoding)!
+        let isBackSpace = strcmp(char, "\\b")
+        if (isBackSpace == -92) {
+            if key1Buffer != "" {
+                key1Buffer = key1Buffer.substringWithRange(Range<String.Index>(start: key1Buffer.startIndex, end: key1Buffer.endIndex.predecessor()))
+            }
+        } else if key1Buffer == "" {
+            key1Buffer = string
+        } else {
+            key1Buffer += string
+        }
+        
+        println(key1Buffer)
     }
     
     func closePop(sender: AnyObject) {
@@ -234,7 +254,11 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			let key = encryption.valueForKey("key1") as! String
 			println(key)
 			if key == "" {
-				errorList.append(encryption.valueForKey("encryptionType") as! String)
+                if key1Buffer != "" {
+                    encryption.setValue(key1Buffer, forKey: "key1")
+                } else {
+                    errorList.append(encryption.valueForKey("encryptionType") as! String)
+                }
 			}
 			
 			let type = EncrytionFramework.encryptionTypeForString(encryption["encryptionType"] as! String)
@@ -407,6 +431,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		emptyCypher.setValue("", forKey: "key1")
 		encryptionList.append(emptyCypher)
 		self.collectionView?.reloadData()
+        key1Buffer = ""
 	}
 	
 	// MARK: - Segues

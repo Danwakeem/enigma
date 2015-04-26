@@ -12,6 +12,7 @@ protocol ProfileDetailCellDelegate {
 	func cypherChanged(cell: ProfileDetailCell, key: String, value: String)
 	func focusOnView(cell: ProfileDetailCell)
 	func deleteEncryptionType(cell: ProfileDetailCell)
+    func sendTextToDelegate(string: String)
 }
 
 class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
@@ -34,7 +35,7 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 		
 		return true
 	}
-	
+    	
 	func textFieldShouldReturn(textField: UITextField) -> Bool {
 		delegate.cypherChanged(self, key: "key1", value: keyField.text)
 		textField.resignFirstResponder()
@@ -45,6 +46,15 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 	func textFieldDidEndEditing(textField: UITextField) {
 		delegate.cypherChanged(self, key: "key1", value: keyField.text)
 	}
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        sendTextToDelegate(string)
+        return true
+    }
+    
+    func sendTextToDelegate(string: String) {
+        delegate.sendTextToDelegate(string)
+    }
 	
 	@IBAction func changeEncryptionMethod(sender: AnyObject) {
 		method++
