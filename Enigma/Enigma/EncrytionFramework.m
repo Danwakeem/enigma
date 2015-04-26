@@ -220,22 +220,24 @@
 +(BOOL) validateKeyWithKey:(NSString *)key type:(EncryptionType)type andKeyNumber:(int)keyNum {
 	NSLog(@"Validating with %@, %d", key, type);
 	
-	NSCharacterSet *chars;
+	NSMutableCharacterSet *chars;
 	NSArray *affineKeyA = @[@1, @3, @5, @7, @9, @11, @15, @17, @19, @21, @23, @25];
 	switch (type) {
 		case SimpleSub:
 		case Vigenere:
-			chars = [[NSCharacterSet letterCharacterSet] invertedSet];
+			chars = [NSMutableCharacterSet letterCharacterSet];
+			[chars formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
+			chars = [[chars invertedSet] mutableCopy];
 			if ([key rangeOfCharacterFromSet:chars].length)
 				return NO;
 			break;
 		case Caesar:
-			chars = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+			chars = [[[NSCharacterSet decimalDigitCharacterSet] invertedSet] mutableCopy];
 			if ([key rangeOfCharacterFromSet:chars].length)
 				return NO;
 			break;
 		case Affine:
-			chars = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+			chars = [[[NSCharacterSet decimalDigitCharacterSet] invertedSet] mutableCopy];
 			if ([key rangeOfCharacterFromSet:chars].length)
 				return NO;
 			
