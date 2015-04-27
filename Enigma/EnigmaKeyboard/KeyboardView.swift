@@ -685,9 +685,6 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.showProfilePages = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("togglePages"), userInfo: nil, repeats: false)
         }
         
-        //let aOrLPopup = TouchDownGestureRecognizer(target: self, action: "aOrL:")
-        //self.addGestureRecognizer(aOrLPopup)
-        
         let tap = UITapGestureRecognizer(target: self, action: "nearestButton:")
         tap.numberOfTapsRequired = 1
         let touchDown = TouchDownGestureRecognizer(target: self, action: "nearestButtonPopupKey:")
@@ -710,7 +707,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         tap4.numberOfTapsRequired = 1
         let touchDown4 = TouchDownGestureRecognizer(target: self, action: "nearestButtonPopupKey:")
         self.row4.addGestureRecognizer(tap4)
-        //self.row4.addGestureRecognizer(touchDown4)
+        self.row4.addGestureRecognizer(touchDown4)
     }
     
     func activatePages() {
@@ -1071,7 +1068,11 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             var bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: -5)
             var rightConstraint : NSLayoutConstraint!
             if index == buttons.count - 1 {
-                rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: -5)
+                if button.titleForState(.Normal) == "L" {
+                    rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: -20)
+                } else {
+                    rightConstraint = NSLayoutConstraint(item: button, attribute: .Right, relatedBy: .Equal, toItem: mainView, attribute: .Right, multiplier: 1.0, constant: -5)
+                }
             } else {
                 let nextButton = buttons[index+1]
                 if button.titleForState(.Normal) == "\u{21E7}" {
@@ -1082,7 +1083,11 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             }
             var leftConstraint : NSLayoutConstraint!
             if index == 0 {
-                leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 5)
+                if button.titleForState(.Normal) == "A" {
+                    leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 20)
+                } else {
+                    leftConstraint = NSLayoutConstraint(item: button, attribute: .Left, relatedBy: .Equal, toItem: mainView, attribute: .Left, multiplier: 1.0, constant: 5)
+                }
             } else {
                 let prevtButton = buttons[index-1]
                 if button.titleForState(.Normal) == "\u{232B}" {
@@ -1106,9 +1111,14 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         
         for (index, rowView) in enumerate(rowViews) {
             if index == 2  && rowView.subviews.count != 10 {
+                var rightSideConstraint = NSLayoutConstraint(item: rowView, attribute: .Right, relatedBy: .Equal, toItem: inputView, attribute: .Right, multiplier: 1.0, constant: 0)
+                var leftConstraint = NSLayoutConstraint(item: rowView, attribute: .Left, relatedBy: .Equal, toItem: inputView, attribute: .Left, multiplier: 1.0, constant: 0)
+                inputView.addConstraints([leftConstraint, rightSideConstraint])
+                /*
                 var rightSideConstraint = NSLayoutConstraint(item: rowView, attribute: .Right, relatedBy: .Equal, toItem: inputView, attribute: .Right, multiplier: 1.0, constant: -15)
                 var leftConstraint = NSLayoutConstraint(item: rowView, attribute: .Left, relatedBy: .Equal, toItem: inputView, attribute: .Left, multiplier: 1.0, constant: 15)
                 inputView.addConstraints([leftConstraint, rightSideConstraint])
+                */
             } else {
                 var rightSideConstraint = NSLayoutConstraint(item: rowView, attribute: .Right, relatedBy: .Equal, toItem: inputView, attribute: .Right, multiplier: 1.0, constant: 0)
                 var leftConstraint = NSLayoutConstraint(item: rowView, attribute: .Left, relatedBy: .Equal, toItem: inputView, attribute: .Left, multiplier: 1.0, constant: 0)

@@ -288,6 +288,30 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
     }
     
     //MARK: - Input text operations
+    
+    func aOrL(tap: TouchDownGestureRecognizer) {
+        if self.Keyboard.popupKey.superview == nil && self.Keyboard.popupEnabled {
+            let v = tap.view
+            let location = tap.locationInView(v)
+            let width = self.view.frame.width
+            if width / 2 < location.x {
+                self.Keyboard.nearestButton = self.Keyboard.l
+                self.Keyboard.keyPopup(self.Keyboard.l)
+                self.Keyboard.nearestButton = self.Keyboard.l
+            } else {
+                self.Keyboard.nearestButton = self.Keyboard.a
+                self.Keyboard.keyPopup(self.Keyboard.a)
+            }
+        } else {
+            self.Keyboard.popupKey.duck = false
+            self.Keyboard.popupKey.rightUpper = false
+            self.Keyboard.popupKey.leftUpper = false
+            self.Keyboard.popupKey.specialWideKey = false
+            self.Keyboard.popupKey.frame = CGRectMake(0, 0, self.Keyboard.popupKey.width, self.Keyboard.popupKey.height)
+            self.Keyboard.popupKey.removeFromSuperview()
+            self.buttonTapped(self.Keyboard.nearestButton)
+        }
+    }
 	
 	func playSound() {
 		if defaults.boolForKey("TypingSounds") {
