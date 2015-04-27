@@ -334,6 +334,8 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
                 if self.upperCase {
                     self.changeToUpperCase()
                 }
+                self.Keyboard.isAlternateKeyboard = false
+                self.Keyboard.canSwitchToAlphaKeyboard = false 
             case "👱":
                 self.toggleProfileTable()
             default :
@@ -435,7 +437,7 @@ class KeyboardViewController: UIInputViewController, NSFetchedResultsControllerD
             self.Keyboard.createKeyboard([Keyboard.buttonTitles1,Keyboard.buttonTitles2,Keyboard.buttonTitles3,Keyboard.buttonTitles4])
             self.Keyboard.isAlternateKeyboard = false
             self.Keyboard.canSwitchToAlphaKeyboard = false
-            self.changeToUpperCase()
+            //self.changeToUpperCase()
         }
 		
 		playSound()
