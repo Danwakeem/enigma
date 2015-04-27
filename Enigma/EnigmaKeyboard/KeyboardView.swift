@@ -74,7 +74,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     let decryptButton: UIButton = UIButton()
     let decryptedTextLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 350, 50))
     
-    var viewBackgroundColor = UIColor.clearColor()
+    var viewBackgroundColor = UIColor(white: 0.999, alpha: 0.01)
     var encryptionRowColor = UIColor(red: 0.949, green: 0.945, blue: 0.945, alpha: 1.0)
     var decryptEncryptButtonTextColor = UIColor.darkGrayColor()
     var decryptEncryptButtonColor = UIColor(red: 0.91, green: 0.902, blue: 0.902, alpha: 1.0)
@@ -91,6 +91,16 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
     
     var popupKey: PopupKey!
     
+    var nearestButton: UIButton!
+    
+    var foundSpecialButton: Bool = false
+    
+    var a: UIButton!
+    
+    var l: UIButton!
+    
+    var keyboardColor: String!
+    
     var device: String = ""
     var popupEnabled: Bool = true
     
@@ -106,7 +116,9 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         super.init(frame: CGRectZero)
         self.initilizedPageIndex = index
         self.phoneModel()
+        self.keyboardColor = color
         if color == "Default" {
+            self.backgroundColor = self.viewBackgroundColor
             self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         } else {
@@ -222,12 +234,14 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         default:
+            self.backgroundColor = self.viewBackgroundColor
             self.popupKey = PopupKey(backgroundColor: self.keysBackgroundColor, textColor: self.keysTextColor, device: self.device)
             self.createKeyboard([buttonTitles1,buttonTitles2,buttonTitles3,buttonTitles4])
         }
     }
     
     func loadAsDarkKeyboard(){
+        self.keyboardColor = "Black"
         self.backgroundColor = UIColor(red: 0.22, green: 0.22, blue: 0.22, alpha: 1.0)
         self.encryptionRowColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1.0)
         self.decryptEncryptButtonTextColor = UIColor.whiteColor()
@@ -426,10 +440,111 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         case "+#=":
             button.backgroundColor = self.specialKeysButtonColor
         case "\u{21E7}":
+            button.backgroundColor = self.specialKeysButtonColor
             println("Shift")
         default:
             button.backgroundColor = self.keysBackgroundColor
         }
+    }
+    
+    func nearestButton(tap: TouchDownGestureRecognizer) {
+        //self.buttonTapped(self.nearestButton)
+        let v = tap.view
+        let location = tap.locationInView(v)
+        var selectedButton: UIButton!
+        for (index, button) in enumerate(v?.subviews as! [UIButton]) {
+            if index == 0 {
+                selectedButton = button
+            }
+            var x = button.superview?.convertRect(button.frame, fromView: v)
+            if x?.origin.x < location.x {
+                selectedButton = button
+            }
+        }
+        self.buttonTapped(selectedButton)
+    }
+    
+    func aOrL(tap: TouchDownGestureRecognizer) {
+        if self.popupKey.superview == nil && self.popupEnabled {
+            let v = tap.view
+            let location = tap.locationInView(v)
+            let width = self.frame.width
+            if width / 2 < location.x {
+                self.nearestButton = self.l
+                self.keyPopup(self.l)
+                self.nearestButton = self.l
+            } else {
+                self.nearestButton = self.a
+                self.keyPopup(self.a)
+            }
+        } else {
+            self.popupKey.duck = false
+            self.popupKey.rightUpper = false
+            self.popupKey.leftUpper = false
+            self.popupKey.specialWideKey = false
+            self.popupKey.frame = CGRectMake(0, 0, self.popupKey.width, self.popupKey.height)
+            self.popupKey.removeFromSuperview()
+            self.buttonTapped(self.nearestButton)
+        }
+    }
+    
+    func nearestButtonPopupKey(tap: TouchDownGestureRecognizer) {
+        var selectedButton: UIButton!
+        if self.popupKey.superview == nil && self.popupEnabled {
+            let v = tap.view
+            if v != self.row4 {
+                let location = tap.locationInView(v)
+                for (index, button) in enumerate(v?.subviews as! [UIButton]) {
+                    if index == 0 {
+                        selectedButton = button
+                    }
+                    var x = button.superview?.convertRect(button.frame, fromView: v)
+                    if x?.origin.x < location.x {
+                        selectedButton = button
+                    }
+                }
+                let title = selectedButton.titleForState(.Normal)
+                if isPopupKey(title!) {
+                    self.keyPopup(selectedButton)
+                } else {
+                    if !self.foundSpecialButton {
+                        if title == "\u{232B}" {
+                            self.backSpaceTapped(selectedButton)
+                        } else if title == "\u{21E7}" {
+                            self.buttonTapped(selectedButton)
+                            if self.shiftKey.backgroundColor == self.shiftKeyPressedColor {
+                                self.shiftKey.backgroundColor = self.specialKeysButtonColor
+                            } else {
+                                self.shiftKey.backgroundColor = self.shiftKeyPressedColor
+                            }
+                        } else {
+                            self.buttonTapped(selectedButton)
+                        }
+                    } else {
+                        if title == "\u{232B}" {
+                            self.backSpaceReleased(selectedButton)
+                        }
+                    }
+                    self.foundSpecialButton = !self.foundSpecialButton
+                }
+            } else {
+                if !self.foundSpecialButton {
+                    self.nearestButton(tap)
+                }
+                self.foundSpecialButton = !self.foundSpecialButton
+            }
+        } else {
+            self.popupKey.duck = false
+            self.popupKey.rightUpper = false
+            self.popupKey.leftUpper = false
+            self.popupKey.specialWideKey = false
+            self.popupKey.frame = CGRectMake(0, 0, self.popupKey.width, self.popupKey.height)
+            self.popupKey.removeFromSuperview()
+            self.buttonTapped(self.nearestButton)
+            self.nearestButton = nil
+        }
+        
+        self.nearestButton = selectedButton
     }
     
     // MARK: - UIPageViewController delegate methods
@@ -506,6 +621,13 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         self.row3 = rowOfButtons(buttonTitles[2] as! [String])
         self.row4 = rowOfButtons(buttonTitles[3] as! [String])
         
+        if self.keyboardColor == "Default" || self.keyboardColor == "White" {
+            self.row1.backgroundColor = self.viewBackgroundColor
+            self.row2.backgroundColor = self.viewBackgroundColor
+            self.row3.backgroundColor = self.viewBackgroundColor
+            self.row4.backgroundColor = self.viewBackgroundColor
+        }
+        
         self.createEncryptDecryptToggleButton()
         
         //add the views of button arrays to the screen
@@ -562,6 +684,33 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             
             self.showProfilePages = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: Selector("togglePages"), userInfo: nil, repeats: false)
         }
+        
+        //let aOrLPopup = TouchDownGestureRecognizer(target: self, action: "aOrL:")
+        //self.addGestureRecognizer(aOrLPopup)
+        
+        let tap = UITapGestureRecognizer(target: self, action: "nearestButton:")
+        tap.numberOfTapsRequired = 1
+        let touchDown = TouchDownGestureRecognizer(target: self, action: "nearestButtonPopupKey:")
+        self.row1.addGestureRecognizer(tap)
+        self.row1.addGestureRecognizer(touchDown)
+        
+        let tap2 = UITapGestureRecognizer(target: self, action: "nearestButton:")
+        tap2.numberOfTapsRequired = 1
+        let touchDown2 = TouchDownGestureRecognizer(target: self, action: "nearestButtonPopupKey:")
+        self.row2.addGestureRecognizer(tap2)
+        self.row2.addGestureRecognizer(touchDown2)
+        
+        let tap3 = UITapGestureRecognizer(target: self, action: "nearestButton:")
+        tap3.numberOfTapsRequired = 1
+        let touchDown3 = TouchDownGestureRecognizer(target: self, action: "nearestButtonPopupKey:")
+        self.row3.addGestureRecognizer(tap3)
+        self.row3.addGestureRecognizer(touchDown3)
+        
+        let tap4 = UITapGestureRecognizer(target: self, action: "nearestButton:")
+        tap4.numberOfTapsRequired = 1
+        let touchDown4 = TouchDownGestureRecognizer(target: self, action: "nearestButtonPopupKey:")
+        self.row4.addGestureRecognizer(tap4)
+        //self.row4.addGestureRecognizer(touchDown4)
     }
     
     func activatePages() {
@@ -679,6 +828,7 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
         var buttons = [UIButton]()
         //Setting up the size of the array of keys
         var keyboardRowView = UIView(frame: CGRectMake(0, 0, 320, 50))
+        
         //Create each button in the row
         for buttonTitle in buttonTitles{
             var button = createButtonWithTitle(buttonTitle as String)
@@ -752,6 +902,12 @@ class KeyboardView: UIView, UIPageViewControllerDelegate {
             button.backgroundColor = self.specialKeysButtonColor
         } else {
             button.titleLabel?.font = UIFont.systemFontOfSize(20)
+        }
+        
+        if title == "A" {
+            self.a = button
+        } else if title == "L" {
+            self.l = button
         }
         
         return button
