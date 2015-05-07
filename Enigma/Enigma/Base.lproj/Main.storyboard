@@ -184,7 +184,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="286" height="120"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6ti-4P-Avh">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="6ti-4P-Avh">
                                             <rect key="frame" x="50" y="70" width="222" height="30"/>
                                             <color key="tintColor" red="0.21960784310000001" green="0.47450980390000003" blue="0.74509803919999995" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
