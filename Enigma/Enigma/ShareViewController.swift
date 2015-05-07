@@ -51,4 +51,13 @@ class ShareViewController: UIViewController {
 			
 		})
 	}
+	
+	@IBAction func shareQRCode(sender: AnyObject) {
+		var items: [AnyObject] = [AnyObject]()
+		items.append(qrCodeView.image!)
+		
+		let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
+		self.presentViewController(vc, animated: true, completion: nil)
+	}
+	
 }
