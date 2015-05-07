@@ -391,10 +391,24 @@
                                             <action selector="done:" destination="Up7-P2-mvw" eventType="touchUpInside" id="0xa-Tq-Mmo"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="seB-Ab-zub" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="8" width="81" height="40"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Share">
+                                            <color key="titleColor" red="0.20392156862745098" green="0.66666666666666663" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="shareQRCode:" destination="Up7-P2-mvw" eventType="touchUpInside" id="6yV-84-yuX"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="seB-Ab-zub" firstAttribute="baseline" secondItem="yFZ-wt-TRt" secondAttribute="baseline" id="3yQ-7M-M7D"/>
                                     <constraint firstAttribute="height" constant="55" id="b2r-KK-aAf"/>
+                                    <constraint firstItem="seB-Ab-zub" firstAttribute="leading" secondItem="aGY-ZL-A4f" secondAttribute="leadingMargin" id="hJl-VG-XFh"/>
                                     <constraint firstAttribute="centerY" secondItem="yFZ-wt-TRt" secondAttribute="centerY" constant="-0.5" id="x97-t9-MbA"/>
                                     <constraint firstItem="yFZ-wt-TRt" firstAttribute="trailing" secondItem="aGY-ZL-A4f" secondAttribute="trailingMargin" id="zxv-3H-VbQ"/>
                                 </constraints>
