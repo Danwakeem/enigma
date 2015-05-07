@@ -263,6 +263,10 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			if EncrytionFramework.validateKeyWithKey(encryption["key1"] as! String, type: type, andKeyNumber: 1) == false {
 				errorList.append(encryption["encryptionType"] as! String)
 			}
+			
+			if (encryption["encryptionType"] as! String) == "SimpleSub" && count(key) > 26 {
+				errorList.append("SimbleSub key must be less than 26 characters")
+			}
 		}
 		
 		errors(errorList)
@@ -277,7 +281,11 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			var errorMessage: String
 			
 			if count(errors) == 1 {
-				errorMessage = "The \(errors[0]) field is invalid."
+				if count(errors[0]) > 10 {
+					errorMessage = errors[0]
+				} else {
+					errorMessage = "The \(errors[0]) field is invalid."
+				}
 			} else {
 				errorMessage = "The following fields are invalid:\n"
 				

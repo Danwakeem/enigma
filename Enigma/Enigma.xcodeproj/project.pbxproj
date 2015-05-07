@@ -251,7 +251,6 @@
 		029227061A71D9D900A7DD81 /* Enigma */ = {
 			isa = PBXGroup;
 			children = (
-				028543781AEC41890014EB93 /* QR Scanner */,
 				23F4FC3B1AA798A400284F16 /* Enigma.entitlements */,
 				026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */,
 				029227091A71D9D900A7DD81 /* AppDelegate.swift */,
@@ -270,6 +269,7 @@
 				23F4FC401AA79AC400284F16 /* SettingsViewController.swift */,
 				02E38F301ACEDB10002B77E6 /* AboutViewController.swift */,
 				0572AA901AEC09C000B788CA /* EncryptDecryptPopupView.swift */,
+				028543781AEC41890014EB93 /* QR Scanner */,
 				021AE2E91A7D706400DF13F0 /* EncryptionFramework */,
 				0572AA821AEB6A8A00B788CA /* Flipboard Library */,
 				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
