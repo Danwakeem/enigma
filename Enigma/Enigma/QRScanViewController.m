@@ -80,6 +80,16 @@
 	[self.view addSubview:labelNoCam];
 	[labelNoCam sizeToFit];
 	labelNoCam.center = self.view.center;
+	
+	UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+	[button setTitle:@"Cancel" forState:UIControlStateNormal];
+	[button addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
+	button.frame = CGRectMake(8.0, [UIScreen mainScreen].bounds.size.height - 48.0, [UIScreen mainScreen].bounds.size.width - 16.0, 40.0);
+	button.layer.cornerRadius = 6.0;
+	button.layer.masksToBounds = true;
+	button.backgroundColor = [UIColor colorWithRed:52.0/255.0 green:170.0/255.0 blue:220.0/255.0 alpha:1.0];
+	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[self.view addSubview:button];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -94,13 +104,13 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft) {
+	/*if([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft) {
 		AVCaptureConnection *con = self.preview.connection;
 		con.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
 	} else {
 		AVCaptureConnection *con = self.preview.connection;
 		con.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
-	}
+	}*/
 }
 
 #pragma mark -
