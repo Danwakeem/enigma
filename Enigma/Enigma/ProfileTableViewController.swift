@@ -9,11 +9,13 @@
 import UIKit
 import CoreData
 
-class ProfileTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, AMScanViewControllerDelegate {
+class ProfileTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate, AMScanViewControllerDelegate, UIAlertViewDelegate {
 	
 	var profiles = [NSManagedObject]()
 	
 	var allowScaning = false
+	var profileToImport: NSManagedObject?
+	let kPorfileNameAlertTag = 50
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
@@ -79,14 +81,71 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 			
 			newProfile.setValue(newSet, forKey: "encryption")
 			
-			var error: NSError?
-			if !managedContext.save(&error) {
-				println("Could not save \(error), \(error?.userInfo)")
-			}
+			profileToImport = newProfile
 			
-			NSNotificationCenter.defaultCenter().postNotificationName("ProfileUpdated", object: newProfile)
+			let alert = UIAlertView(title: "Import Profile", message: "Enter a name for this profile", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Save", "Use \"" + profileArray[0] + "\"")
+			alert.alertViewStyle = .PlainTextInput
+			alert.tag = kPorfileNameAlertTag
+			alert.show()
+			
 		} else {
 			UIAlertView(title: "Error", message: "Could not import profile.", delegate: nil, cancelButtonTitle: "Ok").show()
+		}
+	}
+	
+	func finishImportingProfile(newName: String) {
+		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+		let managedContext = appDelegate.managedObjectContext!
+		
+		profileToImport?.setValue(newName, forKey: "name")
+		
+		var error: NSError?
+		if !managedContext.save(&error) {
+			println("Could not save \(error), \(error?.userInfo)")
+		}
+		
+		NSNotificationCenter.defaultCenter().postNotificationName("ProfileUpdated", object: profileToImport)
+	}
+	
+	func cancelImport() {
+		let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+		let managedContext = appDelegate.managedObjectContext!
+		
+		managedContext.deleteObject(profileToImport!)
+		
+		fetchProfiles()
+	}
+	
+	func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+		if alertView.tag == kPorfileNameAlertTag {
+			println("Delegate called! \(buttonIndex)")
+			switch (buttonIndex) {
+			case alertView.cancelButtonIndex:
+				cancelImport()
+			case 1:
+				if let newName = alertView.textFieldAtIndex(0)?.text {
+					if newName != "" {
+						println("Finalize")
+						finishImportingProfile(newName)
+					} else {
+						println("Empty String")
+						if let profileName = profileToImport?.valueForKey("name") as? String {
+							let alert = UIAlertView(title: "Error", message: "Please enter a name for this profile", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Save", "Use \"" + profileName + "\"")
+							alert.alertViewStyle = .PlainTextInput
+							alert.tag = kPorfileNameAlertTag
+							alert.show()
+						}
+					}
+				} else {
+					println("Something weird happened")
+				}
+			case 2:
+				if let profileName = profileToImport?.valueForKey("name") as? String {
+					finishImportingProfile(profileName)
+				}
+			default:
+				break
+			}
 		}
 	}
 	

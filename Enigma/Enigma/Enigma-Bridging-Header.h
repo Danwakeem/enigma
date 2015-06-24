@@ -6,3 +6,4 @@
 #import "FLAnimatedImageView.h"
 #import "FLAnimatedImage.h"
 #import "QRScanViewController.h"
+#import <UIKit/UIGestureRecognizerSubclass.h>

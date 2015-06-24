@@ -49,6 +49,8 @@ void createKey(char *key, char *buffer) {
 			if (!keyContains(nextChar, buffer)) {
 				buffer[i] = nextChar;
 				break;
+			} else if (j == 19) {
+				//printf("It happened...\n");
 			}
 		}
 	}
@@ -59,7 +61,7 @@ char *SimpleSub_encrypt(char *key, char *message) {
 	
 	char newKey[27];
 	createKey(key, newKey);
-		
+	
 	int i;
 	for (i = 0; i < strlen(message); i++) {
 		if (tolower(message[i]) >= 'a' && tolower(message[i]) <= 'z') {

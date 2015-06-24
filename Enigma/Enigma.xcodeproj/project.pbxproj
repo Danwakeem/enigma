@@ -39,6 +39,7 @@
 		052FB5281AA810560049DF8A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052FB5271AA810560049DF8A /* CoreDataStack.swift */; };
 		052FB5291AA810610049DF8A /* Enigma.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		052FB52A1AA810670049DF8A /* Enigma.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
+		0531970B1AED8D5F005E5387 /* TouchDownGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531970A1AED8D5F005E5387 /* TouchDownGestureRecognizer.swift */; };
 		056C3F841AC8AEDB00F1103F /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056C3F831AC8AEDB00F1103F /* KeyboardView.swift */; };
 		0572AA801AEB615800B788CA /* KeyboardTut.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0572AA7E1AEB615800B788CA /* KeyboardTut.gif */; };
 		0572AA811AEB615800B788CA /* ProfileTut.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0572AA7F1AEB615800B788CA /* ProfileTut.gif */; };
@@ -138,6 +139,7 @@
 		05211C4E1A72D16E00660739 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05211C4F1A72D16E00660739 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		052FB5271AA810560049DF8A /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		0531970A1AED8D5F005E5387 /* TouchDownGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDownGestureRecognizer.swift; sourceTree = "<group>"; };
 		056C3F831AC8AEDB00F1103F /* KeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		0572AA7E1AEB615800B788CA /* KeyboardTut.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = KeyboardTut.gif; sourceTree = "<group>"; };
 		0572AA7F1AEB615800B788CA /* ProfileTut.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ProfileTut.gif; sourceTree = "<group>"; };
@@ -251,7 +253,6 @@
 		029227061A71D9D900A7DD81 /* Enigma */ = {
 			isa = PBXGroup;
 			children = (
-				028543781AEC41890014EB93 /* QR Scanner */,
 				23F4FC3B1AA798A400284F16 /* Enigma.entitlements */,
 				026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */,
 				029227091A71D9D900A7DD81 /* AppDelegate.swift */,
@@ -270,6 +271,7 @@
 				23F4FC401AA79AC400284F16 /* SettingsViewController.swift */,
 				02E38F301ACEDB10002B77E6 /* AboutViewController.swift */,
 				0572AA901AEC09C000B788CA /* EncryptDecryptPopupView.swift */,
+				028543781AEC41890014EB93 /* QR Scanner */,
 				021AE2E91A7D706400DF13F0 /* EncryptionFramework */,
 				0572AA821AEB6A8A00B788CA /* Flipboard Library */,
 				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
@@ -338,6 +340,7 @@
 				056C3F831AC8AEDB00F1103F /* KeyboardView.swift */,
 				05E726611ADB91AC009BF808 /* PopupKey.swift */,
 				05E3CA941AC70C53000EDE84 /* ProfileTableView.swift */,
+				0531970A1AED8D5F005E5387 /* TouchDownGestureRecognizer.swift */,
 				05E3CA451AC62741000EDE84 /* Profiles.xib */,
 			);
 			name = Views;
@@ -579,6 +582,7 @@
 				05AA7D5F1A840BE000C1B763 /* Ceasar.c in Sources */,
 				05C2F8151ACF9FAB00C2097E /* ProfileSwipeViewController.swift in Sources */,
 				05C2F8111ACF9E4C00C2097E /* ProfileSwipeModelController.swift in Sources */,
+				0531970B1AED8D5F005E5387 /* TouchDownGestureRecognizer.swift in Sources */,
 				05AA7D611A840BE000C1B763 /* Affine.c in Sources */,
 				05AA7D631A840BE000C1B763 /* SimpleSub.c in Sources */,
 				05E3CA951AC70C53000EDE84 /* ProfileTableView.swift in Sources */,
