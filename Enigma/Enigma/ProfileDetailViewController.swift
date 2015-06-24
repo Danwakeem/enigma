@@ -44,15 +44,47 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		setEditing(!editing, animated: true)
 	}
 	
+	func createAddButton() {
+		let bounds = UIScreen.mainScreen().bounds
+		let btn = UIButton()
+		btn.frame = CGRectMake(bounds.width - 75, bounds.height - 135, 55, 55)
+		
+		if UI_USER_INTERFACE_IDIOM() == .Pad {
+			btn.frame = CGRectMake(4, 100, 55, 55)
+		}
+		
+		btn.setTitle("+", forState: .Normal)
+		btn.titleLabel?.font = UIFont.systemFontOfSize(28)
+		btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
+		btn.layer.cornerRadius = 27.5
+		btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
+		btn.contentVerticalAlignment = .Center
+		self.view.addSubview(btn)
+		self.view.bringSubviewToFront(btn)
+		
+		self.addButton = btn
+		self.addButton.hidden = !editing
+		println("Add button created")
+		
+		if self.addButton == nil {
+			println("Add button still nil")
+		}
+	}
+	
 	override func setEditing(editing: Bool, animated: Bool) {
+		println("Set editing")
 		super.setEditing(editing, animated: animated)
 		
         if self.addButton != nil {
             self.addButton.hidden = !editing
-        }
+		} else {
+			println("Add button is nil")
+			createAddButton()
+		}
 		
 		if editing == false {
 			saveProfile()
+			self.addButton.hidden = true
 		}
 		collectionView!.reloadData()
 		
@@ -73,28 +105,8 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		}
 		fetchEncryptions()
 		self.collectionView?.reloadData()
-		
-		let bounds = UIScreen.mainScreen().bounds
-		
-		let btn = UIButton()
-		btn.frame = CGRectMake(bounds.width - 75, bounds.height - 135, 55, 55)
-		
-		if UI_USER_INTERFACE_IDIOM() == .Pad {
-			btn.frame = CGRectMake(self.view.center.x - 500, self.view.center.y + 240, 55, 55)
-		}
-		
-		btn.setTitle("+", forState: .Normal)
-		btn.titleLabel?.font = UIFont.systemFontOfSize(28)
-		btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
-		btn.layer.cornerRadius = 27.5
-		btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
-		btn.contentVerticalAlignment = .Center
-		self.view.addSubview(btn)
-		self.view.bringSubviewToFront(btn)
-		
-		self.addButton = btn
-		self.addButton.hidden = !editing
-		
+	
+		createAddButton()
 	}
 	
 	override func viewWillAppear(animated: Bool) {
