@@ -26,7 +26,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
     
     var key1Buffer = ""
 	
-	var addButton: UIButton!
+	var addButton: AddEncryptionButton!
 	
 	var selectedCell: NSIndexPath!
 	
@@ -76,19 +76,15 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		
 		let bounds = UIScreen.mainScreen().bounds
 		
-		let btn = UIButton()
+		let btn = AddEncryptionButton()
 		btn.frame = CGRectMake(bounds.width - 75, bounds.height - 135, 55, 55)
 		
 		if UI_USER_INTERFACE_IDIOM() == .Pad {
 			btn.frame = CGRectMake(self.view.center.x - 500, self.view.center.y + 240, 55, 55)
 		}
 		
-		btn.setTitle("+", forState: .Normal)
-		btn.titleLabel?.font = UIFont.systemFontOfSize(28)
-		btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
-		btn.layer.cornerRadius = 27.5
-		btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
-		btn.contentVerticalAlignment = .Center
+        btn.addTarget(self, action: "changeButtonColor", forControlEvents: .TouchDown)
+        btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
 		self.view.addSubview(btn)
 		self.view.bringSubviewToFront(btn)
 		
@@ -96,6 +92,11 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		self.addButton.hidden = !editing
 		
 	}
+    
+    func changeButtonColor(){
+        self.addButton.bgColor = UIColor(red: 0.188, green:0.514, blue:0.682, alpha:1)
+        self.addButton.setNeedsDisplay()
+    }
 	
 	override func viewWillAppear(animated: Bool) {
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardDidShowNotification, object: nil)
@@ -424,6 +425,9 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	func addEncryption(sender: AnyObject) {
+        self.addButton.bgColor = UIColor(red: 0.172, green: 0.6, blue: 0.827, alpha: 1)
+        self.addButton.setNeedsDisplay()
+        
 		let emptyCypher = NSMutableDictionary()
 		emptyCypher.setValue("SimpleSub", forKey: "encryptionType")
 		emptyCypher.setValue("", forKey: "key1")

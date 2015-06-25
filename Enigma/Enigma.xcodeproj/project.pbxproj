@@ -40,6 +40,7 @@
 		052FB5291AA810610049DF8A /* Enigma.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		052FB52A1AA810670049DF8A /* Enigma.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 026B4DBD1AA7A5E1002DB3C6 /* Enigma.xcdatamodeld */; };
 		0531970B1AED8D5F005E5387 /* TouchDownGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531970A1AED8D5F005E5387 /* TouchDownGestureRecognizer.swift */; };
+		054EC1C21B3BAB74005AD099 /* AddEncryptionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054EC1C11B3BAB74005AD099 /* AddEncryptionButton.swift */; };
 		056C3F841AC8AEDB00F1103F /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056C3F831AC8AEDB00F1103F /* KeyboardView.swift */; };
 		0572AA801AEB615800B788CA /* KeyboardTut.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0572AA7E1AEB615800B788CA /* KeyboardTut.gif */; };
 		0572AA811AEB615800B788CA /* ProfileTut.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0572AA7F1AEB615800B788CA /* ProfileTut.gif */; };
@@ -140,6 +141,7 @@
 		05211C4F1A72D16E00660739 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		052FB5271AA810560049DF8A /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		0531970A1AED8D5F005E5387 /* TouchDownGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDownGestureRecognizer.swift; sourceTree = "<group>"; };
+		054EC1C11B3BAB74005AD099 /* AddEncryptionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEncryptionButton.swift; sourceTree = "<group>"; };
 		056C3F831AC8AEDB00F1103F /* KeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		0572AA7E1AEB615800B788CA /* KeyboardTut.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = KeyboardTut.gif; sourceTree = "<group>"; };
 		0572AA7F1AEB615800B788CA /* ProfileTut.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ProfileTut.gif; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				23F4FC401AA79AC400284F16 /* SettingsViewController.swift */,
 				02E38F301ACEDB10002B77E6 /* AboutViewController.swift */,
 				0572AA901AEC09C000B788CA /* EncryptDecryptPopupView.swift */,
+				054EC1C11B3BAB74005AD099 /* AddEncryptionButton.swift */,
 				021AE2E91A7D706400DF13F0 /* EncryptionFramework */,
 				0572AA821AEB6A8A00B788CA /* Flipboard Library */,
 				021AE2E51A7D6F9600DF13F0 /* Enigma-Bridging-Header.h */,
@@ -531,6 +534,7 @@
 				021AE2E81A7D6F9700DF13F0 /* EncrytionFramework.m in Sources */,
 				02E38F311ACEDB10002B77E6 /* AboutViewController.swift in Sources */,
 				02FF51AE1A854136009C76E6 /* PasscodeView.swift in Sources */,
+				054EC1C21B3BAB74005AD099 /* AddEncryptionButton.swift in Sources */,
 				0572AA911AEC09C000B788CA /* EncryptDecryptPopupView.swift in Sources */,
 				0292270A1A71D9D900A7DD81 /* AppDelegate.swift in Sources */,
 				02CA73881AA4B2EB00FBFDF0 /* Vigenere.c in Sources */,
@@ -715,6 +719,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Enigma/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -734,6 +739,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Enigma/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
