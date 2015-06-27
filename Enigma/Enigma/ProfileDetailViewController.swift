@@ -18,6 +18,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
     var encryptDecryptPopup: EncryptDecryptPopupView?
     
     var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere, "Cypher": Clear]
+    var randomWords = ["iPhone", "yolo", "black sheep", "get to the choppa", "those arnt mountains", "crabs", "zebra", "clowns", "james bond", "whoppers", "skittles", "android", "cool kid", "ice cream", "club sandwhich", "racata", "mountain", "legs", "keyboard", "alphabet", "young", "england", "america"]
 	
 	// TODO: Impliment an edit buffer so that multiple encryptions can be handled
 	var name: String = ""
@@ -389,9 +390,39 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	func nameSelected() {
 		self.selectedCell = nil
 	}
+    
+    func generateCyphers(){
+        //Generate an encryption for them.
+        var numberOfEncryptions = arc4random_uniform(4) + 1
+        println(numberOfEncryptions)
+        for(var i: UInt32 = 0; i <= numberOfEncryptions; i++) {
+            let dict = NSMutableDictionary()
+            //0 - simplesub
+            //1 - Caesar
+            //3 - Vigenere
+            switch(i % 3) {
+            case 0:
+                var randomKey = arc4random_uniform(UInt32(randomWords.count))
+                var randomWord = randomWords[Int(randomKey)]
+                dict.setValue("SimpleSub", forKey: "encryptionType")
+                dict.setValue(randomWord, forKey: "key1")
+            case 1:
+                var randomKey = arc4random_uniform(26)
+                dict.setValue("Caesar", forKey: "encryptionType")
+                dict.setValue(randomKey.description as String, forKey: "key1")
+            default:
+                var randomKey = arc4random_uniform(UInt32(randomWords.count))
+                var randomWord = randomWords[Int(randomKey)]
+                dict.setValue("Vigenere", forKey: "encryptionType")
+                dict.setValue(randomWord, forKey: "key1")
+            }
+            encryptionList.append(dict)
+        }
+    }
 	
 	func fetchEncryptions() {
 		if profile == nil {
+            generateCyphers()
 			return
 		}
 		
