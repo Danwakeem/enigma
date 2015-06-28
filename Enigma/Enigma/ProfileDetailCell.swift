@@ -16,7 +16,9 @@ protocol ProfileDetailCellDelegate {
 }
 
 class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
-	@IBOutlet weak var cypherButton: UIButton!
+	var cypherButton: UIButton = UIButton()
+    
+    @IBOutlet weak var cypherSelection: UISegmentedControl!
 	@IBOutlet weak var keyField: UITextField!
 	@IBOutlet weak var deleteButton: UIButton!
 	@IBOutlet weak var helpLabel: UILabel!
@@ -42,6 +44,12 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
 		
 		return true
 	}
+    
+    func setCypherSelectionGesture(){
+        var tap = UITapGestureRecognizer(target: self, action: "changeEncryptionMethod:")
+        tap.numberOfTapsRequired = 1
+        cypherSelection.addGestureRecognizer(tap)
+    }
 	
 	func textFieldDidEndEditing(textField: UITextField) {
 		delegate.cypherChanged(self, key: "key1", value: keyField.text)
@@ -56,14 +64,21 @@ class ProfileDetailCell: UICollectionViewCell, UITextFieldDelegate {
         delegate.sendTextToDelegate(string)
     }
 	
-	@IBAction func changeEncryptionMethod(sender: AnyObject) {
-		method++
-		method %= encryptionMethods.count
-		
-		self.helpLabel.text = EncrytionFramework.helpStringForEncryptionType(encryptionMethods[method])
-		
-		delegate.cypherChanged(self, key: "encryptionType", value: encryptionMethods[method])
-	}
+    @IBAction func changeEncryptMethod(sender: AnyObject) {
+        var title = cypherSelection.titleForSegmentAtIndex(cypherSelection.selectedSegmentIndex)
+        var method = 0
+        
+        if title == "Caesar" {
+            method = 1
+        } else if title == "Simple Sub" {
+            method = 0
+        } else {
+            method = 2
+        }
+        
+        self.helpLabel.text = EncrytionFramework.helpStringForEncryptionType(encryptionMethods[method])
+        delegate.cypherChanged(self, key: "encryptionType", value: encryptionMethods[method])
+    }
 	
 	@IBAction func deleteMe(sender: AnyObject) {
 		println("Delete encryption method")

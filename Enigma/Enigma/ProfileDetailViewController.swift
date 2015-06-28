@@ -122,16 +122,30 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return encryptionList.count
 	}
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSizeMake(UIScreen.mainScreen().bounds.width / 1.06, 155)
+    }
 	
 	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 		var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! ProfileDetailCell
-		
+        
 		cell.layer.borderColor = UIColor(white: 204.0/255.0, alpha: 1.0).CGColor
 		cell.layer.borderWidth = 0.5
 		
 		var encryption = encryptionList[indexPath.row]
 		
 		cell.delegate = self
+        let title = encryption["encryptionType"] as! String
+        if title == "SimpleSub" {
+            cell.cypherSelection.selectedSegmentIndex = 1
+        } else if title == "Caesar" {
+            cell.cypherSelection.selectedSegmentIndex = 0
+        } else {
+            cell.cypherSelection.selectedSegmentIndex = 2
+        }
+        cell.cypherSelection.enabled = editing
+        //cell.setCypherSelectionGesture()
 		cell.cypherButton.setTitle((encryption["encryptionType"] as! String), forState: UIControlState.Normal)
 		cell.helpLabel.text = EncrytionFramework.helpStringForEncryptionType(encryption["encryptionType"] as! String)
 		cell.cypherButton.enabled = editing
