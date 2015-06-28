@@ -198,6 +198,7 @@
                                                 </mask>
                                             </variation>
                                             <connections>
+                                                <action selector="key1Change:" destination="qyr-ho-Pvo" eventType="editingDidEnd" id="hsH-TW-KJ5"/>
                                                 <outlet property="delegate" destination="qyr-ho-Pvo" id="ywD-hi-8fU"/>
                                             </connections>
                                         </textField>
@@ -231,12 +232,13 @@
                                                 </mask>
                                             </variation>
                                         </label>
-                                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="B1p-4e-EfX">
+                                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="B1p-4e-EfX">
                                             <rect key="frame" x="8" y="26" width="264" height="29"/>
                                             <segments>
                                                 <segment title="Caesar"/>
                                                 <segment title="Simple Sub"/>
                                                 <segment title="Vigenere"/>
+                                                <segment title="Affine"/>
                                             </segments>
                                             <color key="tintColor" red="0.98431372549999996" green="0.17254901959999999" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
@@ -253,6 +255,44 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nyl-tz-I48">
+                                            <rect key="frame" x="50" y="137" width="222" height="30"/>
+                                            <color key="tintColor" red="0.21960784310000001" green="0.47450980390000003" blue="0.74509803919999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="2M0-iG-TZs"/>
+                                                <constraint firstAttribute="height" constant="30" id="GWM-Xt-DpF"/>
+                                                <constraint firstAttribute="width" constant="222" id="gce-v0-IoG"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="GWM-Xt-DpF"/>
+                                                </mask>
+                                            </variation>
+                                            <connections>
+                                                <action selector="key2Change:" destination="qyr-ho-Pvo" eventType="editingDidEnd" id="57c-Eh-Scn"/>
+                                                <outlet property="delegate" destination="qyr-ho-Pvo" id="vza-lp-xhy"/>
+                                            </connections>
+                                        </textField>
+                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key2:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Yv-vq-kDh">
+                                            <rect key="frame" x="8" y="138" width="44" height="21.5"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="44" id="1J0-km-wXC"/>
+                                                <constraint firstAttribute="height" constant="21.5" id="69b-y7-QTz"/>
+                                                <constraint firstAttribute="width" constant="34" id="FcL-bA-6C5"/>
+                                                <constraint firstAttribute="height" constant="21.5" id="TbD-jc-llY"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="69b-y7-QTz"/>
+                                                    <exclude reference="FcL-bA-6C5"/>
+                                                </mask>
+                                            </variation>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -263,16 +303,22 @@
                                     <constraint firstItem="iic-Za-5MK" firstAttribute="top" secondItem="ib9-oX-hef" secondAttribute="bottom" constant="14" id="4yE-ks-pGo"/>
                                     <constraint firstItem="B1p-4e-EfX" firstAttribute="leading" secondItem="qyr-ho-Pvo" secondAttribute="leadingMargin" id="86Y-LT-8pv"/>
                                     <constraint firstItem="iic-Za-5MK" firstAttribute="leading" secondItem="qyr-ho-Pvo" secondAttribute="leadingMargin" id="GOU-qO-nEV"/>
+                                    <constraint firstItem="Nyl-tz-I48" firstAttribute="leading" secondItem="5Yv-vq-kDh" secondAttribute="trailing" constant="8" id="Jqe-j5-dOB"/>
+                                    <constraint firstItem="5Yv-vq-kDh" firstAttribute="leading" secondItem="qyr-ho-Pvo" secondAttribute="leadingMargin" id="Mk7-ms-nLc"/>
                                     <constraint firstItem="6ti-4P-Avh" firstAttribute="top" secondItem="ib9-oX-hef" secondAttribute="bottom" constant="12" id="Ohu-6x-fbU"/>
+                                    <constraint firstItem="5Yv-vq-kDh" firstAttribute="top" secondItem="iic-Za-5MK" secondAttribute="bottom" constant="23" id="P8M-a4-5pn"/>
                                     <constraint firstItem="ib9-oX-hef" firstAttribute="leading" secondItem="qyr-ho-Pvo" secondAttribute="leadingMargin" id="PJD-OA-6ni"/>
                                     <constraint firstItem="iic-Za-5MK" firstAttribute="top" secondItem="ib9-oX-hef" secondAttribute="bottom" constant="10" id="RJR-DH-x1D"/>
                                     <constraint firstItem="6ti-4P-Avh" firstAttribute="leading" secondItem="iic-Za-5MK" secondAttribute="trailing" constant="8" symbolic="YES" id="Sjt-Me-Rbb"/>
                                     <constraint firstAttribute="bottomMargin" secondItem="6ti-4P-Avh" secondAttribute="bottom" constant="12" id="TBi-Vj-MVr"/>
+                                    <constraint firstItem="Nyl-tz-I48" firstAttribute="leading" secondItem="qyr-ho-Pvo" secondAttribute="leadingMargin" constant="42" id="Tnu-8p-JFi"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="ib9-oX-hef" secondAttribute="trailing" constant="6" id="Vmd-Ma-mxE"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="B1p-4e-EfX" secondAttribute="trailing" constant="6" id="VxR-ab-0Nc"/>
                                     <constraint firstItem="ib9-oX-hef" firstAttribute="top" secondItem="B1p-4e-EfX" secondAttribute="bottom" constant="12" id="W42-iS-F7K"/>
+                                    <constraint firstItem="Nyl-tz-I48" firstAttribute="top" secondItem="6ti-4P-Avh" secondAttribute="bottom" constant="15" id="WC5-nU-FL6"/>
                                     <constraint firstItem="ib9-oX-hef" firstAttribute="top" secondItem="B1p-4e-EfX" secondAttribute="bottom" constant="5" id="WxJ-6P-5iZ"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="B1p-4e-EfX" secondAttribute="trailing" constant="6" id="ZAY-6r-aNK"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="Nyl-tz-I48" secondAttribute="trailing" constant="6" id="apa-FV-Lgh"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="6ti-4P-Avh" secondAttribute="trailing" constant="6" id="ays-jM-vV7"/>
                                     <constraint firstItem="B1p-4e-EfX" firstAttribute="top" secondItem="qyr-ho-Pvo" secondAttribute="topMargin" id="cY8-sk-VNm"/>
                                     <constraint firstItem="6ti-4P-Avh" firstAttribute="leading" secondItem="qyr-ho-Pvo" secondAttribute="leadingMargin" constant="42" id="e61-jR-PPR"/>
@@ -304,12 +350,15 @@
                                         <exclude reference="f45-7X-0Pv"/>
                                         <exclude reference="fxQ-0Y-VP3"/>
                                         <exclude reference="hbh-jd-WW9"/>
+                                        <exclude reference="Jqe-j5-dOB"/>
                                     </mask>
                                 </variation>
                                 <connections>
                                     <outlet property="cypherSelection" destination="B1p-4e-EfX" id="QhK-vz-gX6"/>
                                     <outlet property="deleteButton" destination="Dt2-Qy-yag" id="IeW-kd-YZS"/>
                                     <outlet property="helpLabel" destination="ib9-oX-hef" id="Byn-fH-re8"/>
+                                    <outlet property="key2Field" destination="Nyl-tz-I48" id="Cjc-XS-tgc"/>
+                                    <outlet property="key2Label" destination="5Yv-vq-kDh" id="3E2-rF-J3v"/>
                                     <outlet property="keyField" destination="6ti-4P-Avh" id="tAz-ME-K3L"/>
                                 </connections>
                             </collectionViewCell>
