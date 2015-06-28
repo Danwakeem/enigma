@@ -22,6 +22,9 @@ class TutorialViewController: UIViewController, UIPageViewControllerDelegate, Tu
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        
+        //Set auto cypher the first time a user opens the app
+        NSUserDefaults(suiteName: "group.com.enigma")?.setBool(true, forKey: "AutoCypher")
 		
 		let startingViewController: TutorialPageViewController = modelController.viewControllerAtIndex(0, storyboard: self.storyboard!)!
 		startingViewController.delegate = self

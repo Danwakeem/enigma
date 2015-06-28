@@ -18,6 +18,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
     var encryptDecryptPopup: EncryptDecryptPopupView?
     
     var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere, "Cypher": Clear]
+    var randomWords = ["iPhone", "yolo", "black sheep", "get to the choppa", "those arnt mountains", "crabs", "zebra", "clowns", "james bond", "whoppers", "skittles", "android", "cool kid", "ice cream", "club sandwhich", "racata", "mountain", "legs", "keyboard", "alphabet", "young", "england", "america"]
 	
 	// TODO: Impliment an edit buffer so that multiple encryptions can be handled
 	var name: String = ""
@@ -26,7 +27,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
     
     var key1Buffer = ""
 	
-	var addButton: UIButton!
+	var addButton: AddEncryptionButton!
 	
 	var selectedCell: NSIndexPath!
 	
@@ -76,19 +77,15 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		
 		let bounds = UIScreen.mainScreen().bounds
 		
-		let btn = UIButton()
+		let btn = AddEncryptionButton()
 		btn.frame = CGRectMake(bounds.width - 75, bounds.height - 135, 55, 55)
 		
 		if UI_USER_INTERFACE_IDIOM() == .Pad {
 			btn.frame = CGRectMake(self.view.center.x - 500, self.view.center.y + 240, 55, 55)
 		}
 		
-		btn.setTitle("+", forState: .Normal)
-		btn.titleLabel?.font = UIFont.systemFontOfSize(28)
-		btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
-		btn.layer.cornerRadius = 27.5
-		btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
-		btn.contentVerticalAlignment = .Center
+        btn.addTarget(self, action: "changeButtonColor", forControlEvents: .TouchDown)
+        btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
 		self.view.addSubview(btn)
 		self.view.bringSubviewToFront(btn)
 		
@@ -96,6 +93,11 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		self.addButton.hidden = !editing
 		
 	}
+    
+    func changeButtonColor(){
+        self.addButton.bgColor = UIColor(red: 0.188, green:0.514, blue:0.682, alpha:1)
+        self.addButton.setNeedsDisplay()
+    }
 	
 	override func viewWillAppear(animated: Bool) {
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardDidShowNotification, object: nil)
@@ -120,16 +122,30 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return encryptionList.count
 	}
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSizeMake(UIScreen.mainScreen().bounds.width / 1.06, 155)
+    }
 	
 	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 		var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! ProfileDetailCell
-		
+        
 		cell.layer.borderColor = UIColor(white: 204.0/255.0, alpha: 1.0).CGColor
 		cell.layer.borderWidth = 0.5
 		
 		var encryption = encryptionList[indexPath.row]
 		
 		cell.delegate = self
+        let title = encryption["encryptionType"] as! String
+        if title == "SimpleSub" {
+            cell.cypherSelection.selectedSegmentIndex = 1
+        } else if title == "Caesar" {
+            cell.cypherSelection.selectedSegmentIndex = 0
+        } else {
+            cell.cypherSelection.selectedSegmentIndex = 2
+        }
+        cell.cypherSelection.enabled = editing
+        //cell.setCypherSelectionGesture()
 		cell.cypherButton.setTitle((encryption["encryptionType"] as! String), forState: UIControlState.Normal)
 		cell.helpLabel.text = EncrytionFramework.helpStringForEncryptionType(encryption["encryptionType"] as! String)
 		cell.cypherButton.enabled = editing
@@ -396,9 +412,37 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	func nameSelected() {
 		self.selectedCell = nil
 	}
+    
+    func generateCyphers(){
+        var numberOfEncryptions = arc4random_uniform(4) + 1
+        println(numberOfEncryptions)
+        for(var i: UInt32 = 0; i <= numberOfEncryptions; i++) {
+            let dict = NSMutableDictionary()
+            switch(i % 3) {
+            case 0:
+                var randomKey = arc4random_uniform(UInt32(randomWords.count))
+                var randomWord = randomWords[Int(randomKey)]
+                dict.setValue("SimpleSub", forKey: "encryptionType")
+                dict.setValue(randomWord, forKey: "key1")
+            case 1:
+                var randomKey = arc4random_uniform(26)
+                dict.setValue("Caesar", forKey: "encryptionType")
+                dict.setValue(randomKey.description as String, forKey: "key1")
+            default:
+                var randomKey = arc4random_uniform(UInt32(randomWords.count))
+                var randomWord = randomWords[Int(randomKey)]
+                dict.setValue("Vigenere", forKey: "encryptionType")
+                dict.setValue(randomWord, forKey: "key1")
+            }
+            encryptionList.append(dict)
+        }
+    }
 	
 	func fetchEncryptions() {
 		if profile == nil {
+            if NSUserDefaults(suiteName: "group.com.enigma")?.boolForKey("AutoCypher") == true {
+                generateCyphers()
+            }
 			return
 		}
 		
@@ -432,6 +476,9 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	func addEncryption(sender: AnyObject) {
+        self.addButton.bgColor = UIColor(red: 0.172, green: 0.6, blue: 0.827, alpha: 1)
+        self.addButton.setNeedsDisplay()
+        
 		let emptyCypher = NSMutableDictionary()
 		emptyCypher.setValue("SimpleSub", forKey: "encryptionType")
 		emptyCypher.setValue("", forKey: "key1")

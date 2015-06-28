@@ -53,7 +53,7 @@ class EncryptDecryptPopupView: UIViewController, UITextViewDelegate {
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        let  char = text.cStringUsingEncoding(NSUTF8StringEncoding)!
+        let char = text.cStringUsingEncoding(NSUTF8StringEncoding)!
         let isBackSpace = strcmp(char, "\\b")
         if (isBackSpace == -92) {
             if lastTypedWord != "" {
