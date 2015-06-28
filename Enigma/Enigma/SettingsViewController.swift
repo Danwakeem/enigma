@@ -46,7 +46,7 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 	}
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 5;
+		return 6;
 	}
 	
 	override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -73,7 +73,10 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 		case 3:
 			cell.textLabel?.text = "Swipe to Change Profiles"
 			cell.detailTextLabel?.text = "Right swipe across the clear text bar to\nchange encryption profiles"
-		case 4:
+        case 4:
+            cell.textLabel?.text = "Auto Generate Cyphers"
+            cell.detailTextLabel?.text = "Automaticllay generate cyphers when creating a new profile"
+		case 5:
 			cell.textLabel?.text = "Color Scheme"
 			cell.detailTextLabel?.text = "Change the color of the keyboard"
             var pickerContainter = UIView(frame: CGRectMake(0, 0, 100, 100))
@@ -86,7 +89,7 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 			cell.textLabel?.text = ""
 		}
 		
-		if indexPath.row < 4 {
+		if indexPath.row < 5 {
 			cell.accessoryView = createSwitch(indexPath.row)
 		}
 		
@@ -115,6 +118,10 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 			if (defaults!.boolForKey("ProfileSwipe")) {
 				return true
 			}
+        case 4:
+            if (defaults!.boolForKey("AutoCypher")) {
+                return true
+            }
 		default:
 			return false
 		}
@@ -151,6 +158,8 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 			defaults?.setBool(selectedSwitch.on, forKey: "QuickPeriod")
 		case 3:
 			defaults?.setBool(selectedSwitch.on, forKey: "ProfileSwipe")
+        case 4:
+            defaults?.setBool(selectedSwitch.on, forKey: "AutoCypher")
 		default:
 			break
 		}

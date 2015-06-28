@@ -392,14 +392,10 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
     
     func generateCyphers(){
-        //Generate an encryption for them.
         var numberOfEncryptions = arc4random_uniform(4) + 1
         println(numberOfEncryptions)
         for(var i: UInt32 = 0; i <= numberOfEncryptions; i++) {
             let dict = NSMutableDictionary()
-            //0 - simplesub
-            //1 - Caesar
-            //3 - Vigenere
             switch(i % 3) {
             case 0:
                 var randomKey = arc4random_uniform(UInt32(randomWords.count))
@@ -422,7 +418,9 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	
 	func fetchEncryptions() {
 		if profile == nil {
-            generateCyphers()
+            if NSUserDefaults(suiteName: "group.com.enigma")?.boolForKey("AutoCypher") == true {
+                generateCyphers()
+            }
 			return
 		}
 		
