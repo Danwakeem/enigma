@@ -35,7 +35,7 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 		super.viewDidAppear(animated)
         let defaults = NSUserDefaults(suiteName: "group.com.enigma")
         if let color = defaults?.valueForKey("KeyboardColor") as? String {
-            var selectedColor: Int!
+            var selectedColor: Int = 0
             for (index,value) in enumerate(self.colorSelection) {
                 if value == color {
                     selectedColor = index
