@@ -75,7 +75,7 @@ class SettingsViewController: UITableViewController, PasscodeViewDelegate, UIPic
 			cell.detailTextLabel?.text = "Right swipe across the clear text bar to\nchange encryption profiles"
         case 4:
             cell.textLabel?.text = "Auto Generate Cyphers"
-            cell.detailTextLabel?.text = "Automaticllay generate cyphers when creating a new profile"
+            cell.detailTextLabel?.text = "Automatically generate cyphers when creating a new profile"
 		case 5:
 			cell.textLabel?.text = "Color Scheme"
 			cell.detailTextLabel?.text = "Change the color of the keyboard"
