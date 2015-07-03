@@ -265,6 +265,8 @@
 		return @"Enter a word/phrase with no numbers or symbols";
 	else if ([type isEqualToString:@"Caesar"])
 		return @"Enter a number";
+    else if ([type isEqualToString:@"Affine"])
+        return @"Enter an odd number less than 25 for key 1 and a number less than 25 for key 2";
 	
 	return @"";
 }
