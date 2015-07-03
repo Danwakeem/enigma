@@ -124,11 +124,16 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        var width = UIScreen.mainScreen().bounds.width / 1.06
+        if UIScreen.mainScreen().bounds.width > UIScreen.mainScreen().bounds.height {
+            width = UIScreen.mainScreen().bounds.width / 1.7
+        }
+        
         var encryptionType = encryptionList[indexPath.row]
         if encryptionType.valueForKey("encryptionType")?.description == "Affine" {
             return CGSizeMake(UIScreen.mainScreen().bounds.width / 1.06, 200)
         }
-        return CGSizeMake(UIScreen.mainScreen().bounds.width / 1.06, 155)
+        return CGSizeMake(width, 155)
     }
 	
 	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
