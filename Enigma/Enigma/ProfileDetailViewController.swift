@@ -106,10 +106,6 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		}
 		fetchEncryptions()
 		self.collectionView?.reloadData()
-<<<<<<< HEAD
-	
-		createAddButton()
-=======
 		
 		let bounds = UIScreen.mainScreen().bounds
 		
@@ -127,8 +123,6 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		
 		self.addButton = btn
 		self.addButton.hidden = !editing
-		
->>>>>>> develop
 	}
     
     func changeButtonColor(){
