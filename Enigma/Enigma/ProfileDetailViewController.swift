@@ -18,6 +18,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
     var encryptDecryptPopup: EncryptDecryptPopupView?
     
     var encryptionTypes = ["Caesar": Caesar, "Affine": Affine, "SimpleSub": SimpleSub, "Clear": Clear, "Vigenere": Vigenere, "Cypher": Clear]
+    var randomWords = ["iPhone", "yolo", "blacksheep", "gettothechoppa", "thosearntmountains", "crabs", "zebra", "clowns", "jamesbond", "whoppers", "skittles", "android", "coolkid", "icecream", "clubsandwhich", "racata", "mountain", "legs", "keyboard", "alphabet", "young", "england", "america"]
 	
 	// TODO: Impliment an edit buffer so that multiple encryptions can be handled
 	var name: String = ""
@@ -26,7 +27,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
     
     var key1Buffer = ""
 	
-	var addButton: UIButton!
+	var addButton: AddEncryptionButton!
 	
 	var selectedCell: NSIndexPath!
 	
@@ -105,9 +106,35 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		}
 		fetchEncryptions()
 		self.collectionView?.reloadData()
+<<<<<<< HEAD
 	
 		createAddButton()
+=======
+		
+		let bounds = UIScreen.mainScreen().bounds
+		
+		let btn = AddEncryptionButton()
+		btn.frame = CGRectMake(bounds.width - 75, bounds.height - 135, 55, 55)
+		
+		if UI_USER_INTERFACE_IDIOM() == .Pad {
+			btn.frame = CGRectMake(self.view.center.x - 500, self.view.center.y + 240, 55, 55)
+		}
+		
+        btn.addTarget(self, action: "changeButtonColor", forControlEvents: .TouchDown)
+        btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
+		self.view.addSubview(btn)
+		self.view.bringSubviewToFront(btn)
+		
+		self.addButton = btn
+		self.addButton.hidden = !editing
+		
+>>>>>>> develop
 	}
+    
+    func changeButtonColor(){
+        self.addButton.bgColor = UIColor(red: 0.188, green:0.514, blue:0.682, alpha:1)
+        self.addButton.setNeedsDisplay()
+    }
 	
 	override func viewWillAppear(animated: Bool) {
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardDidShowNotification, object: nil)
@@ -132,22 +159,55 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return encryptionList.count
 	}
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        var width = UIScreen.mainScreen().bounds.width / 1.06
+        if UIScreen.mainScreen().bounds.width > UIScreen.mainScreen().bounds.height {
+            width = UIScreen.mainScreen().bounds.width / 1.7
+        }
+        
+        var encryptionType = encryptionList[indexPath.row]
+        if encryptionType.valueForKey("encryptionType")?.description == "Affine" {
+            return CGSizeMake(UIScreen.mainScreen().bounds.width / 1.06, 200)
+        }
+        return CGSizeMake(width, 155)
+    }
 	
 	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 		var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! ProfileDetailCell
-		
+        
 		cell.layer.borderColor = UIColor(white: 204.0/255.0, alpha: 1.0).CGColor
 		cell.layer.borderWidth = 0.5
 		
 		var encryption = encryptionList[indexPath.row]
 		
 		cell.delegate = self
-		cell.cypherButton.setTitle((encryption["encryptionType"] as! String), forState: UIControlState.Normal)
+        
+        cell.cypherSelection.enabled = editing
 		cell.helpLabel.text = EncrytionFramework.helpStringForEncryptionType(encryption["encryptionType"] as! String)
-		cell.cypherButton.enabled = editing
 		cell.deleteButton.hidden = !editing
 		cell.keyField.text = encryption["key1"] as! String
 		cell.keyField.enabled = editing
+        cell.key2Label.hidden = true
+        cell.key2Field.hidden = true
+        
+        let title = encryption["encryptionType"] as! String!
+        switch title {
+        case "SimpleSub":
+            cell.cypherSelection.selectedSegmentIndex = 1
+        case "Caesar":
+            cell.cypherSelection.selectedSegmentIndex = 0
+        case "Vigenere":
+            cell.cypherSelection.selectedSegmentIndex = 2
+        default:
+            cell.cypherSelection.selectedSegmentIndex = 3
+            cell.key2Label.hidden = false
+            cell.key2Field.hidden = false
+            if encryption["key2"] != nil {
+                cell.key2Field.text = encryption["key2"] as! String
+            }
+            cell.key2Field.enabled = editing
+        }
 		
 		return cell
 	}
@@ -262,6 +322,13 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 		
 		for encryption in encryptionList {
 			let key = encryption.valueForKey("key1") as! String
+            var key2 = ""
+            if var value = encryption.valueForKey("key2") as? String{
+                key2 = value
+                if key2 == "" {
+                    errorList.append(encryption.valueForKey("encryptionType") as! String)
+                }
+            }
 			println(key)
 			if key == "" {
                 if key1Buffer != "" {
@@ -269,7 +336,7 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
                 } else {
                     errorList.append(encryption.valueForKey("encryptionType") as! String)
                 }
-			}
+            }
 			
 			let type = EncrytionFramework.encryptionTypeForString(encryption["encryptionType"] as! String)
 			if EncrytionFramework.validateKeyWithKey(encryption["key1"] as! String, type: type, andKeyNumber: 1) == false {
@@ -343,6 +410,9 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 			
 			encryption.setValue(dict["encryptionType"], forKey: "encryptionType")
 			encryption.setValue((dict["key1"] as! String).stringByReplacingOccurrencesOfString(" ", withString: ""), forKey: "key1")
+            if let value = dict["key2"] as? String {
+                encryption.setValue(value, forKey: "key2")
+            }
 			
 			newSet.addObject(encryption)
 			
@@ -408,9 +478,46 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	func nameSelected() {
 		self.selectedCell = nil
 	}
+    
+    func generateCyphers(){
+        var numberOfEncryptions = arc4random_uniform(5) + 1
+        println(numberOfEncryptions)
+        for(var i: UInt32 = 0; i <= numberOfEncryptions; i++) {
+            let dict = NSMutableDictionary()
+            switch(i % 4) {
+            case 0:
+                var randomKey = arc4random_uniform(UInt32(randomWords.count))
+                var randomWord = randomWords[Int(randomKey)]
+                dict.setValue("SimpleSub", forKey: "encryptionType")
+                dict.setValue(randomWord, forKey: "key1")
+            case 1:
+                var randomKey = arc4random_uniform(26) + 1
+                dict.setValue("Caesar", forKey: "encryptionType")
+                dict.setValue(randomKey.description as String, forKey: "key1")
+            case 2:
+                var randomKey = arc4random_uniform(UInt32(randomWords.count))
+                var randomWord = randomWords[Int(randomKey)]
+                dict.setValue("Vigenere", forKey: "encryptionType")
+                dict.setValue(randomWord, forKey: "key1")
+            default:
+                var randomKey = arc4random_uniform(25)
+                if randomKey % 2 == 0 {
+                    randomKey += 1
+                }
+                var randomKey2 = arc4random_uniform(25)
+                dict.setValue("Affine", forKey: "encryptionType")
+                dict.setValue(randomKey.description, forKey: "key1")
+                dict.setValue(randomKey2.description, forKey: "key2")
+            }
+            encryptionList.append(dict)
+        }
+    }
 	
 	func fetchEncryptions() {
 		if profile == nil {
+            if NSUserDefaults(suiteName: "group.com.enigma")?.boolForKey("AutoCypher") == true {
+                generateCyphers()
+            }
 			return
 		}
 		
@@ -435,6 +542,9 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 				let encr = encryptions[i] as! NSManagedObject
 				dict.setValue(encr.valueForKey("encryptionType"), forKey: "encryptionType")
 				dict.setValue(encr.valueForKey("key1"), forKey: "key1")
+                if let value = encr.valueForKey("key2")?.description {
+                    dict.setValue(value, forKey: "key2")
+                }
 				encryptionList.append(dict)
 			}
 			
@@ -444,6 +554,9 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	}
 	
 	func addEncryption(sender: AnyObject) {
+        self.addButton.bgColor = UIColor(red: 0.172, green: 0.6, blue: 0.827, alpha: 1)
+        self.addButton.setNeedsDisplay()
+        
 		let emptyCypher = NSMutableDictionary()
 		emptyCypher.setValue("SimpleSub", forKey: "encryptionType")
 		emptyCypher.setValue("", forKey: "key1")
