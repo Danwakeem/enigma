@@ -439,6 +439,7 @@
 		029226FC1A71D9D900A7DD81 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Flipped Bit";
 				TargetAttributes = {
