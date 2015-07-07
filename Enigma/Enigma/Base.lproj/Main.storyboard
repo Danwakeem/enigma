@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UMq-g1-Tal">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UMq-g1-Tal">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -481,10 +481,25 @@
                                             <action selector="done:" destination="Up7-P2-mvw" eventType="touchUpInside" id="0xa-Tq-Mmo"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6st-u4-KQb" customClass="BlockButton" customModule="Enigma" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="8" width="130" height="40"/>
+                                        <color key="backgroundColor" red="0.20392156859999999" green="0.66666666669999997" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Send as Text">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="shareAsText:" destination="Up7-P2-mvw" eventType="touchUpInside" id="7Yb-0f-DlX"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="6st-u4-KQb" secondAttribute="bottom" constant="7" id="9AA-ut-YWM"/>
                                     <constraint firstAttribute="height" constant="55" id="b2r-KK-aAf"/>
+                                    <constraint firstItem="6st-u4-KQb" firstAttribute="top" secondItem="aGY-ZL-A4f" secondAttribute="top" constant="8" id="rcD-oY-tlO"/>
+                                    <constraint firstItem="6st-u4-KQb" firstAttribute="leading" secondItem="aGY-ZL-A4f" secondAttribute="leading" constant="8" id="ugc-ap-Eor"/>
                                     <constraint firstAttribute="centerY" secondItem="yFZ-wt-TRt" secondAttribute="centerY" constant="-0.5" id="x97-t9-MbA"/>
                                     <constraint firstItem="yFZ-wt-TRt" firstAttribute="trailing" secondItem="aGY-ZL-A4f" secondAttribute="trailingMargin" id="zxv-3H-VbQ"/>
                                 </constraints>
@@ -578,7 +593,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Double tap for decryption" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HjP-Lv-VWz">
                                             <rect key="frame" x="46" y="50" width="151" height="18"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="15"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>

@@ -51,4 +51,8 @@ class ShareViewController: UIViewController {
 			
 		})
 	}
+    
+    @IBAction func shareAsText(sender: AnyObject) {
+        
+    }
 }
