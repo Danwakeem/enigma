@@ -26,7 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// Split view controller
 		let splitViewController = self.window!.rootViewController as! SplitViewController
-        
 		splitViewController.managedObjectContext = self.managedObjectContext
 		
 		return true
@@ -44,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func applicationWillEnterForeground(application: UIApplication) {
 		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        println("Hello")
 	}
 
 	func applicationDidBecomeActive(application: UIApplication) {
@@ -54,6 +54,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 		self.saveContext()
 	}
+    
+    func parseProfile(profile: String) {
+        let profileArray = split(profile) {$0 == ","}
+        
+        if profileArray.count > 2 {
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let managedContext = appDelegate.managedObjectContext!
+            
+            let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
+            let newProfile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+            
+            newProfile.setValue(profileArray[0], forKey: "name")
+            
+            let numEncryptions = profileArray[1].toInt()
+            let newSet = NSMutableOrderedSet()
+            println("numEncryptions: \(numEncryptions)")
+            
+            for var i = 2; i < profileArray.count; i++ {
+                let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
+                let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
+                
+                let encrTypeIndex = i++
+                let encrKeyIndex = i
+                encryption.setValue(profileArray[encrTypeIndex], forKey: "encryptionType")
+                encryption.setValue(profileArray[encrKeyIndex], forKey: "key1")
+                if profileArray[encrTypeIndex] == "Affine" {
+                    let encrKeyIndex2 = ++i
+                    encryption.setValue(profileArray[encrKeyIndex2], forKey: "key2")
+                }
+                newSet.addObject(encryption)
+            }
+            
+            newProfile.setValue(newSet, forKey: "encryption")
+            
+            
+            
+            var error: NSError?
+            if !managedContext.save(&error) {
+                println("Could not save \(error), \(error?.userInfo)")
+            }
+            
+            NSNotificationCenter.defaultCenter().postNotificationName("ProfileUpdated", object: newProfile)
+            NSNotificationCenter.defaultCenter().postNotificationName("ProfileFromURL", object: newProfile)
+        } else {
+            UIAlertView(title: "Error", message: "Could not import profile.", delegate: nil, cancelButtonTitle: "Ok").show()
+        }
+    }
+    
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        var string:String! = url.host?.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
+        
+        if let pro = string{
+            let profile = EncrytionFramework.decrypt(pro, using: Caesar, withKey: "13", andKey: 0)
+            println("Scanned: \(profile)")
+            parseProfile(profile)
+        }
+        return true
+    }
 
 	// MARK: - Core Data stack
 

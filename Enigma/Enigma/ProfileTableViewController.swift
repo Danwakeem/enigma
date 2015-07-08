@@ -25,6 +25,7 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 		super.viewDidLoad()
 		
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "profileUpdated:", name: "ProfileUpdated", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "profileFromURL:", name: "ProfileFromURL", object: nil)
 		
 		let btn = UIBarButtonItem(barButtonSystemItem: .Camera, target: self, action: "showScanner")
 		if let rightBtn = self.navigationItem.rightBarButtonItem {
@@ -51,48 +52,23 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	}
 	
 	func importFromQRCode(profile: String) {
-		println("Scanned: \(profile)")
-		let profileArray = split(profile) {$0 == ","}
-		
-		if profileArray.count > 2 {
-			let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-			let managedContext = appDelegate.managedObjectContext!
-			
-			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
-			let newProfile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-			
-			newProfile.setValue(profileArray[0], forKey: "name")
-			
-			let numEncryptions = profileArray[1].toInt()
-			let newSet = NSMutableOrderedSet()
-			for var i = 0; i < numEncryptions; i++ {
-				let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
-				let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
-				
-				let encrTypeIndex = (1 + i) * 2
-				let encrKeyIndex = ((1 + i) * 2) + 1
-				encryption.setValue(profileArray[encrTypeIndex], forKey: "encryptionType")
-				encryption.setValue(profileArray[encrKeyIndex], forKey: "key1")
-				
-				newSet.addObject(encryption)
-			}
-			
-			newProfile.setValue(newSet, forKey: "encryption")
-			
-			var error: NSError?
-			if !managedContext.save(&error) {
-				println("Could not save \(error), \(error?.userInfo)")
-			}
-			
-			NSNotificationCenter.defaultCenter().postNotificationName("ProfileUpdated", object: newProfile)
-		} else {
-			UIAlertView(title: "Error", message: "Could not import profile.", delegate: nil, cancelButtonTitle: "Ok").show()
-		}
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate.parseProfile(profile)
 	}
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 	}
+    
+    func profileFromURL(sender: AnyObject){
+        if let profile = sender.object as? NSManagedObject {
+            var index: Int = find(profiles,profile)!
+            tableView.selectRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition(rawValue: 0)!)
+            performSegueWithIdentifier("importProfile", sender: self)
+        } else {
+            println("Fuck")
+        }
+    }
 	
 	// MARK: - Segues
 	
@@ -110,6 +86,15 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 			let controller = (segue.destinationViewController as! UINavigationController).topViewController as! ProfileDetailViewController
 			controller.profile = nil
 			controller.setEditing(true, animated: false)
+            
+        case "importProfile":
+            if let indexPath = self.tableView.indexPathForSelectedRow() {
+                let profile = profiles[indexPath.row]
+                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! ProfileDetailViewController
+                
+                controller.profile = profile
+                controller.setEditing(true, animated: false)
+            }
 		default:
 			println("Default segue")
 		}
@@ -158,6 +143,8 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	
 	func profileUpdated(notification: NSNotification) {
 		fetchProfiles()
+        
+        //NSNotificationCenter.defaultCenter().postNotificationName("ProfileFromURL", object: notification.object)
 	}
 	
 	func fetchProfiles() {

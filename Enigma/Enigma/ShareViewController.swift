@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MessageUI
 
-class ShareViewController: UIViewController {
+class ShareViewController: UIViewController, MFMessageComposeViewControllerDelegate {
 	@IBOutlet weak var qrCodeView: UIImageView!
 	
 	var profile: NSManagedObject? = nil
@@ -52,7 +53,30 @@ class ShareViewController: UIViewController {
 		})
 	}
     
+    func canSendText() -> Bool {
+        return MFMessageComposeViewController.canSendText()
+    }
+    
+    func configuredMessageComposeViewController() -> MFMessageComposeViewController {
+        let messageComposeVC = MFMessageComposeViewController()
+        messageComposeVC.messageComposeDelegate = self
+        var encrypProfile = EncrytionFramework.encrypt(EncrytionFramework.stringFromProfile(profile), using: Caesar, withKey: "13", andKey: 0)
+        messageComposeVC.body = "Your friend has shared an encryption method with you! Click here to save:\n\n enigmakeyboard://" + encrypProfile + "\n\nif you do not have enigma keyboard installed click here:\n\n https://goo.gl/SJYlKl"
+        return messageComposeVC
+    }
+    
+    func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     @IBAction func shareAsText(sender: AnyObject) {
-        
+        if canSendText() {
+            let messageView = configuredMessageComposeViewController()
+            presentViewController(messageView, animated: true, completion: nil)
+        } else {
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = UIAlertView(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", delegate: self, cancelButtonTitle: "OK")
+            errorAlert.show()
+        }
     }
 }

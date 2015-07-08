@@ -645,6 +645,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <segue destination="z0C-uA-XmK" kind="showDetail" identifier="showDetail" id="Zfd-CB-mMM"/>
+                                    <segue destination="z0C-uA-XmK" kind="showDetail" identifier="importProfile" trigger="accessoryAction" id="w12-fU-oRL"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1217,6 +1218,6 @@ Q3JlYXRlZCBieToNQnJhZCBTbGF5dGVyEQ1EYW4gV2FrZWVtDUpha2UgU2luZ2VyA
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="hjc-4W-bYD"/>
+        <segue reference="w12-fU-oRL"/>
     </inferredMetricsTieBreakers>
 </document>
