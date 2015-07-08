@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MessageUI
 
-class ShareViewController: UIViewController {
+class ShareViewController: UIViewController, MFMessageComposeViewControllerDelegate {
 	@IBOutlet weak var qrCodeView: UIImageView!
 	
 	var profile: NSManagedObject? = nil
