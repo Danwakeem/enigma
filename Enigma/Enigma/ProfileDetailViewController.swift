@@ -47,17 +47,17 @@ class ProfileDetailViewController: UICollectionViewController, ProfileDetailHead
 	
 	func createAddButton() {
 		let bounds = UIScreen.mainScreen().bounds
-		let btn = UIButton()
+		let btn = AddEncryptionButton()
 		btn.frame = CGRectMake(bounds.width - 75, bounds.height - 135, 55, 55)
 		
 		if UI_USER_INTERFACE_IDIOM() == .Pad {
 			btn.frame = CGRectMake(4, 100, 55, 55)
 		}
 		
-		btn.setTitle("+", forState: .Normal)
-		btn.titleLabel?.font = UIFont.systemFontOfSize(28)
-		btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
-		btn.layer.cornerRadius = 27.5
+		//btn.setTitle("+", forState: .Normal)
+		//btn.titleLabel?.font = UIFont.systemFontOfSize(28)
+		//btn.backgroundColor = UIColor(red: (52.0/255.0), green: (170.0/255.0), blue: (220.0/255.0), alpha: 1.0)
+		//btn.layer.cornerRadius = 27.5
 		btn.addTarget(self, action: "addEncryption:", forControlEvents: .TouchUpInside)
 		btn.contentVerticalAlignment = .Center
 		self.view.addSubview(btn)

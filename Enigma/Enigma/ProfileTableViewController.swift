@@ -54,44 +54,8 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	}
 	
 	func importFromQRCode(profile: String) {
-		println("Scanned: \(profile)")
-		let profileArray = split(profile) {$0 == ","}
-		
-		if profileArray.count > 2 {
-			let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-			let managedContext = appDelegate.managedObjectContext!
-			
-			let entity = NSEntityDescription.entityForName("Profiles", inManagedObjectContext: managedContext)
-			let newProfile = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-			
-			newProfile.setValue(profileArray[0], forKey: "name")
-			
-			let numEncryptions = profileArray[1].toInt()
-			let newSet = NSMutableOrderedSet()
-			for var i = 0; i < numEncryptions; i++ {
-				let encryptionEntity = NSEntityDescription.entityForName("Encryptions", inManagedObjectContext: managedContext)
-				let encryption = NSManagedObject(entity: encryptionEntity!, insertIntoManagedObjectContext:managedContext)
-				
-				let encrTypeIndex = (1 + i) * 2
-				let encrKeyIndex = ((1 + i) * 2) + 1
-				encryption.setValue(profileArray[encrTypeIndex], forKey: "encryptionType")
-				encryption.setValue(profileArray[encrKeyIndex], forKey: "key1")
-				
-				newSet.addObject(encryption)
-			}
-			
-			newProfile.setValue(newSet, forKey: "encryption")
-			
-			profileToImport = newProfile
-			
-			let alert = UIAlertView(title: "Import Profile", message: "Enter a name for this profile", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Save", "Use \"" + profileArray[0] + "\"")
-			alert.alertViewStyle = .PlainTextInput
-			alert.tag = kPorfileNameAlertTag
-			alert.show()
-			
-		} else {
-			UIAlertView(title: "Error", message: "Could not import profile.", delegate: nil, cancelButtonTitle: "Ok").show()
-		}
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate.parseProfile(profile)
 	}
 	
 	func finishImportingProfile(newName: String) {
@@ -237,8 +201,6 @@ class ProfileTableViewController: UITableViewController, UITableViewDataSource, 
 	
 	func profileUpdated(notification: NSNotification) {
 		fetchProfiles()
-        
-        //NSNotificationCenter.defaultCenter().postNotificationName("ProfileFromURL", object: notification.object)
 	}
 	
 	func fetchProfiles() {
