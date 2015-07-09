@@ -69,7 +69,7 @@ class ShareViewController: UIViewController, MFMessageComposeViewControllerDeleg
     func configuredMessageComposeViewController() -> MFMessageComposeViewController {
         let messageComposeVC = MFMessageComposeViewController()
         messageComposeVC.messageComposeDelegate = self
-        var encrypProfile = EncrytionFramework.encrypt(EncrytionFramework.stringFromProfile(profile), using: Caesar, withKey: "13", andKey: 0)
+        var encrypProfile = EncrytionFramework.encrypt(EncrytionFramework.stringFromProfile(profile), using: Vigenere, withKey: "shark", andKey: 0)
         messageComposeVC.body = "Your friend has shared an encryption method with you! Click here to save:\n\n enigmakeyboard://" + encrypProfile + "\n\nif you do not have enigma keyboard installed click here:\n\n https://goo.gl/SJYlKl"
         return messageComposeVC
     }

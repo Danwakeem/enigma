@@ -105,7 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var string:String! = url.host?.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
         
         if let pro = string{
-            let profile = EncrytionFramework.decrypt(pro, using: Caesar, withKey: "13", andKey: 0)
+            let profile = EncrytionFramework.decrypt(pro, using: Vigenere, withKey: "shark", andKey: 0)
             println("Scanned: \(profile)")
             parseProfile(profile)
         }
